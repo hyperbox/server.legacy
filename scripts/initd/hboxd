@@ -37,7 +37,7 @@ IS_REDHAT_BASED=false
 INSTALL_DIR=/opt/hboxd
 EXEC="$INSTALL_DIR/bin/hboxd"
 PID_FILE="/var/run/hboxd.pid"
-RUNAS=noteirak
+RUNAS=max
 ARGS_START="$INSTALL_DIR"
 
 log_start() {

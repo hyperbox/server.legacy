@@ -39,7 +39,7 @@ import java.util.Set;
  * </ul>
  * </p>
  * 
- * @author noteirak
+ * @author max
  * 
  */
 public interface _ModuleClassLoader {

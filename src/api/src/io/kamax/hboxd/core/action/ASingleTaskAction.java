@@ -39,7 +39,7 @@ import io.kamax.hboxd.session.SessionContext;
  * @see AnswerType
  * @see _Action
  * @see AbstractHyperboxAction
- * @author noteirak
+ * @author max
  */
 public abstract class ASingleTaskAction extends AbstractHyperboxAction {
 

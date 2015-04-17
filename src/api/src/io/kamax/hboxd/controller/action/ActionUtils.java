@@ -28,7 +28,7 @@ import io.kamax.hboxd.core.model._Machine;
 /**
  * Utils to extract & manipulate well-known information from Request objects.
  * 
- * @author noteirak
+ * @author max
  */
 // TODO implement all normal & IO objects
 public class ActionUtils {

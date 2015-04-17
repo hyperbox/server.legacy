@@ -33,7 +33,7 @@ import io.kamax.tool.logging.Logger;
  * </p>
  * TODO javadoc
  * 
- * @author noteirak
+ * @author max
  */
 public abstract class SimpleLoopService extends SkeletonService {
 

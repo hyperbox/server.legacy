@@ -32,7 +32,7 @@ import java.util.Set;
 /**
  * Represent a server
  * 
- * @author noteirak
+ * @author max
  */
 public interface _Server {
 

@@ -27,7 +27,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 /**
  * This class will provide a thread management for a Front class, but the front class is responsible to set the proper status for its state.
  * 
- * @author noteirak
+ * @author max
  */
 // TODO implement events
 public abstract class SkeletonFront implements _Front, Runnable {

@@ -47,7 +47,7 @@ import io.kamax.hbox.states.ServiceState;
  * Skeleton classes exists to ease service implementation : SkeletonService & SimpleLoopService.
  * </p>
  * 
- * @author noteirak
+ * @author max
  * @see SkeletonService
  * @see SimpleLoopService
  */

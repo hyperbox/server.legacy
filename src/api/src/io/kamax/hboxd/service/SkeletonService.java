@@ -51,7 +51,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
  * </ul>
  * </p>
  * 
- * @author noteirak
+ * @author max
  * @see SimpleLoopService
  */
 public abstract class SkeletonService implements _Service, Runnable {

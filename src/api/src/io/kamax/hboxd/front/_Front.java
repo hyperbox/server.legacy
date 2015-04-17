@@ -28,7 +28,7 @@ import io.kamax.hbox.exception.HyperboxException;
  * Any protocol implementation (e.g. SOAP, XML-RPC, REST, Java RMI) should implement this interface.<br/>
  * Any class implementing this interface will be automatically loaded.
  * 
- * @author noteirak
+ * @author max
  */
 public interface _Front {
 

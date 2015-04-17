@@ -35,7 +35,7 @@ import javax.swing.AbstractAction;
  * @see AnswerType
  * @see _Action
  * @see AbstractAction
- * @author noteirak
+ * @author max
  */
 public abstract class AbstractHyperboxMultiTaskAction extends AbstractHyperboxAction {
 

@@ -43,7 +43,7 @@ import java.util.Set;
  * {@value #CFGKEY_MODULE_AUTOLOAD}
  * </p>
  * 
- * @author noteirak
+ * @author max
  * 
  */
 public interface _ModuleManager {

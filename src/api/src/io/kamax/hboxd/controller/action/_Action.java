@@ -36,7 +36,7 @@ import java.util.List;
  * </p>
  * This class will be auto-loaded at startup.
  * 
- * @author noteirak
+ * @author max
  * @see AbstractHyperboxMultiTaskAction
  * @see ASingleTaskAction
  * @see ActionUtils
