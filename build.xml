@@ -20,193 +20,216 @@
  *  
 -->
 
-<project name="Hyperbox Server" default="build">
+<project name="Hyperbox Server" default="deploy">
 	
 	<property file="build.properties"/>
-
-	<property name="server.base.dir"								value="${hbox.base.dir}/../server" />
-	<property name="server.dir"										value="${server.base.dir}/src" />
-	<property name="server.core.dir"								value="${server.dir}/core" />
-	<property name="server.api.dir"									value="${server.dir}/api" />
-	<property name="server.hyp.dir"									value="${server.dir}/hypervisor" />
-
-	<property name="server.install.dir.win"							value="C:/Program Files/Hyperbox/Server" />
-	<property name="server.install.dir.linux"						value="/opt/hboxd" />
 	
-	<property name="server.api.src.dir"								value="${server.api.dir}/${src.dirname}" />
-	<property name="server.api.lib.dir"								value="${server.api.dir}/${lib.dirname}" />
-	<property name="server.api.class.dir"							value="${hbox.build.class.dir}/srv-api" />
+	<property name="hbox.api.base.dir"										location="../api" />
+	<include file="${hbox.api.base.dir}/build.xml" as="hbox.api" />
+	
+	<property name="hbox.server.base.dir"									location="." />
+	<property name="hbox.server.dir"										location="${hbox.server.base.dir}/src" />
+	<property name="hbox.server.out.dir"									location="${hbox.server.base.dir}/${out.dirname}" />
+	<property name="hbox.server.out.build.dir"								location="${hbox.server.out.dir}/${build.dirname}" />
+	<property name="hbox.server.out.build.class.dir"						location="${hbox.server.out.build.dir}/${class.dirname}" />
+	<property name="hbox.server.out.build.jar.dir"							location="${hbox.server.out.build.dir}/${jar.dirname}" />
+	<property name="hbox.server.out.bin.dir"								location="${hbox.server.out.dir}/${bin.dirname}" />
+	<property name="hbox.server.out.dist.dir"								location="${hbox.server.out.dir}/${dist.dirname}" />
 
-	<property name="server.core.src.dir"							value="${server.core.dir}/${src.dirname}" />
-	<property name="server.core.lib.dir"							value="${server.core.dir}/${lib.dirname}" />
-	<property name="server.core.class.dir"						value="${hbox.build.class.dir}/srv" />
+	<property name="hbox.server.install.win.dir"							value="C:/Program Files/Hyperbox/Server" />
+	<property name="hbox.server.install.linux.dir"							value="/opt/hboxd" />
 	
-	<path id="server.api.classpath">
-		<path refid="api.classpath"/>
-		<pathelement location="${server.api.class.dir}"/>
-		<fileset dir="${server.api.lib.dir}" includes="**/*.jar"/>
-	</path>
-	
-	<path id="server.classpath">
-		<path refid="server.api.classpath"/>
-		<path refid="kryo.api.classpath"/>
-		<pathelement location="${server.core.class.dir}"/>
-		<fileset dir="${server.core.lib.dir}" includes="**/*.jar"/>
-	</path>
-		
 	<target name="clean">
-		<delete dir="${out.dirname}"/>
+		<delete dir="${hbox.server.out.dir}"/>
 	</target>
 	
-	<target name="configureWin" if="ifWin">
-		<property name="os.family"						value="win"/>
-		<property name="platform"						value="${os.family}.${os.arch}" />
-		<property file="${hbox.base.dir}/tools/${platform}/build.properties" />
-		<assertDirAvailable dir="${tools.launch4j.dir}" />
-		
-		<property name="client.install.dir"				location="${client.install.dir.win}"/>
-		<property name="server.install.dir"				location="${server.install.dir.win}"/>
-		
-		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${tools.launch4j.dir}/launch4j.jar:${tools.launch4j.dir}/lib/xstream.jar" />
-		<property name="client.out.exe"					value="hyperbox.exe"/>
-		<property name="server.out.exe"					value="hyperbox.exe"/>
+	<target name="configure.win" if="ifWin">
+		<property name="hbox.server.install.dir"							location="${hbox.server.install.win.dir}"/>
+		<property name="hbox.server.out.exe"								value="hyperbox.exe"/>
 	</target>
 	
-	<target name="configureLinux" if="ifLinux">
-		<property name="os.family" 						value="linux"/>
-		<property name="platform"						value="${os.family}.${os.arch}" />
-		<property file="${hbox.base.dir}/tools/${platform}/build.properties" />
-		
-		<property name="client.install.dir"				location="${client.install.dir.linux}" />
-		<property name="server.install.dir"				location="${server.install.dir.linux}" />
+	<target name="configure.linux" if="ifLinux">
+		<property name="hbox.server.install.dir"							location="${hbox.server.install.linux.dir}" />
 	</target>
 	
-	<target name="configure" depends="configureWin, configureLinux">
-		<assertDirAvailable dir="${server.api.src.dir}" />
-		<assertDirAvailable dir="${server.core.src.dir}" />
+	<target name="configure" depends="hbox.api.configure, configure.win, configure.linux">
+		<echoproperties>
+			<propertyset>
+				<propertyref prefix="hbox."/>
+				<propertyref prefix="tools."/>
+				<propertyref prefix="platform"/>
+			</propertyset>
+		</echoproperties>
 		
-		<exec executable="git" outputProperty="hbox.version">
+		<property file="${hbox.server.base.dir}/tools/${platform}/build.properties" />
+		
+		<exec executable="git" outputProperty="hbox.server.version">
 			<arg line="describe --always"/>
 		</exec>
-
-		<property name="server.out.dir"						value="${hbox.out.dir}/bin/${platform}/server" />
-		<property name="server.out.module.dir"				value="${server.out.dir}/modules" />
-		<property name="server.out.dir.abs"					location="${server.out.dir}" />
-		<property name="server.out.dist.package"			value="hbox-${hbox.version}-${os.type}_${os.arch}-server" />
-	</target>
-
-	<target name="server.api.compile" depends="api.compile">
-		<mkdir dir="${server.api.class.dir}" />
-		<javac source="1.6" target="1.6" debug="on" debuglevel="lines" includeantruntime="false" srcdir="${server.api.src.dir}" destdir="${server.api.class.dir}" classpathref="server.api.classpath" />
 		
-		<jar destfile="${hbox.build.jar.dir}/hbox-srv-api.jar">
-			<fileset dir="${server.api.class.dir}" />
-		</jar>
+		<property name="hbox.server.out.dist.package"						value="${hbox.name}-${hbox.server.version}-${os.family}_${os.arch}-${server.name}" />
+		
+		<echo message="Hyperbox server Version:             ${hbox.server.version}" />
 	</target>
 	
-	<target name="server.api.deploy" depends="configure">
-		<mkdir dir="${server.out.dir}/bin" />
-		<mkdir dir="${server.out.dir}/conf" />
-		<mkdir dir="${server.out.dir}/doc" />
-		<mkdir dir="${server.out.dir}/doc/manual" />
-		<mkdir dir="${server.out.dir}/doc/legal" />
-		<mkdir dir="${server.out.dir}/lib" />
-		<mkdir dir="${server.out.module.dir}" />
-		<copy todir="${server.out.dir}/lib" flatten="true">
-			<fileset dir="${api.lib.dir}" includes="**/*.jar" />
-		</copy>
-		<copy todir="${server.out.dir}/lib" flatten="true">
-			<fileset dir="${server.api.lib.dir}" includes="**/*.jar" />
-		</copy>
-		<copy todir="${server.out.dir}/doc/legal">
-			<fileset dir="doc/legal" includes="**/*" />
-		</copy>
-		<copy todir="${server.out.dir}/doc/manual">
-			<fileset dir="doc/manual" includes="**/*" />
-		</copy>
+	<target name="configure.compile" depends="configure">
+		<mkdir dir="${hbox.server.out.build.class.dir}" />
 	</target>
 	
-	<target name="kryo.api.server.deploy" depends="server.api.deploy">
-		<copy todir="${server.out.dir}/lib" flatten="true">
-			<fileset dir="${kryo.api.lib.dir}" includes="**/*.jar" />
-		</copy>
-	</target>
-
-    <target name="server.compile" depends="server.api.compile, kryo.api.compile">
-    	<mkdir dir="${server.core.class.dir}" />
-    	<javac source="1.6" target="1.6" debug="on" debuglevel="lines" includeantruntime="false" srcdir="${server.core.src.dir}" destdir="${server.core.class.dir}" classpathref="server.classpath" />
-		<echo file="${server.core.class.dir}/server.build.properties" append="true">version=${hbox.version}${line.separator}</echo>
-    </target>
-
-	<target name="server.deploy" depends="server.api.deploy">
-		<copy todir="${server.out.dir}/lib" flatten="true">
-			<fileset dir="${server.core.lib.dir}" includes="**/*.jar" />
-		</copy>
+	<target name="configure.build" depends="configure">
+		<mkdir dir="${hbox.server.out.build.jar.dir}" />
+		<mkdir dir="${hbox.server.out.bin.dir}" />
 	</target>
 	
-	<target name="server.jar" depends="server.compile, server.deploy">
-        <jar destfile="${server.out.dir}/bin/hyperbox-server.jar">
-        	<fileset dir="${api.class.dir}" />
-			<fileset dir="${server.api.class.dir}" />
-        	<fileset dir="${kryo.api.class.dir}" />
-        	<fileset dir="${server.core.class.dir}" />
+	<target name="configure.deploy" depends="configure">
+		<mkdir dir="${hbox.server.out.bin.dir}" />
+		<mkdir dir="${hbox.server.out.bin.dir}/${doc.dirname}" />
+		<mkdir dir="${hbox.server.out.bin.dir}/${doc.dirname}/manual" />
+		<mkdir dir="${hbox.server.out.bin.dir}/${doc.dirname}/legal" />
+		<mkdir dir="${hbox.server.out.bin.dir}/${lib.dirname}" />
+		<mkdir dir="${hbox.server.out.bin.dir}/${module.dirname}" />
+	</target>
+	
+	<target name="configure.dist" depends="configure">
+		<mkdir dir="${hbox.server.out.dist.dir}" />
+	</target>
+	
+	<!-- = Server API ======================================================================================================================== -->
+	
+	<property name="hbox.server.api.dir"									location="${hbox.server.dir}/${api.name}" />
+	<property name="hbox.server.api.src.dir"								location="${hbox.server.api.dir}/${src.dirname}" />
+	<property name="hbox.server.api.lib.dir"								location="${hbox.server.api.dir}/${lib.dirname}" />
+	<property name="hbox.server.api.class.dir"								location="${hbox.server.out.build.class.dir}/${server.name}-${api.name}" />
+	<property name="hbox.server.api.jar.filename"							value="${hbox.name}-${server.name}-${api.name}.jar" />
+	<property name="hbox.server.api.jar.file"								location="${hbox.server.out.build.jar.dir}/${hbox.server.api.jar.filename}" />
+	
+	<path id="hbox.server.api.classpath">
+		<pathelement location="${hbox.server.api.class.dir}"/>
+		<fileset dir="${hbox.server.api.lib.dir}" includes="**/*.jar"/>
+		<path refid="hbox.api.classpath"/>
+	</path>
+	
+	<target name="api.compile" depends="configure.compile, hbox.api.compile">
+		<assertDirAvailable dir="${hbox.server.api.src.dir}" />
+		<mkdir dir="${hbox.server.api.class.dir}" />
+		<javac source="1.6" target="1.6" debug="on" debuglevel="lines" includeantruntime="false" srcdir="${hbox.server.api.src.dir}" destdir="${hbox.server.api.class.dir}" classpathref="hbox.server.api.classpath" />
+	</target>
+	
+	<target name="api.build" depends="configure.build, api.compile">
+        <jar destfile="${hbox.server.api.jar.file}">
+			<fileset dir="${hbox.server.api.class.dir}" />
         </jar>
     </target>
 	
-	<target name="server.build.win" depends="server.jar, server.deploy" if="ifWin">
-		<launch4j configFile="${server.base.dir}/scripts/launch4j/main.xml" outfile="${server.out.dir}/${server.out.exe}" />
-		<copy file="${server.base.dir}/external/common-daemons/prunsrv-${os.arch}.exe" tofile="${server.out.dir}/hboxd.exe" />
+	<target name="api.deploy" depends="configure.deploy, api.build">
+		<copy todir="${hbox.server.out.bin.dir}/${bin.dirname}" flatten="true">
+			<fileset dir="${hbox.api.out.build.jar.dir}" includes="**/*.jar" />
+			<file file="${hbox.server.api.jar.file}" />
+		</copy>
+		
+		<copy todir="${hbox.server.out.bin.dir}/doc/legal">
+			<fileset dir="${hbox.server.base.dir}/${doc.dirname}/legal" includes="**/*" />
+		</copy>
+		<copy todir="${hbox.server.out.bin.dir}/doc/manual">
+			<fileset dir="${hbox.server.base.dir}/${doc.dirname}/manual" includes="**/*" />
+		</copy>
+		
+		<copy todir="${hbox.server.out.bin.dir}/${lib.dirname}" flatten="true">
+			<fileset dir="${hbox.api.core.lib.dir}" includes="**/*.jar"/>
+			<fileset dir="${hbox.server.api.lib.dir}" includes="**/*.jar" />
+		</copy>
 	</target>
 	
-	<target name="server.build.linux" depends="server.jar, server.deploy" if="ifLinux">
-		<copy file="scripts/server/hyperbox" tofile="${server.out.dir}/hyperbox" />
-		<chmod file="${server.out.dir}/hyperbox" perm="ugo+rx" />
-		<copy file="scripts/server/initd/hboxd" tofile="${server.out.dir}/hboxd" />
-		<chmod file="${server.out.dir}/hboxd" perm="ugo+rx"/>
-		<copy file="scripts/server/hboxd" tofile="${server.out.dir}/bin/hboxd" />
-		<chmod file="${server.out.dir}/bin/hboxd" perm="ugo+rx" />
+	<!-- ===================================================================================================================================== -->
+	
+	<!-- = Server Core ======================================================================================================================= -->
+	
+	<property name="hbox.server.core.dir"									location="${hbox.server.dir}/${core.name}" />
+	<property name="hbox.server.core.src.dir"								location="${hbox.server.core.dir}/${src.dirname}" />
+	<property name="hbox.server.core.lib.dir"								location="${hbox.server.core.dir}/${lib.dirname}" />
+	<property name="hbox.server.core.class.dir"								location="${hbox.server.out.build.class.dir}/${server.name}-${core.name}" />
+	<property name="hbox.server.core.jar.filename"							value="${hbox.name}-${server.name}-${core.name}.jar" />
+	<property name="hbox.server.core.jar.file"								location="${hbox.server.out.build.jar.dir}/${hbox.server.core.jar.filename}" /> 
+	
+	<path id="hbox.server.core.classpath">
+		<pathelement location="${hbox.server.core.class.dir}"/>
+		<fileset dir="${hbox.server.core.lib.dir}" includes="**/*.jar"/>
+		<path refid="hbox.server.api.classpath"/>
+	</path>
+	
+	<target name="core.compile" depends="api.compile">
+    	<mkdir dir="${hbox.server.core.class.dir}" />
+    	<javac source="1.6" target="1.6" debug="on" debuglevel="lines" includeantruntime="false" srcdir="${hbox.server.core.src.dir}" destdir="${hbox.server.core.class.dir}" classpathref="hbox.server.core.classpath" />
+		<echo file="${hbox.server.core.class.dir}/server.build.properties" append="true">version=${hbox.server.version}${line.separator}</echo>
+    </target>
+	
+	<target name="core.build" depends="core.compile">
+        <jar destfile="${hbox.server.core.jar.file}">
+        	<fileset dir="${hbox.server.core.class.dir}" />
+        </jar>
+    </target>
+	
+	<target name="core.deploy" depends="api.deploy, core.build">
+		<copy todir="${hbox.server.out.bin.dir}/${bin.dirname}" flatten="true">
+			<file file="${hbox.server.core.jar.file}" />
+		</copy>
+		<copy todir="${hbox.server.out.bin.dir}/${lib.dirname}" flatten="true">
+			<fileset dir="${hbox.api.kryo.lib.dir}" includes="**/*.jar" />
+			<fileset dir="${hbox.server.core.lib.dir}" includes="**/*.jar" />
+		</copy>
 	</target>
 	
-	<extension-point name="server.build" depends="server.build.linux, server.build.win, kryo.api.server.deploy" />
+	<!-- ===================================================================================================================================== -->
 	
-	<target name="server.build.zip" depends="server.build">
-		<zip destfile="${dist.out.dir.abs}/${server.out.dist.package}.zip" basedir="${server.out.dir}" />
+	<extension-point name="compile" depends="api.compile, core.compile" />
+	
+	<target name="build.win" if="ifWin" depends="configure.build">
+		<assertDirAvailable dir="${tools.launch4j.dir}" />
+		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${tools.launch4j.dir}/launch4j.jar:${tools.launch4j.dir}/lib/xstream.jar" />
+		<launch4j configFile="${hbox.server.base.dir}/scripts/launch4j/main.xml" outfile="${hbox.server.out.bin.dir}/${hbox.server.out.exe}" />
 	</target>
 	
-	<target name="configureDist" depends="configure">
-		<property name="dist.build.out.dir" value="${hbox.build.dir}/dist" />
-		<mkdir dir="${dist.build.out.dir}" />
+	<target name="build.linux" if="ifLinux" depends="configure.build">
+		<copy file="${hbox.server.base.dir}/scripts/hyperbox" tofile="${hbox.server.out.bin.dir}/hyperbox" />
+		<chmod file="${hbox.server.out.bin.dir}/hyperbox" perm="a+rx" />
+		<copy file="${hbox.server.base.dir}/scripts/initd/hboxd" tofile="${hbox.server.out.bin.dir}/hboxd.init" />
+		<chmod file="${hbox.server.out.bin.dir}/hboxd" perm="a+rx"/>
+		<copy file="${hbox.server.base.dir}/scripts/hboxd" tofile="${hbox.server.out.bin.dir}/bin/hboxd" />
+		<chmod file="${hbox.server.out.bin.dir}/bin/hboxd" perm="a+rx" />
 	</target>
 	
-	<target name="server.build.dist.win" if="ifWin" depends="configureDist">
+	<extension-point name="build" depends="api.build, core.build, build.win, build.linux" />
+	
+	<extension-point name="deploy" depends="build, api.deploy, core.deploy" />
+	
+	<target name="dist.win" if="ifWin" depends="configure.dist, deploy">
 		<echo message="NSIS Dir:           ${tools.nsis.dir}" />
-		<echo message="Binaries Dir:       ${server.out.dir.abs}" />
-		<copy file="${server.base.dir}/scripts/installer/server-installer.nsi" tofile="${dist.build.out.dir}/server-installer.nsi" overwrite="true" />
-		<replace file="${dist.build.out.dir}/server-installer.nsi" token="@SERVER_INSTALLER_OUTPUT@" value="${dist.out.dir.abs}/${server.out.dist.package}.exe" />
-		<replace file="${dist.build.out.dir}/server-installer.nsi" token="@SERVER_OUT_BIN_DIR@" value="${server.out.dir.abs}" />
-		<replace file="${dist.build.out.dir}/server-installer.nsi" token="@SERVER_INSTALL_DIR@" value="${server.install.dir}" />
+		<copy file="${hbox.server.base.dir}/scripts/installer/server-installer.nsi" tofile="${hbox.server.out.build.dir}/server-installer.nsi" overwrite="true" />
+		<replace file="${hbox.server.out.build.dir}/server-installer.nsi" token="@SERVER_INSTALLER_OUTPUT@" value="${hbox.server.out.dist.dir}/${hbox.server.out.dist.package}.exe" />
+		<replace file="${hbox.server.out.build.dir}/server-installer.nsi" token="@SERVER_OUT_BIN_DIR@" value="${hbox.server.out.bin.dir}" />
+		<replace file="${hbox.server.out.build.dir}/server-installer.nsi" token="@SERVER_INSTALL_DIR@" value="${hbox.server.install.dir}" />
 		<exec executable="${tools.nsis.dir}\makensis.exe" failonerror="true">
 			<arg value="/DPROJECT_NAME=Hyperbox Server" />
 			<arg value="/V2"/>
-			<arg value="${dist.build.out.dir}/server-installer.nsi" />
+			<arg value="${hbox.server.out.build.dir}/server-installer.nsi" />
 		</exec>
 	</target>
 	
-	<target name="server.build.dist.linux" if="ifLinux" depends="configureDist">
-		<copy file="scripts/server/installer/server-installer.sh" tofile="${server.out.dir}/server-installer.sh" overwrite="true" />
-		<chmod file="${server.out.dir}/server-installer.sh" perm="ugo+rx" />
+	<target name="dist.linux" if="ifLinux" depends="configure.dist">
+		<copy file="${hbox.server.base.dir}/scripts/installer/server-installer.sh" tofile="${hbox.server.out.build.dir}/server-installer.sh" overwrite="true" />
+		<chmod file="${hbox.server.out.build.dir}/server-installer.sh" perm="a+rx" />
 		<exec executable="makeself" failonerror="true">
-			<arg value="${server.out.dir.abs}" />
-			<arg value="${dist.out.dir.abs}/${server.out.dist.package}.run" />
+			<arg value="${hbox.server.out.bin.dir}" />
+			<arg value="${hbox.server.out.build.dir}/${hbox.server.out.dist.package}.run" />
 			<arg value="Hyperbox Server" />
 			<arg value="./server-installer.sh" />
 		</exec>
 	</target>
 	
-	<extension-point name="server.build.dist" depends="server.build.dist.win,server.build.dist.linux" />
+	<target name="dist.zip">
+		<zip destfile="${hbox.server.out.dist.dir}/${hbox.server.out.dist.package}.zip" basedir="${hbox.server.out.bin.dir}" />
+	</target>
 	
-	<extension-point name="build.dist" depends="client.build.dist, server.build.dist" />
-	
-	<extension-point name="build.all" depends="build, build.zip, build.dist" />
+	<extension-point name="dist" depends="deploy, dist.win, dist.linux, dist.zip" />
 
 </project>

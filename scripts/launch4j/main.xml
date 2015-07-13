@@ -23,8 +23,8 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>console</headerType>
-  <jar>bin/hyperbox-server.jar</jar>
-  <icon>../../../hyperbox/media/img/hyperbox.ico</icon>
+  <jar>bin/hbox-server-core.jar</jar>
+  <icon>../../../api/media/img/hyperbox.ico</icon>
   <stayAlive>false</stayAlive>
   <classPath>
     <mainClass>io.kamax.hboxd.HyperboxInteractive</mainClass>
