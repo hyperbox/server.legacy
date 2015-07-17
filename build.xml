@@ -29,6 +29,9 @@
 	
 	<property name="hbox.server.base.dir"									location="." />
 	<property name="hbox.server.dir"										location="${hbox.server.base.dir}/src" />
+	<condition property="hbox.server.out.dir" value="${hbox.out.dir}">
+			<isset property="hbox.out.dir" />
+	</condition>
 	<property name="hbox.server.out.dir"									location="${hbox.server.base.dir}/${out.dirname}" />
 	<property name="hbox.server.out.build.dir"								location="${hbox.server.out.dir}/${build.dirname}" />
 	<property name="hbox.server.out.build.class.dir"						location="${hbox.server.out.build.dir}/${class.dirname}" />
@@ -53,14 +56,6 @@
 	</target>
 	
 	<target name="configure" depends="hbox.api.configure, configure.win, configure.linux">
-		<echoproperties>
-			<propertyset>
-				<propertyref prefix="hbox."/>
-				<propertyref prefix="tools."/>
-				<propertyref prefix="platform"/>
-			</propertyset>
-		</echoproperties>
-		
 		<property file="${hbox.server.base.dir}/tools/${platform}/build.properties" />
 		
 		<exec executable="git" outputProperty="hbox.server.version">
@@ -110,7 +105,6 @@
 	</path>
 	
 	<target name="api.compile" depends="configure.compile, hbox.api.compile">
-		<assertDirAvailable dir="${hbox.server.api.src.dir}" />
 		<mkdir dir="${hbox.server.api.class.dir}" />
 		<javac source="1.6" target="1.6" debug="on" debuglevel="lines" includeantruntime="false" srcdir="${hbox.server.api.src.dir}" destdir="${hbox.server.api.class.dir}" classpathref="hbox.server.api.classpath" />
 	</target>
@@ -123,7 +117,7 @@
 	
 	<target name="api.deploy" depends="configure.deploy, api.build">
 		<copy todir="${hbox.server.out.bin.dir}/${bin.dirname}" flatten="true">
-			<fileset dir="${hbox.api.out.build.jar.dir}" includes="**/*.jar" />
+			<file file="${hbox.api.out.build.jar.file}" />
 			<file file="${hbox.server.api.jar.file}" />
 		</copy>
 		
