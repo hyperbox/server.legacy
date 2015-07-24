@@ -106,7 +106,7 @@
 	
 	<target name="api.compile" depends="configure.compile, hbox.api.compile">
 		<mkdir dir="${hbox.server.api.class.dir}" />
-		<javac source="1.6" target="1.6" debug="on" debuglevel="lines" includeantruntime="false" srcdir="${hbox.server.api.src.dir}" destdir="${hbox.server.api.class.dir}" classpathref="hbox.server.api.classpath" />
+		<javac source="1.6" target="1.6" debug="on" includeantruntime="false" srcdir="${hbox.server.api.src.dir}" destdir="${hbox.server.api.class.dir}" classpathref="hbox.server.api.classpath" />
 	</target>
 	
 	<target name="api.build" depends="configure.build, api.compile">
@@ -153,7 +153,7 @@
 	
 	<target name="core.compile" depends="api.compile">
     	<mkdir dir="${hbox.server.core.class.dir}" />
-    	<javac source="1.6" target="1.6" debug="on" debuglevel="lines" includeantruntime="false" srcdir="${hbox.server.core.src.dir}" destdir="${hbox.server.core.class.dir}" classpathref="hbox.server.core.classpath" />
+    	<javac source="1.6" target="1.6" debug="on" includeantruntime="false" srcdir="${hbox.server.core.src.dir}" destdir="${hbox.server.core.class.dir}" classpathref="hbox.server.core.classpath" />
 		<echo file="${hbox.server.core.class.dir}/server.build.properties" append="true">version=${hbox.server.version}${line.separator}</echo>
     </target>
 	
