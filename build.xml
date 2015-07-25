@@ -55,10 +55,10 @@
 		<property name="hbox.server.install.dir"							location="${hbox.server.install.linux.dir}" />
 	</target>
 	
-	<target name="configure" depends="hbox.api.configure, configure.win, configure.linux">
+	<target name="configure" depends="configure.win, configure.linux">
 		<property file="${hbox.server.base.dir}/tools/${platform}/build.properties" />
 		
-		<exec executable="git" outputProperty="hbox.server.version">
+		<exec executable="git" dir="${hbox.server.base.dir}" outputProperty="hbox.server.version">
 			<arg line="describe --always"/>
 		</exec>
 		
@@ -104,7 +104,7 @@
 		<path refid="hbox.api.classpath"/>
 	</path>
 	
-	<target name="api.compile" depends="configure.compile, hbox.api.compile">
+	<target name="api.compile" depends="configure.compile">
 		<mkdir dir="${hbox.server.api.class.dir}" />
 		<javac source="1.6" target="1.6" debug="on" includeantruntime="false" srcdir="${hbox.server.api.src.dir}" destdir="${hbox.server.api.class.dir}" classpathref="hbox.server.api.classpath" />
 	</target>
@@ -143,7 +143,7 @@
 	<property name="hbox.server.core.lib.dir"								location="${hbox.server.core.dir}/${lib.dirname}" />
 	<property name="hbox.server.core.class.dir"								location="${hbox.server.out.build.class.dir}/${server.name}-${core.name}" />
 	<property name="hbox.server.core.jar.filename"							value="${hbox.name}-${server.name}-${core.name}.jar" />
-	<property name="hbox.server.core.jar.file"								location="${hbox.server.out.build.jar.dir}/${hbox.server.core.jar.filename}" /> 
+	<property name="hbox.server.core.jar.file"								location="${hbox.server.out.build.jar.dir}/${hbox.server.core.jar.filename}" />
 	
 	<path id="hbox.server.core.classpath">
 		<pathelement location="${hbox.server.core.class.dir}"/>
@@ -154,7 +154,7 @@
 	<target name="core.compile" depends="api.compile">
     	<mkdir dir="${hbox.server.core.class.dir}" />
     	<javac source="1.6" target="1.6" debug="on" includeantruntime="false" srcdir="${hbox.server.core.src.dir}" destdir="${hbox.server.core.class.dir}" classpathref="hbox.server.core.classpath" />
-		<echo file="${hbox.server.core.class.dir}/server.build.properties" append="true">version=${hbox.server.version}${line.separator}</echo>
+		<echo file="${hbox.server.core.class.dir}/server.build.properties" append="false">version=${hbox.server.version}${line.separator}</echo>
     </target>
 	
 	<target name="core.build" depends="core.compile">
@@ -209,7 +209,7 @@
 		</exec>
 	</target>
 	
-	<target name="dist.linux" if="ifLinux" depends="configure.dist">
+	<target name="dist.linux" if="ifLinux" depends="deploy, configure.dist">
 		<copy file="${hbox.server.base.dir}/scripts/installer/server-installer.sh" tofile="${hbox.server.out.build.dir}/server-installer.sh" overwrite="true" />
 		<chmod file="${hbox.server.out.build.dir}/server-installer.sh" perm="a+rx" />
 		<exec executable="makeself" failonerror="true">
@@ -220,7 +220,7 @@
 		</exec>
 	</target>
 	
-	<target name="dist.zip">
+	<target name="dist.zip" depends="deploy, configure.dist">
 		<zip destfile="${hbox.server.out.dist.dir}/${hbox.server.out.dist.package}.zip" basedir="${hbox.server.out.bin.dir}" />
 	</target>
 	
