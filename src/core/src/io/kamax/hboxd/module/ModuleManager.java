@@ -20,21 +20,15 @@
 
 package io.kamax.hboxd.module;
 
-import net.engio.mbassy.listener.Handler;
 import io.kamax.hbox.Configuration;
 import io.kamax.hboxd.event.EventManager;
 import io.kamax.hboxd.event.module.ModuleRegisteredEvent;
-import io.kamax.hboxd.event.module.ModuleUnloadedEvent;
-import io.kamax.hboxd.event.module.ModuleUnregisteredEvent;
 import io.kamax.hboxd.exception.ModuleException;
 import io.kamax.hboxd.exception.module.ModuleAlreadyRegisteredException;
 import io.kamax.hboxd.factory.ModuleFactory;
-import io.kamax.hboxd.module._Module;
-import io.kamax.hboxd.module._ModuleManager;
 import io.kamax.tool.AxBooleans;
 import io.kamax.tool.logging.Logger;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -59,7 +53,6 @@ public class ModuleManager implements _ModuleManager {
    public void stop() {
       EventManager.unregister(this);
       isStarted = false;
-      unregisterModules();
       baseDirs = null;
       modules.clear();
       Logger.verbose("Module manager has stopped");
@@ -111,21 +104,6 @@ public class ModuleManager implements _ModuleManager {
    }
 
    @Override
-   public void unregisterModules() {
-
-      // needed not to cause an Exception
-      for (_Module mod : new ArrayList<_Module>(modules.values())) {
-         try {
-            mod.unload();
-            unregisterModule(mod);
-         } catch (ModuleException e) {
-            Logger.warning("Couldn't unload " + mod + ": " + e.getMessage());
-         }
-
-      }
-   }
-
-   @Override
    public void setModuleBasedir(String... basedir) {
 
       baseDirs = basedir;
@@ -133,7 +111,6 @@ public class ModuleManager implements _ModuleManager {
       for (String s : basedir) {
          Logger.verbose("\t" + new File(s).getAbsolutePath());
       }
-      unregisterModules();
       if (isStarted) {
          refreshModules();
       }
@@ -196,44 +173,6 @@ public class ModuleManager implements _ModuleManager {
       }
 
       return mod;
-   }
-
-   @Override
-   public void unregisterModule(_Module mod) {
-
-      mod = getModule(mod.getId());
-      mod.unload();
-
-      modules.remove(mod.getId());
-      modules.remove(mod.getDescriptor());
-
-      EventManager.post(new ModuleUnregisteredEvent(mod.getId()));
-      Logger.info("Module ID " + mod.getId() + " (" + mod.getName() + ") was successfully unregistered");
-   }
-
-   @Override
-   public _Module reloadModule(_Module mod) {
-      if (isRegistered(mod)) {
-         String path = mod.getLocation();
-         unregisterModule(mod);
-         return registerModule(path);
-      } else {
-         return getModule(mod.getId());
-      }
-   }
-
-   @Handler
-   protected void putModuleEvent(ModuleUnloadedEvent ev) {
-
-      Logger.debug("Calling GC to release any ressources of the module");
-      System.gc();
-   }
-
-   @Handler
-   protected void putModuleEvent(ModuleUnregisteredEvent ev) {
-
-      Logger.debug("Calling GC to release any ressources of the module");
-      System.gc();
    }
 
 }

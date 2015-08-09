@@ -161,13 +161,6 @@ public interface _Module {
    public void load() throws ModuleException;
 
    /**
-    * Unload the module.
-    * 
-    * @throws ModuleException If an error occurred during unload or if the module does not support it.
-    */
-   public void unload() throws ModuleException;
-
-   /**
     * Indicates if the module is loaded.
     * 
     * @return true if the module is loaded, else false.
@@ -175,26 +168,7 @@ public interface _Module {
    public boolean isLoaded();
 
    /**
-    * Enable this module.
-    * 
-    * @throws ModuleException If an error occurred.
-    */
-   public void enable() throws ModuleException;
-
-   /**
-    * Disable this module. This will unload the module if it is loaded.
-    */
-   public void disable();
-
-   /**
-    * Indicates if the module is enabled.
-    * 
-    * @return true if the module is enabled, else false.
-    */
-   public boolean isEnabled();
-
-   /**
-    * Indicates if the module is enabled, loaded and ready for usage.
+    * Indicates if the module is loaded and ready for usage.
     * 
     * @return true if the module is ready, else false.
     */

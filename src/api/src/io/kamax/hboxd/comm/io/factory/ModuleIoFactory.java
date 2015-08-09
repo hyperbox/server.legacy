@@ -41,7 +41,6 @@ public class ModuleIoFactory {
       settings.add(new StringSettingIO(ModuleAttribute.DescriptorFile, mod.getDescriptor()));
       settings.add(new StringSettingIO(ModuleAttribute.Name, mod.getName()));
       settings.add(new StringSettingIO(ModuleAttribute.Version, mod.getVersion()));
-      settings.add(new BooleanSettingIO(ModuleAttribute.isEnabled, mod.isEnabled()));
       settings.add(new BooleanSettingIO(ModuleAttribute.isLoaded, mod.isLoaded()));
       return new ModuleOut(mod.getId(), settings);
    }

@@ -20,22 +20,16 @@
 
 package io.kamax.hboxd.comm.io.factory.event;
 
-import io.kamax.hbox.comm.out.ModuleOut;
 import io.kamax.hbox.comm.out.ServerOut;
 import io.kamax.hbox.comm.out.event.EventOut;
-import io.kamax.hbox.comm.out.event.module.ModuleDisabledEventOut;
-import io.kamax.hbox.comm.out.event.module.ModuleEnabledEventOut;
 import io.kamax.hbox.comm.out.event.module.ModuleLoadedEventOut;
 import io.kamax.hbox.comm.out.event.module.ModuleRegisteredEventOut;
-import io.kamax.hbox.comm.out.event.module.ModuleUnloadedEventOut;
-import io.kamax.hbox.comm.out.event.module.ModuleUnregisteredEventOut;
 import io.kamax.hbox.event.HyperboxEvents;
 import io.kamax.hbox.event._Event;
 import io.kamax.hboxd.comm.io.factory.ModuleIoFactory;
 import io.kamax.hboxd.comm.io.factory.ServerIoFactory;
 import io.kamax.hboxd.core._Hyperbox;
 import io.kamax.hboxd.event.module.ModuleEvent;
-import io.kamax.hboxd.event.module.ModuleUnregisteredEvent;
 import java.util.Date;
 
 public class ModuleEventIoFactory implements _EventIoFactory {
@@ -43,12 +37,8 @@ public class ModuleEventIoFactory implements _EventIoFactory {
    @Override
    public Enum<?>[] getHandles() {
       return new Enum<?>[] {
-            HyperboxEvents.ModuleDisabled,
-            HyperboxEvents.ModuleEnabled,
             HyperboxEvents.ModuleLoaded,
             HyperboxEvents.ModuleRegistered,
-            HyperboxEvents.ModuleUnloaded,
-            HyperboxEvents.ModuleUnregistered
       };
    }
 
@@ -63,18 +53,10 @@ public class ModuleEventIoFactory implements _EventIoFactory {
       ServerOut srvOut = ServerIoFactory.get();
 
       switch ((HyperboxEvents) ev.getEventId()) {
-         case ModuleDisabled:
-            return new ModuleDisabledEventOut(time, srvOut, ModuleIoFactory.get(modEv.getModule()));
-         case ModuleEnabled:
-            return new ModuleEnabledEventOut(time, srvOut, ModuleIoFactory.get(modEv.getModule()));
          case ModuleLoaded:
             return new ModuleLoadedEventOut(time, srvOut, ModuleIoFactory.get(modEv.getModule()));
          case ModuleRegistered:
             return new ModuleRegisteredEventOut(time, srvOut, ModuleIoFactory.get(modEv.getModule()));
-         case ModuleUnloaded:
-            return new ModuleUnloadedEventOut(time, srvOut, ModuleIoFactory.get(modEv.getModule()));
-         case ModuleUnregistered:
-            return new ModuleUnregisteredEventOut(time, srvOut, new ModuleOut(((ModuleUnregisteredEvent) modEv).getModuleId()));
          default:
             return null;
       }

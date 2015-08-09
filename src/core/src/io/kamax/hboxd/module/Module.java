@@ -22,12 +22,8 @@ package io.kamax.hboxd.module;
 
 import io.kamax.hboxd.HBoxServer;
 import io.kamax.hboxd.event.EventManager;
-import io.kamax.hboxd.event.module.ModuleDisabledEvent;
-import io.kamax.hboxd.event.module.ModuleEnabledEvent;
 import io.kamax.hboxd.event.module.ModuleLoadedEvent;
 import io.kamax.hboxd.exception.ModuleException;
-import io.kamax.hboxd.module._Module;
-import io.kamax.hboxd.module._ModuleClassLoader;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
@@ -47,7 +43,6 @@ public class Module implements _Module {
    private Map<String, String> providers = new HashMap<String, String>();
 
    private _ModuleClassLoader loader;
-   private boolean isEnabled = true;
    private Map<Class<?>, Class<?>> providerClasses;
 
    public Module(String id, File descFile, File base, String name, String version, String vendor, String desc, String website,
@@ -102,37 +97,9 @@ public class Module implements _Module {
    }
 
    @Override
-   public void enable() {
-      if (!isEnabled()) {
-         isEnabled = true;
-         EventManager.post(new ModuleEnabledEvent(this));
-      }
-   }
-
-   @Override
-   public void disable() {
-      if (isEnabled()) {
-         if (isLoaded()) {
-            unload();
-         }
-
-         isEnabled = false;
-         EventManager.post(new ModuleDisabledEvent(this));
-      }
-   }
-
-   @Override
-   public boolean isEnabled() {
-      return isEnabled;
-   }
-
-   @Override
    public void load() throws ModuleException {
       if (isLoaded()) {
          throw new ModuleException("Module is already loaded");
-      }
-      if (!isEnabled()) {
-         throw new ModuleException("Module must be enabled to be loaded");
       }
 
       loader = new ModuleClassLoader();
@@ -155,35 +122,13 @@ public class Module implements _Module {
    }
 
    @Override
-   public final void unload() {
-      throw new ModuleException("This module cannot be unloaded: Not implemented");
-
-      /*
-       * There is currently a leak with ModuleClassLoader: unloaded modules are not being GC.
-       * Until fix, we do not allow unloading in the default implementation.
-       * 
-      if (isLoaded()) {
-         HBoxServer.remove(getRessources());
-         
-         mainClass = null;
-         typeClass = null;
-         
-         loader.unload();
-         loader = null;
-         
-         EventManager.post(new ModuleUnloadedEvent(this));
-      }
-       */
-   }
-
-   @Override
    public boolean isLoaded() {
       return (loader != null) && (providers != null);
    }
 
    @Override
    public boolean isReady() {
-      return isEnabled() && isLoaded();
+      return isLoaded();
    }
 
    @Override

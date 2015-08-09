@@ -101,14 +101,8 @@ public interface _ModuleManager {
    public void refreshModules();
 
    /**
-    * Unload all the loaded modules.
-    */
-   public void unregisterModules();
-
-   /**
     * Change the base directories for modules.
     * <p>
-    * This will unregister all previous loaded modules using {@link #unregisterModules()} and change the base directories.<br/>
     * Modules will be refreshed using {{@link #refreshModules()} if the manager is started.
     * </p>
     * 
@@ -148,33 +142,11 @@ public interface _ModuleManager {
    public _Module registerModule(String path);
 
    /**
-    * Unregister a module.
-    * <p>
-    * Module will be unloaded before hand if loaded, and any reference to the module will be cleared.
-    * </p>
-    * 
-    * @param mod The module to unload.
-    */
-   public void unregisterModule(_Module mod);
-
-   /**
     * Checks if the module ID or Descriptor File path is already registered.
     * 
     * @param idOrDescriptorPath Module ID or absolute Descriptor File path.
     * @return true if this ID/path represents a registered module, false if not.
     */
    public boolean isRegistered(String idOrDescriptorPath);
-
-   /**
-    * Register again an existing module.
-    * <p>
-    * This is the equivalent to call {@link #unregisterModule(_Module)} and then {@link #registerModule(String)}.<br/>
-    * Technically, the module returned by this call is NOT the same object as the unregistered module.
-    * </p>
-    * 
-    * @param mod The module to unload and load
-    * @return The newly loaded module
-    */
-   public _Module reloadModule(_Module mod);
 
 }
