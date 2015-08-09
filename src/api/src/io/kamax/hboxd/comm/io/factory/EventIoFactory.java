@@ -20,6 +20,7 @@
 
 package io.kamax.hboxd.comm.io.factory;
 
+import io.kamax.hbox.ClassManager;
 import io.kamax.hbox.comm.out.event.EventOut;
 import io.kamax.hbox.comm.out.event.UnknownEventOut;
 import io.kamax.hbox.event._Event;
@@ -43,7 +44,7 @@ public final class EventIoFactory {
    static {
       factories = new HashMap<Enum<?>, _EventIoFactory>();
       try {
-         Set<_EventIoFactory> preciseFactories = HBoxServer.getAtLeastOneOrFail(_EventIoFactory.class);
+         Set<_EventIoFactory> preciseFactories = ClassManager.getAtLeastOneOrFail(_EventIoFactory.class);
          for (_EventIoFactory preciseFactory : preciseFactories) {
             for (Enum<?> id : preciseFactory.getHandles()) {
                factories.put(id, preciseFactory);

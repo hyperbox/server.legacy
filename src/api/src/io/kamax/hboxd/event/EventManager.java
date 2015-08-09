@@ -20,10 +20,10 @@
 
 package io.kamax.hboxd.event;
 
+import io.kamax.hbox.ClassManager;
 import io.kamax.hbox.Configuration;
 import io.kamax.hbox.event._Event;
 import io.kamax.hbox.exception.HyperboxException;
-import io.kamax.hboxd.HBoxServer;
 import io.kamax.tool.logging.Logger;
 
 public final class EventManager {
@@ -33,7 +33,7 @@ public final class EventManager {
    static {
       String className = Configuration.getSetting("core.eventmgr.class", DefaultEventManager.class.getName());
       Logger.debug("Creating Event manager using : " + className);
-      evMgr = HBoxServer.loadClass(_EventManager.class, className);
+      evMgr = ClassManager.loadClass(_EventManager.class, className);
    }
 
    private EventManager() {

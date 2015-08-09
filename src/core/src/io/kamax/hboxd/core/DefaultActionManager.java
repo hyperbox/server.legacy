@@ -20,10 +20,10 @@
 
 package io.kamax.hboxd.core;
 
+import io.kamax.hbox.ClassManager;
 import io.kamax.hbox.comm.Request;
 import io.kamax.hbox.exception.HyperboxCommunicationException;
 import io.kamax.hbox.exception.HyperboxException;
-import io.kamax.hboxd.HBoxServer;
 import io.kamax.hboxd.core.action._ActionManager;
 import io.kamax.hboxd.core.action._HyperboxAction;
 import io.kamax.tool.logging.Logger;
@@ -39,7 +39,7 @@ public class DefaultActionManager implements _ActionManager {
    @Override
    public void start() throws HyperboxException {
 
-      Set<_HyperboxAction> subTypes = HBoxServer.getAtLeastOneOrFail(_HyperboxAction.class);
+      Set<_HyperboxAction> subTypes = ClassManager.getAtLeastOneOrFail(_HyperboxAction.class);
       for (_HyperboxAction action : subTypes) {
          List<String> mappings = action.getRegistrations();
          if ((mappings == null) || (mappings.size() == 0)) {

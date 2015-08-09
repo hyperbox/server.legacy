@@ -20,7 +20,7 @@
 
 package io.kamax.hboxd.module;
 
-import io.kamax.hboxd.HBoxServer;
+import io.kamax.hbox.ClassManager;
 import io.kamax.hboxd.event.EventManager;
 import io.kamax.hboxd.event.module.ModuleLoadedEvent;
 import io.kamax.hboxd.exception.ModuleException;
@@ -117,7 +117,7 @@ public class Module implements _Module {
          throw new ModuleException("Unable to create provider classes: " + t.getClass().getSimpleName() + ": " + t.getMessage());
       }
 
-      HBoxServer.reload(getRessources(), loader.getClassLoader());
+      ClassManager.reload(getRessources(), loader.getClassLoader());
       EventManager.post(new ModuleLoadedEvent(this));
    }
 

@@ -20,7 +20,7 @@
 
 package io.kamax.hboxd.core;
 
-import net.engio.mbassy.listener.Handler;
+import io.kamax.hbox.ClassManager;
 import io.kamax.hbox.Configuration;
 import io.kamax.hbox.comm.Answer;
 import io.kamax.hbox.comm.Command;
@@ -38,7 +38,6 @@ import io.kamax.hbox.states.ServerConnectionState;
 import io.kamax.hbox.states.ServerState;
 import io.kamax.hboxd.HBoxServer;
 import io.kamax.hboxd.Hyperbox;
-import io.kamax.hboxd.core._Hyperbox;
 import io.kamax.hboxd.core.action._ActionManager;
 import io.kamax.hboxd.core.model.Medium;
 import io.kamax.hboxd.core.model._Machine;
@@ -90,6 +89,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import net.engio.mbassy.listener.Handler;
 import com.google.common.io.Files;
 
 public class SingleHostServer implements _Hyperbox, _Server {
@@ -125,7 +125,7 @@ public class SingleHostServer implements _Hyperbox, _Server {
 
    private void loadPersistors() throws HyperboxException {
 
-      persistor = HBoxServer.loadClass(_Persistor.class, Configuration.getSetting(CFGKEY_CORE_PERSISTOR_CLASS, H2SqlPersistor.class.getName()));
+      persistor = ClassManager.loadClass(_Persistor.class, Configuration.getSetting(CFGKEY_CORE_PERSISTOR_CLASS, H2SqlPersistor.class.getName()));
       persistor.init();
    }
 
@@ -344,7 +344,7 @@ public class SingleHostServer implements _Hyperbox, _Server {
    private void loadHypervisors() throws HyperboxException {
 
       Map<String, Class<? extends _Hypervisor>> hyps = new HashMap<String, Class<? extends _Hypervisor>>();
-      Set<Class<? extends _Hypervisor>> subTypes = HBoxServer.getAnnotatedSubTypes(_Hypervisor.class, Hypervisor.class);
+      Set<Class<? extends _Hypervisor>> subTypes = ClassManager.getAnnotatedSubTypes(_Hypervisor.class, Hypervisor.class);
 
       for (Class<? extends _Hypervisor> hypLoader : subTypes) {
          for (String scheme : hypLoader.getAnnotation(Hypervisor.class).schemes()) {

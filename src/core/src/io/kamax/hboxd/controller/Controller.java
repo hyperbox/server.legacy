@@ -20,6 +20,7 @@
 
 package io.kamax.hboxd.controller;
 
+import io.kamax.hbox.ClassManager;
 import io.kamax.hbox.Configuration;
 import io.kamax.hbox.HyperboxAPI;
 import io.kamax.hbox.comm.Answer;
@@ -27,10 +28,8 @@ import io.kamax.hbox.comm._Client;
 import io.kamax.hbox.comm.out.event.EventOut;
 import io.kamax.hbox.comm.out.event.server.ServerShutdownEventOut;
 import io.kamax.hbox.exception.HyperboxException;
-import io.kamax.hboxd.HBoxServer;
 import io.kamax.hboxd.Hyperbox;
 import io.kamax.hboxd.comm.io.factory.ServerIoFactory;
-import io.kamax.hboxd.controller._Controller;
 import io.kamax.hboxd.core._Hyperbox;
 import io.kamax.hboxd.core.action.ShutdownAction;
 import io.kamax.hboxd.factory.ModelFactory;
@@ -89,7 +88,7 @@ public final class Controller implements _Controller {
 
    private void startFront() throws HyperboxException {
 
-      Set<_Front> subTypes = HBoxServer.getAtLeastOneOrFail(_Front.class);
+      Set<_Front> subTypes = ClassManager.getAtLeastOneOrFail(_Front.class);
       for (_Front test : subTypes) {
          fronts.add(test);
       }
