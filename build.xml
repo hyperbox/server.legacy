@@ -36,7 +36,6 @@
 	<property name="hbox.server.out.build.dir"								location="${hbox.server.out.dir}/${build.dirname}" />
 	<property name="hbox.server.out.build.class.dir"						location="${hbox.server.out.build.dir}/${class.dirname}" />
 	<property name="hbox.server.out.build.jar.dir"							location="${hbox.server.out.build.dir}/${jar.dirname}" />
-	<property name="hbox.server.out.bin.dir"								location="${hbox.server.out.dir}/${bin.dirname}" />
 	<property name="hbox.server.out.dist.dir"								location="${hbox.server.out.dir}/${dist.dirname}" />
 
 	<property name="hbox.server.install.win.dir"							value="C:/Program Files/Hyperbox/Server" />
@@ -55,14 +54,15 @@
 		<property name="hbox.server.install.dir"							location="${hbox.server.install.linux.dir}" />
 	</target>
 	
-	<target name="configure" depends="configure.win, configure.linux">
+	<target name="configure" depends="hbox.api.configure, configure.win, configure.linux">
+		<property name="hbox.server.out.bin.dir"								location="${hbox.server.out.dir}/${bin.dirname}/${platform}" />
 		<property file="${hbox.server.base.dir}/tools/${platform}/build.properties" />
 		
 		<exec executable="git" dir="${hbox.server.base.dir}" outputProperty="hbox.server.version">
 			<arg line="describe --always"/>
 		</exec>
 		
-		<property name="hbox.server.out.dist.package"						value="${hbox.name}-${hbox.server.version}-${os.family}_${os.arch}-${server.name}" />
+		<property name="hbox.server.out.dist.package"						value="${hbox.name}-${hbox.server.version}-${platform}-${server.name}" />
 		
 		<echo message="Hyperbox server Version:             ${hbox.server.version}" />
 	</target>
