@@ -21,10 +21,10 @@
 package io.kamax.hboxd.module;
 
 import io.kamax.hbox.Configuration;
+import io.kamax.hbox.exception.ModuleAlreadyRegisteredException;
+import io.kamax.hbox.exception.ModuleException;
 import io.kamax.hboxd.event.EventManager;
 import io.kamax.hboxd.event.module.ModuleRegisteredEvent;
-import io.kamax.hboxd.exception.ModuleException;
-import io.kamax.hboxd.exception.module.ModuleAlreadyRegisteredException;
 import io.kamax.hboxd.factory.ModuleFactory;
 import io.kamax.tool.AxBooleans;
 import io.kamax.tool.logging.Logger;

@@ -20,7 +20,7 @@
 
 package io.kamax.hboxd.module;
 
-import io.kamax.hboxd.module._ModuleClassLoader;
+import io.kamax.hbox.module._ModuleClassLoader;
 import io.kamax.tool.logging.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

@@ -20,7 +20,8 @@
 
 package io.kamax.hboxd.module;
 
-import io.kamax.hboxd.exception.ModuleException;
+import io.kamax.hbox.exception.ModuleException;
+import io.kamax.hbox.module._ModuleClassLoader;
 import java.net.URL;
 import java.util.Set;
 

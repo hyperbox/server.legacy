@@ -21,9 +21,10 @@
 package io.kamax.hboxd.module;
 
 import io.kamax.hbox.ClassManager;
+import io.kamax.hbox.exception.ModuleException;
+import io.kamax.hbox.module._ModuleClassLoader;
 import io.kamax.hboxd.event.EventManager;
 import io.kamax.hboxd.event.module.ModuleLoadedEvent;
-import io.kamax.hboxd.exception.ModuleException;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;

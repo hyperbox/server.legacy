@@ -20,7 +20,7 @@
 
 package io.kamax.hboxd.exception.module;
 
-import io.kamax.hboxd.exception.ModuleException;
+import io.kamax.hbox.exception.ModuleException;
 import java.io.File;
 
 @SuppressWarnings("serial")
