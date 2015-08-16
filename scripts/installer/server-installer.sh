@@ -287,20 +287,20 @@ function installDaemon {
 	logandout "Install Daemon..."
 	
 	INSTDIR_SED="s#.*#INSTALL_DIR=$INSTALL_DIR#"
-	INSTDIR_LN=$(grep -m 1 -n "^INSTALL_DIR=" $INSTALL_DIR/hboxd | awk -F ":" '{print $1}')
-	sed -i $INSTDIR_LN$INSTDIR_SED  $INSTALL_DIR/hboxd >> $LOG_FILE 2>&1
+	INSTDIR_LN=$(grep -m 1 -n "^INSTALL_DIR=" $INSTALL_DIR/hboxd.init | awk -F ":" '{print $1}')
+	sed -i $INSTDIR_LN$INSTDIR_SED  $INSTALL_DIR/hboxd.init >> $LOG_FILE 2>&1
 	if [ $? -ne 0 ]; then
 		abort "Failed to configure service init.d script"
     fi
 	
 	RUNAS_SED="s/.*/RUNAS=$RUNAS/"
-	RUNAS_LN=$(grep -m 1 -n "^RUNAS=" $INSTALL_DIR/hboxd | awk -F ":" '{print $1}')
-	sed -i $RUNAS_LN$RUNAS_SED $INSTALL_DIR/hboxd >> $LOG_FILE 2>&1
+	RUNAS_LN=$(grep -m 1 -n "^RUNAS=" $INSTALL_DIR/hboxd.init | awk -F ":" '{print $1}')
+	sed -i $RUNAS_LN$RUNAS_SED $INSTALL_DIR/hboxd.init >> $LOG_FILE 2>&1
     if [ $? -ne 0 ]; then
 		abort "Failed to configure service init.d script"
     fi
 
-	mv $INSTALL_DIR/hboxd /etc/init.d/hboxd >> $LOG_FILE 2>&1
+	mv $INSTALL_DIR/hboxd.init /etc/init.d/hboxd >> $LOG_FILE 2>&1
 	if [ $? -ne 0 ]; then
 	        abort "Failed to relocated init.d script to /etc/init.d"
 	fi

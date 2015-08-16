@@ -210,11 +210,11 @@
 	</target>
 	
 	<target name="dist.linux" if="ifLinux" depends="deploy, configure.dist">
-		<copy file="${hbox.server.base.dir}/scripts/installer/server-installer.sh" tofile="${hbox.server.out.build.dir}/server-installer.sh" overwrite="true" />
-		<chmod file="${hbox.server.out.build.dir}/server-installer.sh" perm="a+rx" />
+		<copy file="${hbox.server.base.dir}/scripts/installer/server-installer.sh" tofile="${hbox.server.out.bin.dir}/server-installer.sh" overwrite="true" />
+		<chmod file="${hbox.server.out.bin.dir}/server-installer.sh" perm="a+rx" />
 		<exec executable="makeself" failonerror="true">
 			<arg value="${hbox.server.out.bin.dir}" />
-			<arg value="${hbox.server.out.build.dir}/${hbox.server.out.dist.package}.run" />
+			<arg value="${hbox.server.out.dist.dir}/${hbox.server.out.dist.package}.run" />
 			<arg value="Hyperbox Server" />
 			<arg value="./server-installer.sh" />
 		</exec>
