@@ -29,16 +29,21 @@ import java.util.Set;
 
 public class Hyperbox {
 
-   private static Properties buildProperties;
-   private static Version version = Version.UNKNOWN;
+   private static Properties buildProperties = new Properties();
+   private static Version version;
    private static String cfgFile = "conf/main.cfg";
 
    private static void failedToLoad(Exception e) {
+      version = Version.UNKNOWN;
       Logger.error("Unable to access the build.properties file: " + e.getMessage());
       Logger.error("Version and revision will not be accurate");
    }
 
    public static Version getVersion() {
+      if (version == null) {
+         loadVersions();
+      }
+
       return version;
    }
 
@@ -46,15 +51,15 @@ public class Hyperbox {
       return cfgFile;
    }
 
-   static {
-      buildProperties = new Properties();
+   private static void loadVersions() {
       try {
          buildProperties.load(Hyperbox.class.getResourceAsStream("/server.build.properties"));
          Version rawVersion = new Version(buildProperties.getProperty("version"));
          if (rawVersion.isValid()) {
             version = rawVersion;
          } else {
-            Logger.error("Invalid client version in properties: " + rawVersion);
+            version = Version.UNKNOWN;
+            Logger.error("Invalid server version in properties: " + rawVersion);
             Logger.error("Failing back to " + version);
          }
       } catch (IOException e) {
