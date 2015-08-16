@@ -21,4 +21,7 @@
 #
 ###########################################################################
 
-java -server -Xmx75m -Xss2048k -cp bin/*:lib/* io.kamax.hboxd.HyperboxInteractive "$@"
+export HBOX_SERVER_BASE_DIR=$(dirname $0)
+export HBOX_SERVER_MODULE_DIR="$BASEDIR/modules"
+
+java -server -Xmx75m -Xss2048k -cp "$HBOX_SERVER_BASE_DIR/bin/*":"$HBOX_SERVER_BASE_DIR/lib/*" io.kamax.hboxd.HyperboxInteractive "$@"
