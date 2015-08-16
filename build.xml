@@ -168,7 +168,6 @@
 			<file file="${hbox.server.core.jar.file}" />
 		</copy>
 		<copy todir="${hbox.server.out.bin.dir}/${lib.dirname}" flatten="true">
-			<fileset dir="${hbox.api.kryo.lib.dir}" includes="**/*.jar" />
 			<fileset dir="${hbox.server.core.lib.dir}" includes="**/*.jar" />
 		</copy>
 	</target>
