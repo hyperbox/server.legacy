@@ -56,7 +56,6 @@ public final class Controller implements _Controller {
    private Thread shutdownHook;
 
    static {
-      Logger.raw(getHeader());
       try {
          if (new File(Hyperbox.getConfigFilePath()).exists()) {
             Configuration.init(Hyperbox.getConfigFilePath());
@@ -109,7 +108,6 @@ public final class Controller implements _Controller {
 
    @Override
    public void start(String[] args) {
-
       Hyperbox.setArgs(args);
       shutdownHook = new Thread() {
 
@@ -132,6 +130,7 @@ public final class Controller implements _Controller {
             Logger.log(logFilename, 4);
          }
 
+         Logger.raw(getHeader());
          Logger.info("Hyperbox Init Sequence started");
 
          SecurityContext.init();
