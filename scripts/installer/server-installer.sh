@@ -265,7 +265,7 @@ function copyFiles {
 		log "Cleaning up old binaries"
 		rm -rf $INSTALL_DIR/bin 2>&1 >> $LOG_FILE
 		rm -rf $INSTALL_DIR/lib 2>&1 >> $LOG_FILE
-		rm -rf $INSTALL_DIR/modules 2>$1 >> $LOG_FILE
+		rm -rf $INSTALL_DIR/modules 2>&1 >> $LOG_FILE
 	fi
 	
 	echo Will install to $INSTALL_DIR
