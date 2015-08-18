@@ -24,7 +24,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import io.kamax.hbox.constant.StorageControllerAttribute;
-import io.kamax.hboxd.hypervisor.storage._RawStorageController;
 
 public class RawStorageControllerTest {
 

@@ -20,7 +20,6 @@
 
 package io.kamax.hboxd.task;
 
-import net.engio.mbassy.listener.Handler;
 import io.kamax.hbox.comm.Answer;
 import io.kamax.hbox.comm.AnswerType;
 import io.kamax.hbox.comm.Request;
@@ -37,8 +36,6 @@ import io.kamax.hboxd.event.system.SystemStateEvent;
 import io.kamax.hboxd.event.task.TaskQueueEvent;
 import io.kamax.hboxd.security.SecurityContext;
 import io.kamax.hboxd.session.SessionContext;
-import io.kamax.hboxd.task._Task;
-import io.kamax.hboxd.task._TaskManager;
 import io.kamax.tool.logging.LogLevel;
 import io.kamax.tool.logging.Logger;
 import java.util.ArrayList;
@@ -49,6 +46,7 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
+import net.engio.mbassy.listener.Handler;
 
 public final class TaskManager implements _TaskManager {
 

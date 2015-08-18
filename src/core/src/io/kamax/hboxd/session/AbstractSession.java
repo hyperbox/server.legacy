@@ -29,8 +29,6 @@ import io.kamax.hboxd.event.EventManager;
 import io.kamax.hboxd.event.session.SessionStateEvent;
 import io.kamax.hboxd.security.SecurityContext;
 import io.kamax.hboxd.security._User;
-import io.kamax.hboxd.session.SessionContext;
-import io.kamax.hboxd.session._Session;
 import io.kamax.hboxd.task._TaskManager;
 import io.kamax.tool.logging.Logger;
 import java.util.Date;

@@ -22,7 +22,6 @@ package io.kamax.hboxd.security;
 
 import io.kamax.hbox.comm.SecurityAction;
 import io.kamax.hbox.comm.SecurityItem;
-import io.kamax.hboxd.security._ItemPermission;
 
 public class ItemPermission extends ActionPermission implements _ItemPermission {
 

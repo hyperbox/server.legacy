@@ -20,7 +20,6 @@
 
 package io.kamax.hboxd.core.model;
 
-import io.kamax.hboxd.core.model._Display;
 import io.kamax.hboxd.hypervisor.vm.device._RawDisplay;
 import io.kamax.setting._Setting;
 import java.util.List;

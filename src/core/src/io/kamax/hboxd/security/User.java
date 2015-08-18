@@ -21,7 +21,6 @@
 package io.kamax.hboxd.security;
 
 import io.kamax.hbox.exception.HyperboxException;
-import io.kamax.hboxd.security._User;
 import io.kamax.tool.AxStrings;
 
 public class User implements _User {

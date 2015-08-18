@@ -21,7 +21,6 @@
 package io.kamax.hboxd.core.model;
 
 import io.kamax.hbox.constant.KeyboardMode;
-import io.kamax.hboxd.core.model._Keyboard;
 import io.kamax.hboxd.hypervisor.vm.device._RawKeyboard;
 import io.kamax.setting._Setting;
 import java.util.List;

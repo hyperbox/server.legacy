@@ -20,7 +20,6 @@
 
 package io.kamax.hboxd.core.model;
 
-import io.kamax.hboxd.core.model._Mouse;
 import io.kamax.hboxd.hypervisor.vm.device._RawMouse;
 import io.kamax.setting._Setting;
 import java.util.List;

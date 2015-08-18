@@ -26,8 +26,6 @@ import io.kamax.hbox.exception.HyperboxException;
 import io.kamax.hboxd.factory.StoreFactory;
 import io.kamax.hboxd.persistence._StorePersistor;
 import io.kamax.hboxd.security.SecurityContext;
-import io.kamax.hboxd.store._Store;
-import io.kamax.hboxd.store._StoreManager;
 import io.kamax.tool.logging.Logger;
 import java.io.File;
 import java.util.ArrayList;

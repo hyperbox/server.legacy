@@ -20,7 +20,6 @@
 
 package io.kamax.hboxd;
 
-import io.kamax.hboxd.Hyperbox;
 import io.kamax.hboxd.controller.Controller;
 import java.util.Arrays;
 import java.util.HashSet;

@@ -22,8 +22,6 @@ package io.kamax.hboxd.core.model;
 
 import io.kamax.hbox.constant.EntityType;
 import io.kamax.hbox.hypervisor.net._NetService;
-import io.kamax.hboxd.core.model._Machine;
-import io.kamax.hboxd.core.model._NetworkInterface;
 import io.kamax.hboxd.hypervisor.vm.device._RawNetworkInterface;
 import io.kamax.setting._Setting;
 import java.util.List;

@@ -37,7 +37,6 @@ import io.kamax.hbox.exception.HypervisorException;
 import io.kamax.hbox.exception.MachineDisplayNotAvailableException;
 import io.kamax.hbox.hypervisor._MachineLogFile;
 import io.kamax.hbox.states.MachineStates;
-import io.kamax.hboxd.hypervisor._Hypervisor;
 import io.kamax.hboxd.hypervisor.snapshot.RawSnapshotTest;
 import io.kamax.hboxd.hypervisor.storage.RawMediumTest;
 import io.kamax.hboxd.hypervisor.storage.RawStorageControllerSubTypeTest;

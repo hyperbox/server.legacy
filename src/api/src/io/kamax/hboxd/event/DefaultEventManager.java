@@ -20,14 +20,14 @@
 
 package io.kamax.hboxd.event;
 
-import net.engio.mbassy.bus.MBassador;
-import net.engio.mbassy.bus.config.BusConfiguration;
 import io.kamax.hbox.event._Event;
 import io.kamax.hbox.exception.HyperboxException;
 import io.kamax.hboxd.security.SecurityContext;
 import io.kamax.tool.logging.Logger;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.config.BusConfiguration;
 
 public final class DefaultEventManager implements _EventManager, Runnable {
 

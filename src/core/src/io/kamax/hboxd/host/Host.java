@@ -20,7 +20,6 @@
 
 package io.kamax.hboxd.host;
 
-import io.kamax.hboxd.host._Host;
 import io.kamax.hboxd.hypervisor.host._RawHost;
 
 public class Host implements _Host {

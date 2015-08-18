@@ -21,8 +21,6 @@
 package io.kamax.hboxd.core;
 
 import io.kamax.hbox.exception.HyperboxException;
-import io.kamax.hboxd.core.HyperboxTest;
-import io.kamax.hboxd.core.SingleHostServer;
 import org.junit.BeforeClass;
 
 public class HyperboxCoreTest extends HyperboxTest {

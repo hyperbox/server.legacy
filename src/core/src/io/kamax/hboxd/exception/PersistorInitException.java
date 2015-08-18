@@ -21,7 +21,6 @@
 
 package io.kamax.hboxd.exception;
 
-import io.kamax.hboxd.exception.PersistorException;
 
 @SuppressWarnings("serial")
 public class PersistorInitException extends PersistorException {

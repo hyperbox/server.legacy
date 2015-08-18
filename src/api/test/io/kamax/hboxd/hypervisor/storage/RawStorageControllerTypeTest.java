@@ -22,7 +22,6 @@ package io.kamax.hboxd.hypervisor.storage;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import io.kamax.hboxd.hypervisor.storage._RawStorageControllerType;
 
 public class RawStorageControllerTypeTest {
 

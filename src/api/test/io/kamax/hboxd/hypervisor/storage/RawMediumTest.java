@@ -22,7 +22,6 @@ package io.kamax.hboxd.hypervisor.storage;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import io.kamax.hboxd.hypervisor.storage._RawMedium;
 
 public final class RawMediumTest {
 

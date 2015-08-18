@@ -20,7 +20,6 @@
 
 package io.kamax.hboxd.session;
 
-import net.engio.mbassy.listener.Handler;
 import io.kamax.hbox.comm.Request;
 import io.kamax.hbox.comm._Client;
 import io.kamax.hbox.comm.out.event.EventOut;
@@ -29,13 +28,12 @@ import io.kamax.hbox.exception.HyperboxException;
 import io.kamax.hboxd.comm.io.factory.EventIoFactory;
 import io.kamax.hboxd.core._Hyperbox;
 import io.kamax.hboxd.event.EventManager;
-import io.kamax.hboxd.session._Session;
-import io.kamax.hboxd.session._SessionManager;
 import io.kamax.tool.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import net.engio.mbassy.listener.Handler;
 
 public final class SessionManager implements _SessionManager {
 

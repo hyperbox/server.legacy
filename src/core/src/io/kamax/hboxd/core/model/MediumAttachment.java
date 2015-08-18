@@ -20,7 +20,6 @@
 
 package io.kamax.hboxd.core.model;
 
-import io.kamax.hboxd.core.model._MediumAttachment;
 import io.kamax.hboxd.hypervisor.storage._RawMediumAttachment;
 import io.kamax.tool.AxStrings;
 

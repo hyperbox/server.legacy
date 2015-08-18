@@ -21,10 +21,6 @@
 package io.kamax.hboxd.core.model;
 
 import io.kamax.hbox.constant.EntityType;
-import io.kamax.hboxd.core.model._Machine;
-import io.kamax.hboxd.core.model._Medium;
-import io.kamax.hboxd.core.model._MediumAttachment;
-import io.kamax.hboxd.core.model._StorageController;
 import io.kamax.hboxd.event.EventManager;
 import io.kamax.hboxd.event.storage.StorageAttachmentAddedEvent;
 import io.kamax.hboxd.event.storage.StorageAttachmentModifiedEvent;

@@ -20,7 +20,6 @@
 
 package io.kamax.hboxd.core.model;
 
-import io.kamax.hboxd.core.model._CPU;
 import io.kamax.hboxd.hypervisor.vm.device._RawCPU;
 import io.kamax.setting._Setting;
 import java.util.List;

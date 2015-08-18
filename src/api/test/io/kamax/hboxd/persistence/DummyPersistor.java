@@ -25,7 +25,6 @@ import io.kamax.hbox.comm.SecurityAction;
 import io.kamax.hbox.comm.SecurityItem;
 import io.kamax.hbox.exception.FeatureNotImplementedException;
 import io.kamax.hboxd.exception.PersistorException;
-import io.kamax.hboxd.persistence._Persistor;
 import io.kamax.hboxd.security._ActionPermission;
 import io.kamax.hboxd.security._ItemPermission;
 import io.kamax.hboxd.security._User;

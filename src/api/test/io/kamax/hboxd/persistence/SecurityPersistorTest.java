@@ -23,7 +23,6 @@ package io.kamax.hboxd.persistence;
 
 import static org.junit.Assert.assertTrue;
 import io.kamax.hbox.exception.HyperboxException;
-import io.kamax.hboxd.persistence._SecurityPersistor;
 import io.kamax.tool.logging.LogLevel;
 import io.kamax.tool.logging.Logger;
 import org.junit.After;

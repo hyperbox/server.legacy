@@ -22,10 +22,8 @@ package io.kamax.hboxd.core;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import net.engio.mbassy.listener.Handler;
 import io.kamax.hbox.comm.out.event.EventOut;
 import io.kamax.hbox.exception.HyperboxException;
-import io.kamax.hboxd.core._Hyperbox;
 import io.kamax.hboxd.core.model.MachineTest;
 import io.kamax.hboxd.core.model._Machine;
 import io.kamax.hboxd.hypervisor.vm._RawVM;
@@ -35,6 +33,7 @@ import io.kamax.tool.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import net.engio.mbassy.listener.Handler;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

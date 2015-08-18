@@ -24,9 +24,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import io.kamax.hbox.constant.MachineAttribute;
-import io.kamax.hboxd.core.model._Machine;
-import io.kamax.hboxd.core.model._NetworkInterface;
-import io.kamax.hboxd.core.model._StorageController;
 
 public class MachineTest {
 

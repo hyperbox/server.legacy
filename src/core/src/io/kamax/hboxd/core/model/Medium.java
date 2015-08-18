@@ -22,8 +22,6 @@ package io.kamax.hboxd.core.model;
 
 import io.kamax.hbox.constant.EntityType;
 import io.kamax.hbox.exception.FeatureNotImplementedException;
-import io.kamax.hboxd.core.model._Machine;
-import io.kamax.hboxd.core.model._Medium;
 import io.kamax.hboxd.hypervisor._Hypervisor;
 import io.kamax.hboxd.hypervisor.storage._RawMedium;
 import io.kamax.hboxd.server._Server;

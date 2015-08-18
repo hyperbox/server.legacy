@@ -23,7 +23,6 @@ package io.kamax.hboxd.core;
 import io.kamax.hbox.comm.Command;
 import io.kamax.hbox.comm.Request;
 import io.kamax.hbox.exception.HyperboxException;
-import io.kamax.hboxd.core._Hyperbox;
 import io.kamax.hboxd.core.action.ASingleTaskAction;
 import java.util.Arrays;
 import java.util.List;

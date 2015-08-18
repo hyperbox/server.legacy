@@ -21,8 +21,6 @@
 package io.kamax.hboxd.core.model;
 
 import io.kamax.hbox.constant.EntityType;
-import io.kamax.hboxd.core.model._Console;
-import io.kamax.hboxd.core.model._Machine;
 import io.kamax.hboxd.hypervisor.vm.device._RawConsole;
 import io.kamax.setting._Setting;
 import java.util.List;

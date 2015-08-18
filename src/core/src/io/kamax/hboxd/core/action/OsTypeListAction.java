@@ -27,7 +27,6 @@ import io.kamax.hbox.comm.HypervisorTasks;
 import io.kamax.hbox.comm.Request;
 import io.kamax.hboxd.comm.io.factory.OsTypeIoFactory;
 import io.kamax.hboxd.core._Hyperbox;
-import io.kamax.hboxd.core.action.AbstractHyperboxMultiTaskAction;
 import io.kamax.hboxd.hypervisor._RawOsType;
 import io.kamax.hboxd.session.SessionContext;
 import java.util.Arrays;

@@ -23,7 +23,6 @@ package io.kamax.hboxd.core.model;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import io.kamax.hboxd.core.model._NetworkInterface;
 
 public class NetworkInterfaceTest {
 

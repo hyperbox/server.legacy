@@ -20,7 +20,6 @@
 
 package io.kamax.hboxd.core.model;
 
-import io.kamax.hboxd.core.model._USB;
 import io.kamax.hboxd.hypervisor.vm.device._RawUSB;
 import io.kamax.setting._Setting;
 import java.util.List;
