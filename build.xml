@@ -122,9 +122,11 @@
 		</copy>
 		
 		<copy todir="${hbox.server.out.bin.dir}/doc/legal">
+			<fileset dir="${hbox.api.doc.dir}/legal" includes="**/*" />
 			<fileset dir="${hbox.server.base.dir}/${doc.dirname}/legal" includes="**/*" />
 		</copy>
 		<copy todir="${hbox.server.out.bin.dir}/doc/manual">
+			<fileset dir="${hbox.api.doc.dir}/manual" includes="**/*" />
 			<fileset dir="${hbox.server.base.dir}/${doc.dirname}/manual" includes="**/*" />
 		</copy>
 		
