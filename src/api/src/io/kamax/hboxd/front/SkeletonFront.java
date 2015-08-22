@@ -26,94 +26,94 @@ import java.lang.Thread.UncaughtExceptionHandler;
 
 /**
  * This class will provide a thread management for a Front class, but the front class is responsible to set the proper status for its state.
- * 
+ *
  * @author max
  */
 // TODO implement events
 public abstract class SkeletonFront implements _Front, Runnable {
 
-   protected static final int STOPPED = 0;
-   protected static final int STARTING = 1;
-   protected static final int STARTED = 2;
-   protected static final int STOPPING = 3;
-   protected static final int CRASHED = 4;
+    protected static final int STOPPED = 0;
+    protected static final int STARTING = 1;
+    protected static final int STARTED = 2;
+    protected static final int STOPPING = 3;
+    protected static final int CRASHED = 4;
 
-   private _RequestReceiver r;
+    private _RequestReceiver r;
 
-   private volatile int status = STOPPED;
-   private Thread thread;
+    private volatile int status = STOPPED;
+    private Thread thread;
 
-   @Override
-   public void start(_RequestReceiver receiver) throws HyperboxException {
+    @Override
+    public void start(_RequestReceiver receiver) throws HyperboxException {
 
-      r = receiver;
-      thread = new Thread(this, "Front ID " + getClass().getSimpleName());
-      thread.setUncaughtExceptionHandler(new FrontExceptionHander());
-      status = STARTING;
-      starting();
-      thread.start();
-      synchronized (this) {
-         while (status == STARTING) {
-            try {
-               wait(1000);
-            } catch (InterruptedException e) {
-               throw new HyperboxException("Unable to start " + getClass().getSimpleName() + " because it was interrupted.");
+        r = receiver;
+        thread = new Thread(this, "Front ID " + getClass().getSimpleName());
+        thread.setUncaughtExceptionHandler(new FrontExceptionHander());
+        status = STARTING;
+        starting();
+        thread.start();
+        synchronized (this) {
+            while (status == STARTING) {
+                try {
+                    wait(1000);
+                } catch (InterruptedException e) {
+                    throw new HyperboxException("Unable to start " + getClass().getSimpleName() + " because it was interrupted.");
+                }
             }
-         }
-      }
-      if (status != STARTED) {
-         throw new HyperboxException("An error occured while trying to start " + getClass().getSimpleName());
-      }
-   }
+        }
+        if (status != STARTED) {
+            throw new HyperboxException("An error occured while trying to start " + getClass().getSimpleName());
+        }
+    }
 
-   @Override
-   public void stop() {
+    @Override
+    public void stop() {
 
-      if (status == STARTED) {
-         status = STOPPING;
-         stopping();
-         thread.interrupt();
-         try {
-            thread.join();
-         } catch (InterruptedException e) {
-            Logger.exception(e);
-         }
-      }
-      thread = null;
-      status = STOPPED;
-   }
+        if (status == STARTED) {
+            status = STOPPING;
+            stopping();
+            thread.interrupt();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                Logger.exception(e);
+            }
+        }
+        thread = null;
+        status = STOPPED;
+    }
 
-   protected void setStatus(int status) {
+    protected void setStatus(int status) {
 
-      this.status = status;
-      synchronized (this) {
-         this.notifyAll();
-      }
+        this.status = status;
+        synchronized (this) {
+            this.notifyAll();
+        }
 
-   }
+    }
 
-   protected void starting() {
-      // stub - to be implemented if needed
-   }
+    protected void starting() {
+        // stub - to be implemented if needed
+    }
 
-   protected void stopping() {
-      // stub - to be implemented if needed
-   }
+    protected void stopping() {
+        // stub - to be implemented if needed
+    }
 
-   protected _RequestReceiver getReceiver() {
-      return r;
-   }
+    protected _RequestReceiver getReceiver() {
+        return r;
+    }
 
-   private class FrontExceptionHander implements UncaughtExceptionHandler {
+    private class FrontExceptionHander implements UncaughtExceptionHandler {
 
-      @Override
-      public void uncaughtException(Thread arg0, Throwable arg1) {
+        @Override
+        public void uncaughtException(Thread arg0, Throwable arg1) {
 
-         Logger.debug("The Front-end \"" + getClass().getSimpleName() + " has crashed.");
-         Logger.debug("Exception caught is : " + arg1.getClass().getSimpleName() + " - " + arg1.getMessage());
-         Logger.debug("The Front-end will not be restarted.");
-         status = CRASHED;
-      }
-   }
+            Logger.debug("The Front-end \"" + getClass().getSimpleName() + " has crashed.");
+            Logger.debug("Exception caught is : " + arg1.getClass().getSimpleName() + " - " + arg1.getMessage());
+            Logger.debug("The Front-end will not be restarted.");
+            status = CRASHED;
+        }
+    }
 
 }

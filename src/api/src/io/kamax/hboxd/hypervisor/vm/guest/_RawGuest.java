@@ -24,12 +24,12 @@ import java.util.List;
 
 public interface _RawGuest {
 
-   public boolean hasHypervisorTools();
+    public boolean hasHypervisorTools();
 
-   public _RawHypervisorTools getHypervisorTools();
+    public _RawHypervisorTools getHypervisorTools();
 
-   public List<_RawGuestNetworkInterface> listNetworkInterfaces();
+    public List<_RawGuestNetworkInterface> listNetworkInterfaces();
 
-   public _RawGuestNetworkInterface getNetworkInterfaceByMac(String macAddress);
+    public _RawGuestNetworkInterface getNetworkInterfaceByMac(String macAddress);
 
 }

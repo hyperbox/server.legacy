@@ -26,8 +26,8 @@ import io.kamax.hboxd.security._User;
 
 public class UserRemovedEvent extends UserEvent {
 
-   public UserRemovedEvent(_User usr) {
-      super(HyperboxEvents.UserRemoved, usr);
-   }
+    public UserRemovedEvent(_User usr) {
+        super(HyperboxEvents.UserRemoved, usr);
+    }
 
 }

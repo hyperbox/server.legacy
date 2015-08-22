@@ -22,12 +22,12 @@ package io.kamax.hboxd.hypervisor.storage;
 
 public interface _RawStorageControllerType {
 
-   public String getId();
+    public String getId();
 
-   public long getMinPort();
+    public long getMinPort();
 
-   public long getMaxPort();
+    public long getMaxPort();
 
-   public long getMaxDevPerPort();
+    public long getMaxDevPerPort();
 
 }

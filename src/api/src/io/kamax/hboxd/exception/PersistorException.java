@@ -23,11 +23,13 @@ package io.kamax.hboxd.exception;
 
 import io.kamax.hbox.exception.HyperboxException;
 
-@SuppressWarnings("serial")
+
 public class PersistorException extends HyperboxException {
 
-   public PersistorException(String s, Throwable e) {
-      super(s, e);
-   }
+    private static final long serialVersionUID = 5971025054537442210L;
+
+    public PersistorException(String s, Throwable e) {
+        super(s, e);
+    }
 
 }

@@ -27,65 +27,65 @@ import java.io.File;
 
 public final class FolderStore implements _Store {
 
-   private String id;
-   private String name;
-   private File location;
+    private String id;
+    private String name;
+    private File location;
 
-   public FolderStore(String id, String name, File path) {
-      if (!path.exists()) {
-         throw new HyperboxException(location.getAbsolutePath() + " does not exist");
-      }
-      if (!path.isDirectory()) {
-         throw new HyperboxException(location.getAbsolutePath() + " is not a folder");
-      }
-      if (!path.isAbsolute()) {
-         throw new HyperboxException(location.getAbsolutePath() + " must be a full path");
-      }
+    public FolderStore(String id, String name, File path) {
+        if (!path.exists()) {
+            throw new HyperboxException(location.getAbsolutePath() + " does not exist");
+        }
+        if (!path.isDirectory()) {
+            throw new HyperboxException(location.getAbsolutePath() + " is not a folder");
+        }
+        if (!path.isAbsolute()) {
+            throw new HyperboxException(location.getAbsolutePath() + " must be a full path");
+        }
 
-      this.id = id;
-      this.name = name;
-      location = new File(path.getAbsolutePath());
-   }
+        this.id = id;
+        this.name = name;
+        location = new File(path.getAbsolutePath());
+    }
 
-   @Override
-   public String getId() {
-      return id;
-   }
+    @Override
+    public String getId() {
+        return id;
+    }
 
-   @Override
-   public String getType() {
-      return "localFolder";
-   }
+    @Override
+    public String getType() {
+        return "localFolder";
+    }
 
-   @Override
-   public String getLabel() {
-      return name;
-   }
+    @Override
+    public String getLabel() {
+        return name;
+    }
 
-   @Override
-   public _StoreItem getContainer() {
-      return new FolderStoreItem(this, location);
-   }
+    @Override
+    public _StoreItem getContainer() {
+        return new FolderStoreItem(this, location);
+    }
 
-   @Override
-   public String getLocation() {
-      return location.getAbsolutePath();
-   }
+    @Override
+    public String getLocation() {
+        return location.getAbsolutePath();
+    }
 
-   @Override
-   public _StoreItem getItem(String path) {
-      File newItemPath = path.startsWith(getLocation()) ? new File(path) : new File(getLocation() + path);
-      if (!newItemPath.exists()) {
-         throw new HyperboxException(newItemPath.getAbsolutePath() + " is not a valid location");
-      }
-      if (!newItemPath.canRead()) {
-         throw new HyperboxException(newItemPath.getAbsolutePath() + " is not readable");
-      }
-      if (newItemPath.isDirectory()) {
-         return new FolderStoreItem(this, newItemPath);
-      } else {
-         return new FileStoreItem(this, newItemPath);
-      }
-   }
+    @Override
+    public _StoreItem getItem(String path) {
+        File newItemPath = path.startsWith(getLocation()) ? new File(path) : new File(getLocation() + path);
+        if (!newItemPath.exists()) {
+            throw new HyperboxException(newItemPath.getAbsolutePath() + " is not a valid location");
+        }
+        if (!newItemPath.canRead()) {
+            throw new HyperboxException(newItemPath.getAbsolutePath() + " is not readable");
+        }
+        if (newItemPath.isDirectory()) {
+            return new FolderStoreItem(this, newItemPath);
+        } else {
+            return new FileStoreItem(this, newItemPath);
+        }
+    }
 
 }

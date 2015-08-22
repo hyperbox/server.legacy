@@ -31,19 +31,19 @@ import java.util.List;
 
 public class HypervisorDisconnectAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.HypervisorDisconnect.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.HypervisorDisconnect.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      hbox.getServerManager().getServer().disconnect();
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        hbox.getServerManager().getServer().disconnect();
+    }
 
 }

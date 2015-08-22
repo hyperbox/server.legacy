@@ -20,23 +20,25 @@
 
 package io.kamax.hboxd.exception.machine;
 
-@SuppressWarnings("serial")
+
 public class MachineLockingException extends MachineException {
 
-   public MachineLockingException() {
-      this("Unable to lock machine");
-   }
+    private static final long serialVersionUID = 5627624619421855929L;
 
-   public MachineLockingException(String s) {
-      super(s);
-   }
+    public MachineLockingException() {
+        this("Unable to lock machine");
+    }
 
-   public MachineLockingException(Throwable t) {
-      super(t);
-   }
+    public MachineLockingException(String s) {
+        super(s);
+    }
 
-   public MachineLockingException(String s, Throwable t) {
-      super(s, t);
-   }
+    public MachineLockingException(Throwable t) {
+        super(t);
+    }
+
+    public MachineLockingException(String s, Throwable t) {
+        super(s, t);
+    }
 
 }

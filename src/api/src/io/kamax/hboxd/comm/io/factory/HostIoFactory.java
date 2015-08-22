@@ -29,18 +29,18 @@ import java.util.List;
 
 public class HostIoFactory {
 
-   private HostIoFactory() {
-      // static class, cannot be instantiated
-   }
+    private HostIoFactory() {
+        // static class, cannot be instantiated
+    }
 
-   public static HostOut get(_Host host) {
-      List<SettingIO> sIoList = new ArrayList<SettingIO>();
-      sIoList.add(new SettingIO(HostAttribute.Hostname, host.getHostname()));
-      sIoList.add(new SettingIO(HostAttribute.OperatingSystemName, host.getOSName()));
-      sIoList.add(new SettingIO(HostAttribute.OperatingSystemVersion, host.getOSVersion()));
-      sIoList.add(new SettingIO(HostAttribute.MemoryTotal, host.getMemorySize()));
-      sIoList.add(new SettingIO(HostAttribute.MemoryAvailable, host.getMemoryAvailable()));
-      return new HostOut(sIoList);
-   }
+    public static HostOut get(_Host host) {
+        List<SettingIO> sIoList = new ArrayList<SettingIO>();
+        sIoList.add(new SettingIO(HostAttribute.Hostname, host.getHostname()));
+        sIoList.add(new SettingIO(HostAttribute.OperatingSystemName, host.getOSName()));
+        sIoList.add(new SettingIO(HostAttribute.OperatingSystemVersion, host.getOSVersion()));
+        sIoList.add(new SettingIO(HostAttribute.MemoryTotal, host.getMemorySize()));
+        sIoList.add(new SettingIO(HostAttribute.MemoryAvailable, host.getMemoryAvailable()));
+        return new HostOut(sIoList);
+    }
 
 }

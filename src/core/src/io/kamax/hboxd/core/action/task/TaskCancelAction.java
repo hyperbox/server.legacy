@@ -31,20 +31,20 @@ import java.util.List;
 
 public class TaskCancelAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.TaskCancel.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.TaskCancel.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      TaskIn tIn = request.get(TaskIn.class);
-      hbox.getTaskManager().remove(tIn.getId());
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        TaskIn tIn = request.get(TaskIn.class);
+        hbox.getTaskManager().remove(tIn.getId());
+    }
 
 }

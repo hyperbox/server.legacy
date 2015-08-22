@@ -23,11 +23,13 @@ package io.kamax.hboxd.exception.store;
 import io.kamax.hboxd.exception.StoreException;
 import java.io.File;
 
-@SuppressWarnings("serial")
+
 public class StoreItemIsNotContainerException extends StoreException {
 
-   public StoreItemIsNotContainerException(File path) {
-      super(path.getAbsolutePath() + " is not a container");
-   }
+    private static final long serialVersionUID = 4519998846429867737L;
+
+    public StoreItemIsNotContainerException(File path) {
+        super(path.getAbsolutePath() + " is not a container");
+    }
 
 }

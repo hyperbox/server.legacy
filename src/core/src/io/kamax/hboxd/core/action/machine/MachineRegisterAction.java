@@ -38,23 +38,23 @@ import java.util.List;
 
 public final class MachineRegisterAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineRegister.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineRegister.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      ServerIn srvIn = request.get(ServerIn.class);
-      StoreItemIn siIn = request.get(StoreItemIn.class);
-      _RawVM vm = hbox.getHypervisor().registerMachine(siIn.getPath());
-      MachineOut mOut = MachineIoFactory.get(hbox.getServer(srvIn.getId()).getMachine(vm.getUuid()));
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, mOut));
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        ServerIn srvIn = request.get(ServerIn.class);
+        StoreItemIn siIn = request.get(StoreItemIn.class);
+        _RawVM vm = hbox.getHypervisor().registerMachine(siIn.getPath());
+        MachineOut mOut = MachineIoFactory.get(hbox.getServer(srvIn.getId()).getMachine(vm.getUuid()));
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, mOut));
+    }
 
 }

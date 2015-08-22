@@ -26,8 +26,8 @@ import io.kamax.setting._Settable;
 
 public class ObjectIoFactory {
 
-   public static void update(_Settable o, ObjectIn<?> oIo) {
-      oIo.setSetting(SettingIoFactory.getList(o.getSettings()));
-   }
+    public static void update(_Settable o, ObjectIn<?> oIo) {
+        oIo.setSetting(SettingIoFactory.getList(o.getSettings()));
+    }
 
 }

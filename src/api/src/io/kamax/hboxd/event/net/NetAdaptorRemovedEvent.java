@@ -25,8 +25,8 @@ import io.kamax.hboxd.hypervisor._Hypervisor;
 
 public class NetAdaptorRemovedEvent extends NetAdaptorEvent {
 
-   public NetAdaptorRemovedEvent(_Hypervisor hyp, String modeId, String adaptorId) {
-      super(HyperboxEvents.NetAdaptorRemoved, hyp, modeId, adaptorId);
-   }
+    public NetAdaptorRemovedEvent(_Hypervisor hyp, String modeId, String adaptorId) {
+        super(HyperboxEvents.NetAdaptorRemoved, hyp, modeId, adaptorId);
+    }
 
 }

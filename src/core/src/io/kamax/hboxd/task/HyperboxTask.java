@@ -39,176 +39,176 @@ import java.util.Date;
 
 public class HyperboxTask implements _Task, _Client {
 
-   private String id;
-   private Throwable error;
-   private _HyperboxAction ac;
-   private Request req;
-   private _User user;
-   private _Hyperbox hbox;
+    private String id;
+    private Throwable error;
+    private _HyperboxAction ac;
+    private Request req;
+    private _User user;
+    private _Hyperbox hbox;
 
-   private volatile TaskState state;
+    private volatile TaskState state;
 
-   private final Date createTime = new Date();
-   private volatile Date queueTime = null;
-   private volatile Date startTime = null;
-   private volatile Date endTime = null;
+    private final Date createTime = new Date();
+    private volatile Date queueTime = null;
+    private volatile Date startTime = null;
+    private volatile Date endTime = null;
 
-   public HyperboxTask(String id, _HyperboxAction ac, Request req, _User user, _Client client, _Hyperbox hbox) {
-      this.id = id;
-      this.ac = ac;
-      this.req = req;
-      this.user = user;
-      this.hbox = hbox;
-      setState(TaskState.Created);
-   }
+    public HyperboxTask(String id, _HyperboxAction ac, Request req, _User user, _Client client, _Hyperbox hbox) {
+        this.id = id;
+        this.ac = ac;
+        this.req = req;
+        this.user = user;
+        this.hbox = hbox;
+        setState(TaskState.Created);
+    }
 
-   private void setState(TaskState ts) {
-      state = ts;
-      EventManager.post(new TaskStateEvent(this, state));
-   }
+    private void setState(TaskState ts) {
+        state = ts;
+        EventManager.post(new TaskStateEvent(this, state));
+    }
 
-   @Override
-   public String getId() {
-      return id;
-   }
+    @Override
+    public String getId() {
+        return id;
+    }
 
-   @Override
-   public _HyperboxAction getAction() {
-      return ac;
-   }
+    @Override
+    public _HyperboxAction getAction() {
+        return ac;
+    }
 
-   @Override
-   public Request getRequest() {
-      return req;
-   }
+    @Override
+    public Request getRequest() {
+        return req;
+    }
 
-   @Override
-   public _User getUser() {
-      return user;
-   }
+    @Override
+    public _User getUser() {
+        return user;
+    }
 
-   @Override
-   public _ProgressTracker getProgress() {
-      // TODO Auto-generated method stub
-      return null;
-   }
+    @Override
+    public _ProgressTracker getProgress() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-   @Override
-   public boolean isCancelable() {
-      return ac.isCancelable();
-   }
+    @Override
+    public boolean isCancelable() {
+        return ac.isCancelable();
+    }
 
-   @Override
-   public void start() {
+    @Override
+    public void start() {
 
-      if (!state.equals(TaskState.Pending)) {
-         throw new IllegalStateException("Task must be Pending to be started.");
-      }
+        if (!state.equals(TaskState.Pending)) {
+            throw new IllegalStateException("Task must be Pending to be started.");
+        }
 
-      TaskState currentState = getState();
-      try {
-         startTime = new Date();
-         SecurityContext.setUser(user);
-         SessionContext.setClient(this);
-         setState(TaskState.Running);
+        TaskState currentState = getState();
+        try {
+            startTime = new Date();
+            SecurityContext.setUser(user);
+            SessionContext.setClient(this);
+            setState(TaskState.Running);
 
-         Logger.debug("Running Task #" + getId() + " for Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]");
-         try {
-            ac.run(req, hbox);
-            Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " succeeded.");
-            currentState = TaskState.Completed;
-         } catch (ActionCanceledException e) {
-            Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " was canceled: " + e.getMessage());
-            currentState = TaskState.Canceled;
-         } catch (HyperboxException e) {
-            Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " failed: " + e.getMessage());
+            Logger.debug("Running Task #" + getId() + " for Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]");
+            try {
+                ac.run(req, hbox);
+                Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " succeeded.");
+                currentState = TaskState.Completed;
+            } catch (ActionCanceledException e) {
+                Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " was canceled: " + e.getMessage());
+                currentState = TaskState.Canceled;
+            } catch (HyperboxException e) {
+                Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " failed: " + e.getMessage());
+                error = e;
+                currentState = TaskState.Failed;
+            } catch (Throwable e) {
+                error = e;
+                Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " failed in an unexpected manner");
+                Logger.exception(e);
+                currentState = TaskState.CriticalFailure;
+            }
+        } catch (Throwable e) {
             error = e;
-            currentState = TaskState.Failed;
-         } catch (Throwable e) {
-            error = e;
-            Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " failed in an unexpected manner");
+            Logger.debug("Hyperbox error when executing #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + ": "
+                    + e.getMessage());
             Logger.exception(e);
-            currentState = TaskState.CriticalFailure;
-         }
-      } catch (Throwable e) {
-         error = e;
-         Logger.debug("Hyperbox error when executing #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + ": "
-               + e.getMessage());
-         Logger.exception(e);
-         currentState = TaskState.Failed;
-      } finally {
-         endTime = new Date();
-         setState(currentState);
-      }
-   }
+            currentState = TaskState.Failed;
+        } finally {
+            endTime = new Date();
+            setState(currentState);
+        }
+    }
 
-   @Override
-   public void cancel() {
-      if (!state.equals(TaskState.Running)) {
-         throw new HyperboxException("Task must be running to be canceled");
-      }
-      ac.cancel();
-      setState(TaskState.Canceled);
-   }
+    @Override
+    public void cancel() {
+        if (!state.equals(TaskState.Running)) {
+            throw new HyperboxException("Task must be running to be canceled");
+        }
+        ac.cancel();
+        setState(TaskState.Canceled);
+    }
 
-   @Override
-   public void putAnswer(Answer ans) {
-      // client.putAnswer(ans);
-   }
+    @Override
+    public void putAnswer(Answer ans) {
+        // client.putAnswer(ans);
+    }
 
-   @Override
-   public String getAddress() {
-      return "TaskID #" + getId();
-   }
+    @Override
+    public String getAddress() {
+        return "TaskID #" + getId();
+    }
 
-   @Override
-   public String toString() {
-      return getAddress();
-   }
+    @Override
+    public String toString() {
+        return getAddress();
+    }
 
-   @Override
-   public void post(EventOut evOut) {
-      // client.post(evOut);
-   }
+    @Override
+    public void post(EventOut evOut) {
+        // client.post(evOut);
+    }
 
-   @Override
-   public void queue() {
-      if (!state.equals(TaskState.Created)) {
-         throw new IllegalStateException("Task must be Created to be queued.");
-      }
+    @Override
+    public void queue() {
+        if (!state.equals(TaskState.Created)) {
+            throw new IllegalStateException("Task must be Created to be queued.");
+        }
 
-      queueTime = new Date();
-      setState(TaskState.Pending);
-   }
+        queueTime = new Date();
+        setState(TaskState.Pending);
+    }
 
-   @Override
-   public Date getQueueTime() {
-      return queueTime;
-   }
+    @Override
+    public Date getQueueTime() {
+        return queueTime;
+    }
 
-   @Override
-   public Date getStartTime() {
-      return startTime;
-   }
+    @Override
+    public Date getStartTime() {
+        return startTime;
+    }
 
-   @Override
-   public Date getStopTime() {
-      return endTime;
-   }
+    @Override
+    public Date getStopTime() {
+        return endTime;
+    }
 
-   @Override
-   public TaskState getState() {
-      return state;
-   }
+    @Override
+    public TaskState getState() {
+        return state;
+    }
 
-   @Override
-   public Date getCreateTime() {
-      return createTime;
-   }
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-   @Override
-   public Throwable getError() {
-      return error;
-   }
+    @Override
+    public Throwable getError() {
+        return error;
+    }
 
 }

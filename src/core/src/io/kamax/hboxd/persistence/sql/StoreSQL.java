@@ -25,30 +25,30 @@ import java.sql.SQLException;
 
 public class StoreSQL {
 
-   public static final String TABLE = "stores";
+    public static final String TABLE = "stores";
 
-   public static final String ID = "storeId";
-   public static final String NAME = "storeName";
-   public static final String PATH = "storePath";
-   public static final String MODULE_ID = "storeModuleId";
+    public static final String ID = "storeId";
+    public static final String NAME = "storeName";
+    public static final String PATH = "storePath";
+    public static final String MODULE_ID = "storeModuleId";
 
-   public static void init(SqlPersistor sql) throws SQLException {
+    public static void init(SqlPersistor sql) throws SQLException {
 
-      createTables(sql);
-   }
+        createTables(sql);
+    }
 
-   public static void createTables(SqlPersistor sql) throws SQLException {
+    public static void createTables(SqlPersistor sql) throws SQLException {
 
-      sql.getConn()
-            .createStatement()
-            .executeUpdate(
-                  "CREATE TABLE IF NOT EXISTS `" + TABLE + "` (`" + ID
-                        + "` VARCHAR(50) NOT NULL,`" + NAME + "` VARCHAR(300) NOT NULL,`" + PATH + "` VARCHAR(300) NOT NULL,`" + MODULE_ID
-                        + "` VARCHAR(300) NOT NULL, PRIMARY KEY (`" + ID + "`))");
-   }
+        sql.getConn()
+                .createStatement()
+                .executeUpdate(
+                        "CREATE TABLE IF NOT EXISTS `" + TABLE + "` (`" + ID
+                                + "` VARCHAR(50) NOT NULL,`" + NAME + "` VARCHAR(300) NOT NULL,`" + PATH + "` VARCHAR(300) NOT NULL,`" + MODULE_ID
+                                + "` VARCHAR(300) NOT NULL, PRIMARY KEY (`" + ID + "`))");
+    }
 
-   public static String getInsertQuery() {
-      return "INSERT INTO " + TABLE + " (" + ID + "," + MODULE_ID + "," + NAME + "," + PATH + ") VALUES (?,?,?,?)";
-   }
+    public static String getInsertQuery() {
+        return "INSERT INTO " + TABLE + " (" + ID + "," + MODULE_ID + "," + NAME + "," + PATH + ") VALUES (?,?,?,?)";
+    }
 
 }

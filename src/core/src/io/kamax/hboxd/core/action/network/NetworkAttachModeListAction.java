@@ -34,23 +34,23 @@ import java.util.List;
 
 public final class NetworkAttachModeListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetworkAttachModeList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetworkAttachModeList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      List<String> attachModesId = hbox.getHypervisor().listNicAttachModes();
-      for (String attachModeId : attachModesId) {
-         NetworkAttachModeOut namOut = new NetworkAttachModeOut(attachModeId);
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, namOut));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        List<String> attachModesId = hbox.getHypervisor().listNicAttachModes();
+        for (String attachModeId : attachModesId) {
+            NetworkAttachModeOut namOut = new NetworkAttachModeOut(attachModeId);
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, namOut));
+        }
+    }
 
 }

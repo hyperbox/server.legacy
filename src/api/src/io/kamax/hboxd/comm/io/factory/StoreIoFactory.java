@@ -25,8 +25,8 @@ import io.kamax.hboxd.store._Store;
 
 public final class StoreIoFactory {
 
-   public static StoreOut get(_Store s) {
-      return new StoreOut(s.getId(), s.getLabel(), s.getLocation());
-   }
+    public static StoreOut get(_Store s) {
+        return new StoreOut(s.getId(), s.getLabel(), s.getLocation());
+    }
 
 }

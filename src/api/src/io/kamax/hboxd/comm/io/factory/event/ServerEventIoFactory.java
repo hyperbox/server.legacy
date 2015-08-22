@@ -35,32 +35,32 @@ import io.kamax.hboxd.event.server.ServerPropertyChangedEvent;
 
 public class ServerEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.ServerConnectionState,
-            HyperboxEvents.ServerPropertyChanged
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.ServerConnectionState,
+                HyperboxEvents.ServerPropertyChanged
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      if (!(ev instanceof ServerEvent)) {
-         return null;
-      }
-
-      ServerOut srvOut = ServerIoFactory.get();
-      switch ((HyperboxEvents) ev.getEventId()) {
-         case ServerConnectionState:
-            ServerConnectionState state = ((ServerConnectionStateEvent) ev).getState();
-            return new ServerConnectionStateEventOut(ev.getTime(), srvOut, state);
-         case ServerPropertyChanged:
-            Object property = ((ServerPropertyChangedEvent) ev).getProperty();
-            Object value = ((ServerPropertyChangedEvent) ev).getValue();
-            return new ServerPropertyChangedEventOut(ev.getTime(), srvOut, property, value.toString());
-         default:
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        if (!(ev instanceof ServerEvent)) {
             return null;
-      }
-   }
+        }
+
+        ServerOut srvOut = ServerIoFactory.get();
+        switch ((HyperboxEvents) ev.getEventId()) {
+            case ServerConnectionState:
+                ServerConnectionState state = ((ServerConnectionStateEvent) ev).getState();
+                return new ServerConnectionStateEventOut(ev.getTime(), srvOut, state);
+            case ServerPropertyChanged:
+                Object property = ((ServerPropertyChangedEvent) ev).getProperty();
+                Object value = ((ServerPropertyChangedEvent) ev).getValue();
+                return new ServerPropertyChangedEventOut(ev.getTime(), srvOut, property, value.toString());
+            default:
+                return null;
+        }
+    }
 
 }

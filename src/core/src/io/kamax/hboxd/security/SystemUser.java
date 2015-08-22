@@ -22,8 +22,8 @@ package io.kamax.hboxd.security;
 
 public class SystemUser extends User {
 
-   public SystemUser() {
-      super("0", "System");
-   }
+    public SystemUser() {
+        super("0", "System");
+    }
 
 }

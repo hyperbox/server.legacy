@@ -22,8 +22,8 @@ package io.kamax.hboxd.hypervisor.storage;
 
 public interface _RawStorageControllerSubType {
 
-   public String getId();
+    public String getId();
 
-   public String getParentType();
+    public String getParentType();
 
 }

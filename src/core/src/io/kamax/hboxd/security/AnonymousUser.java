@@ -22,13 +22,13 @@ package io.kamax.hboxd.security;
 
 public final class AnonymousUser extends User {
 
-   public AnonymousUser() {
-      super("-1", "Anonymous", ".");
-   }
+    public AnonymousUser() {
+        super("-1", "Anonymous", ".");
+    }
 
-   @Override
-   public boolean isAnnonyomous() {
-      return true;
-   }
+    @Override
+    public boolean isAnnonyomous() {
+        return true;
+    }
 
 }

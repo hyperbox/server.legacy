@@ -22,8 +22,8 @@ package io.kamax.hboxd.security;
 
 public interface _UserGroup {
 
-   public String getId();
+    public String getId();
 
-   public String getName();
+    public String getName();
 
 }

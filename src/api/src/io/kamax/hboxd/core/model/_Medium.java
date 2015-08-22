@@ -27,101 +27,101 @@ import java.util.Set;
 
 public interface _Medium extends _Settable {
 
-   public String getId();
+    public String getId();
 
-   public String getUuid();
+    public String getUuid();
 
-   public String getDescription();
+    public String getDescription();
 
-   public void setDescription(String desc);
+    public void setDescription(String desc);
 
-   public String getState();
+    public String getState();
 
-   public String getVariant();
+    public String getVariant();
 
-   public String getLocation();
+    public String getLocation();
 
-   public void setLocation(String path);
+    public void setLocation(String path);
 
-   public String getName();
+    public String getName();
 
-   public String getDeviceType();
+    public String getDeviceType();
 
-   /**
-    * Get size In bytes
-    * 
-    * @return size in bytes
-    */
-   public long getSize();
+    /**
+     * Get size In bytes
+     * 
+     * @return size in bytes
+     */
+    public long getSize();
 
-   public String getFormat();
+    public String getFormat();
 
-   public String getMediumFormat();
+    public String getMediumFormat();
 
-   public String getType();
+    public String getType();
 
-   public void setType(String type);
+    public void setType(String type);
 
-   public boolean hasParent();
+    public boolean hasParent();
 
-   public _Medium getParent();
+    public _Medium getParent();
 
-   public boolean hasChild();
+    public boolean hasChild();
 
-   public Set<_Medium> getChild();
+    public Set<_Medium> getChild();
 
-   public _Medium getBase();
+    public _Medium getBase();
 
-   public boolean isReadOnly();
+    public boolean isReadOnly();
 
-   public long getLogicalSize();
+    public long getLogicalSize();
 
-   public boolean isAutoReset();
+    public boolean isAutoReset();
 
-   public String lastAccessError();
+    public String lastAccessError();
 
-   public Set<_Machine> getLinkedMachines();
+    public Set<_Machine> getLinkedMachines();
 
-   public void close();
+    public void close();
 
-   public _ProgressTracker delete();
+    public _ProgressTracker delete();
 
-   public _ProgressTracker deleteForce();
+    public _ProgressTracker deleteForce();
 
-   public void refresh();
+    public void refresh();
 
-   public _ProgressTracker clone(String path);
+    public _ProgressTracker clone(String path);
 
-   public _ProgressTracker clone(_RawMedium toMedium);
+    public _ProgressTracker clone(_RawMedium toMedium);
 
-   public _ProgressTracker clone(String path, String variantType);
+    public _ProgressTracker clone(String path, String variantType);
 
-   public _ProgressTracker clone(_RawMedium toMedium, String variantType);
+    public _ProgressTracker clone(_RawMedium toMedium, String variantType);
 
-   public _ProgressTracker compact();
+    public _ProgressTracker compact();
 
-   /**
-    * @param size in bytes
-    * @return progress tracking object
-    */
-   public _ProgressTracker create(long size);
+    /**
+     * @param size in bytes
+     * @return progress tracking object
+     */
+    public _ProgressTracker create(long size);
 
-   /**
-    * @param size in bytes
-    * @param variantType see Virtualbox MediumVariant
-    * @return progress tracking object
-    */
-   public _ProgressTracker create(long size, String variantType);
+    /**
+     * @param size in bytes
+     * @param variantType see Virtualbox MediumVariant
+     * @return progress tracking object
+     */
+    public _ProgressTracker create(long size, String variantType);
 
-   /**
-    * @param size in bytes
-    * @return progress tracking object
-    */
-   public _ProgressTracker resize(long size);
+    /**
+     * @param size in bytes
+     * @return progress tracking object
+     */
+    public _ProgressTracker resize(long size);
 
-   /**
-    * Only for diff storage
-    */
-   public void reset();
+    /**
+     * Only for diff storage
+     */
+    public void reset();
 
 }

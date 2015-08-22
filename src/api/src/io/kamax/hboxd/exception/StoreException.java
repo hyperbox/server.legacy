@@ -22,19 +22,21 @@ package io.kamax.hboxd.exception;
 
 import io.kamax.hbox.exception.HyperboxException;
 
-@SuppressWarnings("serial")
+
 public class StoreException extends HyperboxException {
 
-   public StoreException(String s) {
-      super(s);
-   }
+    private static final long serialVersionUID = 2566019734954374587L;
 
-   public StoreException(Throwable t) {
-      super(t);
-   }
+    public StoreException(String s) {
+        super(s);
+    }
 
-   public StoreException(String s, Throwable t) {
-      super(s, t);
-   }
+    public StoreException(Throwable t) {
+        super(t);
+    }
+
+    public StoreException(String s, Throwable t) {
+        super(s, t);
+    }
 
 }

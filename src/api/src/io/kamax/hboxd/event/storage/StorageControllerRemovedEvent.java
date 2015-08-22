@@ -24,8 +24,8 @@ import io.kamax.hbox.event.HyperboxEvents;
 
 public class StorageControllerRemovedEvent extends StorageControllerEvent {
 
-   public StorageControllerRemovedEvent(String vmId, String controllerId) {
-      super(HyperboxEvents.StorageControllerRemoved, vmId, controllerId);
-   }
+    public StorageControllerRemovedEvent(String vmId, String controllerId) {
+        super(HyperboxEvents.StorageControllerRemoved, vmId, controllerId);
+    }
 
 }

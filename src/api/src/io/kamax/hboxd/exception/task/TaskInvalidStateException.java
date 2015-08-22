@@ -22,19 +22,21 @@ package io.kamax.hboxd.exception.task;
 
 import io.kamax.hbox.exception.HyperboxException;
 
-@SuppressWarnings("serial")
+
 public class TaskInvalidStateException extends HyperboxException {
 
-   public TaskInvalidStateException() {
-      super("Task state is invalid for the requested operation");
-   }
+    private static final long serialVersionUID = 5406464971643245936L;
 
-   public TaskInvalidStateException(String message) {
-      super(message);
-   }
+    public TaskInvalidStateException() {
+        super("Task state is invalid for the requested operation");
+    }
 
-   public TaskInvalidStateException(String message, Throwable cause) {
-      super(message, cause);
-   }
+    public TaskInvalidStateException(String message) {
+        super(message);
+    }
+
+    public TaskInvalidStateException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

@@ -22,15 +22,17 @@ package io.kamax.hboxd.exception.security;
 
 import io.kamax.hbox.exception.HyperboxException;
 
-@SuppressWarnings("serial")
+
 public class SecurityException extends HyperboxException {
 
-   public SecurityException() {
-      super("Not Authorized");
-   }
+    private static final long serialVersionUID = 2284581544923930540L;
 
-   public SecurityException(String s) {
-      super(s);
-   }
+    public SecurityException() {
+        super("Not Authorized");
+    }
+
+    public SecurityException(String s) {
+        super(s);
+    }
 
 }

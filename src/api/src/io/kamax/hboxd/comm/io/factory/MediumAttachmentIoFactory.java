@@ -26,35 +26,35 @@ import io.kamax.hboxd.hypervisor.storage._RawMediumAttachment;
 
 public class MediumAttachmentIoFactory {
 
-   private MediumAttachmentIoFactory() {
-      // static class
-   }
+    private MediumAttachmentIoFactory() {
+        // static class
+    }
 
-   public static StorageDeviceAttachmentOut get(_MediumAttachment ma) {
+    public static StorageDeviceAttachmentOut get(_MediumAttachment ma) {
 
-      return new StorageDeviceAttachmentOut(
-            ma.getMachineId(),
-            ma.getControllerId(),
-            ma.getMediumId(),
-            ma.getPortId(),
-            ma.getDeviceId(),
-            ma.getDeviceType());
-   }
+        return new StorageDeviceAttachmentOut(
+                ma.getMachineId(),
+                ma.getControllerId(),
+                ma.getMediumId(),
+                ma.getPortId(),
+                ma.getDeviceId(),
+                ma.getDeviceType());
+    }
 
-   public static StorageDeviceAttachmentOut get(_RawMediumAttachment ma) {
+    public static StorageDeviceAttachmentOut get(_RawMediumAttachment ma) {
 
-      String mediumId = null;
-      if (ma.getMedium() != null) {
-         mediumId = ma.getMedium().getUuid();
-      }
+        String mediumId = null;
+        if (ma.getMedium() != null) {
+            mediumId = ma.getMedium().getUuid();
+        }
 
-      return new StorageDeviceAttachmentOut(
-            ma.getMachine().getUuid(),
-            ma.getController().getName(),
-            mediumId,
-            ma.getPortId(),
-            ma.getDeviceId(),
-            ma.getDeviceType());
-   }
+        return new StorageDeviceAttachmentOut(
+                ma.getMachine().getUuid(),
+                ma.getController().getName(),
+                mediumId,
+                ma.getPortId(),
+                ma.getDeviceId(),
+                ma.getDeviceType());
+    }
 
 }

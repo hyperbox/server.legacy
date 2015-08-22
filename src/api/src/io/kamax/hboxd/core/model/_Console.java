@@ -22,16 +22,16 @@ package io.kamax.hboxd.core.model;
 
 public interface _Console extends _Device {
 
-   public String getAddress();
+    public String getAddress();
 
-   public Long getPort();
+    public Long getPort();
 
-   public String getProtocol();
+    public String getProtocol();
 
-   public boolean isEnable();
+    public boolean isEnable();
 
-   public void setEnable(boolean isEnable);
+    public void setEnable(boolean isEnable);
 
-   public boolean isActive();
+    public boolean isActive();
 
 }

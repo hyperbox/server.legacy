@@ -25,69 +25,69 @@ import io.kamax.tool.AxStrings;
 
 public class MediumAttachment implements _MediumAttachment {
 
-   private String machineId;
-   private String mediumId;
-   private String controllerId;
-   private long portId;
-   private long deviceId;
-   private String deviceType;
-   private boolean isPassThrough;
+    private String machineId;
+    private String mediumId;
+    private String controllerId;
+    private long portId;
+    private long deviceId;
+    private String deviceType;
+    private boolean isPassThrough;
 
-   public MediumAttachment(_RawMediumAttachment raw) {
-      this(raw.getMachine().getUuid(), raw.hasMedium() ? raw.getMedium().getUuid() : null, raw.getController().getName(), raw.getPortId(), raw
-            .getDeviceId(), raw
-            .getDeviceType(), raw.isPassThrough());
-   }
+    public MediumAttachment(_RawMediumAttachment raw) {
+        this(raw.getMachine().getUuid(), raw.hasMedium() ? raw.getMedium().getUuid() : null, raw.getController().getName(), raw.getPortId(), raw
+                .getDeviceId(), raw
+                .getDeviceType(), raw.isPassThrough());
+    }
 
-   public MediumAttachment(String machineId, String mediumId, String controllerId, long portId, long deviceId, String deviceType,
-         boolean isPassThrough) {
-      this.machineId = machineId;
-      this.mediumId = mediumId;
-      this.controllerId = controllerId;
-      this.portId = portId;
-      this.deviceId = deviceId;
-      this.deviceType = deviceType;
-      this.isPassThrough = isPassThrough;
-   }
+    public MediumAttachment(String machineId, String mediumId, String controllerId, long portId, long deviceId, String deviceType,
+            boolean isPassThrough) {
+        this.machineId = machineId;
+        this.mediumId = mediumId;
+        this.controllerId = controllerId;
+        this.portId = portId;
+        this.deviceId = deviceId;
+        this.deviceType = deviceType;
+        this.isPassThrough = isPassThrough;
+    }
 
-   @Override
-   public String getMachineId() {
-      return machineId;
-   }
+    @Override
+    public String getMachineId() {
+        return machineId;
+    }
 
-   @Override
-   public String getMediumId() {
-      return mediumId;
-   }
+    @Override
+    public String getMediumId() {
+        return mediumId;
+    }
 
-   @Override
-   public String getControllerId() {
-      return controllerId;
-   }
+    @Override
+    public String getControllerId() {
+        return controllerId;
+    }
 
-   @Override
-   public long getPortId() {
-      return portId;
-   }
+    @Override
+    public long getPortId() {
+        return portId;
+    }
 
-   @Override
-   public long getDeviceId() {
-      return deviceId;
-   }
+    @Override
+    public long getDeviceId() {
+        return deviceId;
+    }
 
-   @Override
-   public String getDeviceType() {
-      return deviceType;
-   }
+    @Override
+    public String getDeviceType() {
+        return deviceType;
+    }
 
-   @Override
-   public boolean isPassThrough() {
-      return isPassThrough;
-   }
+    @Override
+    public boolean isPassThrough() {
+        return isPassThrough;
+    }
 
-   @Override
-   public boolean hasMedium() {
-      return !AxStrings.isEmpty(mediumId);
-   }
+    @Override
+    public boolean hasMedium() {
+        return !AxStrings.isEmpty(mediumId);
+    }
 
 }

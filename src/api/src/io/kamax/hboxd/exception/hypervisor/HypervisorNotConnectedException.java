@@ -22,15 +22,17 @@ package io.kamax.hboxd.exception.hypervisor;
 
 import io.kamax.hbox.exception.HyperboxException;
 
-@SuppressWarnings("serial")
+
 public class HypervisorNotConnectedException extends HyperboxException {
 
-   public HypervisorNotConnectedException() {
-      super("Hypervisor is not connected");
-   }
+    private static final long serialVersionUID = 7591060429571459628L;
 
-   public HypervisorNotConnectedException(Throwable t) {
-      super("Hypervisor is not connected", t);
-   }
+    public HypervisorNotConnectedException() {
+        super("Hypervisor is not connected");
+    }
+
+    public HypervisorNotConnectedException(Throwable t) {
+        super("Hypervisor is not connected", t);
+    }
 
 }

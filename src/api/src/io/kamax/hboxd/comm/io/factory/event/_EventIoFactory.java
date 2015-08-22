@@ -26,8 +26,8 @@ import io.kamax.hboxd.core._Hyperbox;
 
 public interface _EventIoFactory {
 
-   public Enum<?>[] getHandles();
+    public Enum<?>[] getHandles();
 
-   public EventOut get(_Hyperbox hbox, _Event ev);
+    public EventOut get(_Hyperbox hbox, _Event ev);
 
 }

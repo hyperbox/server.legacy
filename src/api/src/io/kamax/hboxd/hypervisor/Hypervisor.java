@@ -31,13 +31,13 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE })
 public @interface Hypervisor {
 
-   String id();
+    String id();
 
-   String typeId();
+    String typeId();
 
-   String vendor();
+    String vendor();
 
-   String product();
+    String product();
 
-   String[] schemes();
+    String[] schemes();
 }

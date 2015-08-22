@@ -50,137 +50,137 @@ import java.lang.Thread.UncaughtExceptionHandler;
  * <li>reload() - If the service configuration can be reloaded during runtime, the code can go here.</li>
  * </ul>
  * </p>
- * 
+ *
  * @author max
  * @see SimpleLoopService
  */
 public abstract class SkeletonService implements _Service, Runnable {
 
-   protected Thread serviceThread;
-   private ServiceState state;
+    protected Thread serviceThread;
+    private ServiceState state;
 
-   protected final void setState(ServiceState state) {
-      this.state = state;
-      publishState();
-   }
+    protected final void setState(ServiceState state) {
+        this.state = state;
+        publishState();
+    }
 
-   @Override
-   public final ServiceState getState() {
-      return state;
-   }
+    @Override
+    public final ServiceState getState() {
+        return state;
+    }
 
-   /**
-    * Called by {@link #setState(ServiceState)} to send events about the new state
-    */
-   protected void publishState() {
-      EventManager.post(new ServiceStateEvent(this, state));
-   }
+    /**
+     * Called by {@link #setState(ServiceState)} to send events about the new state
+     */
+    protected void publishState() {
+        EventManager.post(new ServiceStateEvent(this, state));
+    }
 
-   @Override
-   public void start() throws HyperboxException {
+    @Override
+    public void start() throws HyperboxException {
 
-      serviceThread = new Thread(this, "Service ID " + getClass().getSimpleName());
-      serviceThread.setUncaughtExceptionHandler(new ServiceExceptionHander());
-      starting();
-      setState(ServiceState.Starting);
-      serviceThread.start();
-   }
+        serviceThread = new Thread(this, "Service ID " + getClass().getSimpleName());
+        serviceThread.setUncaughtExceptionHandler(new ServiceExceptionHander());
+        starting();
+        setState(ServiceState.Starting);
+        serviceThread.start();
+    }
 
-   @Override
-   public void startAndRun() throws ServiceException {
-      start();
-      while (!serviceThread.isAlive()) {
-         try {
-            Thread.sleep(50);
-         } catch (InterruptedException e) {
-            Logger.exception(e);
-         }
-      }
-   }
+    @Override
+    public void startAndRun() throws ServiceException {
+        start();
+        while (!serviceThread.isAlive()) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Logger.exception(e);
+            }
+        }
+    }
 
-   @Override
-   public void stop() {
+    @Override
+    public void stop() {
 
-      setState(ServiceState.Stopping);
-      stopping();
-      if ((serviceThread != null) && serviceThread.isAlive()) {
-         serviceThread.interrupt();
-      }
-   }
+        setState(ServiceState.Stopping);
+        stopping();
+        if ((serviceThread != null) && serviceThread.isAlive()) {
+            serviceThread.interrupt();
+        }
+    }
 
-   @Override
-   public boolean stopAndDie(int timeout) {
-      if (isRunning()) {
-         stop();
-         try {
-            serviceThread.join(timeout);
-            return !isRunning();
-         } catch (InterruptedException e) {
-            Logger.exception(e);
-            return false;
-         }
-      } else {
-         return true;
-      }
-   }
+    @Override
+    public boolean stopAndDie(int timeout) {
+        if (isRunning()) {
+            stop();
+            try {
+                serviceThread.join(timeout);
+                return !isRunning();
+            } catch (InterruptedException e) {
+                Logger.exception(e);
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
 
-   @Override
-   public final boolean isRunning() {
+    @Override
+    public final boolean isRunning() {
 
-      if ((serviceThread != null) && serviceThread.isAlive()) {
-         return true;
-      }
+        if ((serviceThread != null) && serviceThread.isAlive()) {
+            return true;
+        }
 
-      serviceThread = null;
-      return false;
+        serviceThread = null;
+        return false;
 
-   }
+    }
 
-   /**
-    * Override if you want to implement this
-    */
-   @Override
-   public void pause() throws UnsupportedOperationException {
-      throw new UnsupportedOperationException("This action is not supported by " + getClass().getSimpleName());
-   }
+    /**
+     * Override if you want to implement this
+     */
+    @Override
+    public void pause() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("This action is not supported by " + getClass().getSimpleName());
+    }
 
-   /**
-    * Override if you want to implement this
-    */
-   @Override
-   public void unpause() throws UnsupportedOperationException {
-      throw new UnsupportedOperationException("This action is not supported by " + getClass().getSimpleName());
-   }
+    /**
+     * Override if you want to implement this
+     */
+    @Override
+    public void unpause() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("This action is not supported by " + getClass().getSimpleName());
+    }
 
-   /**
-    * Override if you want to implement this
-    */
-   @Override
-   public void reload() throws UnsupportedOperationException {
-      throw new UnsupportedOperationException("This action is not supported by " + getClass().getSimpleName());
-   }
+    /**
+     * Override if you want to implement this
+     */
+    @Override
+    public void reload() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("This action is not supported by " + getClass().getSimpleName());
+    }
 
-   /**
-    * Must be used to set the start condition
-    */
-   protected abstract void starting();
+    /**
+     * Must be used to set the start condition
+     */
+    protected abstract void starting();
 
-   /**
-    * Must be used to set the stop condition
-    */
-   protected abstract void stopping();
+    /**
+     * Must be used to set the stop condition
+     */
+    protected abstract void stopping();
 
-   private class ServiceExceptionHander implements UncaughtExceptionHandler {
+    private class ServiceExceptionHander implements UncaughtExceptionHandler {
 
-      @Override
-      public void uncaughtException(Thread arg0, Throwable arg1) {
+        @Override
+        public void uncaughtException(Thread arg0, Throwable arg1) {
 
-         Logger.error("The service \"" + serviceThread.getName() + "\" has crashed.");
-         Logger.error("Exception caught is : " + arg1.getClass().getSimpleName() + " - " + arg1.getMessage());
-         Logger.exception(arg1);
-         serviceThread = null;
-         setState(ServiceState.Stopped);
-      }
-   }
+            Logger.error("The service \"" + serviceThread.getName() + "\" has crashed.");
+            Logger.error("Exception caught is : " + arg1.getClass().getSimpleName() + " - " + arg1.getMessage());
+            Logger.exception(arg1);
+            serviceThread = null;
+            setState(ServiceState.Stopped);
+        }
+    }
 
 }

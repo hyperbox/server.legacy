@@ -38,34 +38,34 @@ import io.kamax.hboxd.event.snapshot.SnapshotEvent;
 
 public class SnapshotChangedEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.SnapshotModified,
-            HyperboxEvents.SnapshotRestored,
-            HyperboxEvents.SnapshotTaken,
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.SnapshotModified,
+                HyperboxEvents.SnapshotRestored,
+                HyperboxEvents.SnapshotTaken,
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      SnapshotEvent sEv = (SnapshotEvent) ev;
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        SnapshotEvent sEv = (SnapshotEvent) ev;
 
-      _Machine vm = HBoxServer.get().getMachine(sEv.getMachineId());
-      MachineOut mOut = MachineIoFactory.get(vm);
-      SnapshotOut snapOut = SnapshotIoFactory.get(vm.getSnapshot(sEv.getSnapshotUuid()));
+        _Machine vm = HBoxServer.get().getMachine(sEv.getMachineId());
+        MachineOut mOut = MachineIoFactory.get(vm);
+        SnapshotOut snapOut = SnapshotIoFactory.get(vm.getSnapshot(sEv.getSnapshotUuid()));
 
-      switch ((HyperboxEvents) sEv.getEventId()) {
+        switch ((HyperboxEvents) sEv.getEventId()) {
 
-         case SnapshotModified:
-            return new SnapshotModifiedEventOut(sEv.getTime(), ServerIoFactory.get(), mOut, snapOut);
-         case SnapshotRestored:
-            return new SnapshotRestoredEventOut(sEv.getTime(), ServerIoFactory.get(), mOut, snapOut);
-         case SnapshotTaken:
-            return new SnapshotTakenEventOut(sEv.getTime(), ServerIoFactory.get(), mOut, snapOut);
-         default:
-            return null;
-      }
-   }
+            case SnapshotModified:
+                return new SnapshotModifiedEventOut(sEv.getTime(), ServerIoFactory.get(), mOut, snapOut);
+            case SnapshotRestored:
+                return new SnapshotRestoredEventOut(sEv.getTime(), ServerIoFactory.get(), mOut, snapOut);
+            case SnapshotTaken:
+                return new SnapshotTakenEventOut(sEv.getTime(), ServerIoFactory.get(), mOut, snapOut);
+            default:
+                return null;
+        }
+    }
 
 }

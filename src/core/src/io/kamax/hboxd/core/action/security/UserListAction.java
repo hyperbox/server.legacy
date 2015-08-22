@@ -36,23 +36,23 @@ import java.util.List;
 
 public class UserListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.UserList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.UserList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      List<_User> users = hbox.getSecurityManager().listUsers();
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        List<_User> users = hbox.getSecurityManager().listUsers();
 
-      for (_User user : users) {
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, UserIoFactory.get(user)));
-      }
-   }
+        for (_User user : users) {
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, UserIoFactory.get(user)));
+        }
+    }
 
 }

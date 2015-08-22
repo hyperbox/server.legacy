@@ -27,12 +27,12 @@ import io.kamax.hboxd.security._ItemPermission;
 
 public class ItemPermissionFactory {
 
-   private ItemPermissionFactory() {
-      throw new RuntimeException("Not allowed");
-   }
+    private ItemPermissionFactory() {
+        throw new RuntimeException("Not allowed");
+    }
 
-   public static _ItemPermission get(String userId, String itemTypeId, String actionId, String itemId, boolean isAllowed) {
-      return new ItemPermission(userId, SecurityItem.valueOf(itemTypeId), SecurityAction.valueOf(actionId), itemId, isAllowed);
-   }
+    public static _ItemPermission get(String userId, String itemTypeId, String actionId, String itemId, boolean isAllowed) {
+        return new ItemPermission(userId, SecurityItem.valueOf(itemTypeId), SecurityAction.valueOf(actionId), itemId, isAllowed);
+    }
 
 }

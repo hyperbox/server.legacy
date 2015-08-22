@@ -25,12 +25,12 @@ import io.kamax.hbox.comm.SecurityItem;
 
 public interface _ActionPermission {
 
-   public String getUserId();
+    public String getUserId();
 
-   public SecurityItem getItemType();
+    public SecurityItem getItemType();
 
-   public SecurityAction getAction();
+    public SecurityAction getAction();
 
-   public boolean isAllowed();
+    public boolean isAllowed();
 
 }

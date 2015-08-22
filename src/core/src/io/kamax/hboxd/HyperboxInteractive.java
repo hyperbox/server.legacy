@@ -27,11 +27,11 @@ import java.util.HashSet;
 
 public final class HyperboxInteractive {
 
-   public static void main(String[] args) {
-      Hyperbox.processArgs(new HashSet<String>(Arrays.asList(args)));
+    public static void main(String[] args) {
+        Hyperbox.processArgs(new HashSet<String>(Arrays.asList(args)));
 
-      Configuration.setSetting("log.file", "none");
-      new Controller().start(args);
-   }
+        Configuration.setSetting("log.file", "none");
+        new Controller().start(args);
+    }
 
 }

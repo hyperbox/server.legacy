@@ -25,11 +25,11 @@ import org.junit.BeforeClass;
 
 public class HyperboxCoreTest extends HyperboxTest {
 
-   @BeforeClass
-   public static void beforeClass() throws HyperboxException {
-      core = new SingleHostServer();
+    @BeforeClass
+    public static void beforeClass() throws HyperboxException {
+        core = new SingleHostServer();
 
-      HyperboxTest.init();
-   }
+        HyperboxTest.init();
+    }
 
 }

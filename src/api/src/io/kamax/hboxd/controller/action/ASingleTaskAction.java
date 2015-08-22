@@ -30,7 +30,7 @@ import io.kamax.hbox.comm.AnswerType;
  * <li>Finish : AnswerType.SUCCESS</li>
  * <li>Failed : AnswerType.FAILED</li>
  * </ul>
- * 
+ *
  * @see AnswerType
  * @see _Action
  * @see AbstractHyperboxAction
@@ -38,19 +38,19 @@ import io.kamax.hbox.comm.AnswerType;
  */
 public abstract class ASingleTaskAction extends AbstractHyperboxAction {
 
-   @Override
-   public AnswerType getStartReturn() {
-      return AnswerType.STARTED;
-   }
+    @Override
+    public AnswerType getStartReturn() {
+        return AnswerType.STARTED;
+    }
 
-   @Override
-   public AnswerType getFinishReturn() {
-      return AnswerType.SUCCESS;
-   }
+    @Override
+    public AnswerType getFinishReturn() {
+        return AnswerType.SUCCESS;
+    }
 
-   @Override
-   public AnswerType getFailReturn() {
-      return AnswerType.FAILED;
-   }
+    @Override
+    public AnswerType getFailReturn() {
+        return AnswerType.FAILED;
+    }
 
 }

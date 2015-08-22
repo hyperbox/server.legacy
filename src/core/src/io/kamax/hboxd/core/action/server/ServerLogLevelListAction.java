@@ -34,22 +34,22 @@ import java.util.List;
 
 public class ServerLogLevelListAction extends ServerAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ServerLogLevelList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ServerLogLevelList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   protected void run(Request request, _Hyperbox hbox, _Server srv) {
-      for (String level : srv.listLogLevel()) {
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, level));
-      }
+    @Override
+    protected void run(Request request, _Hyperbox hbox, _Server srv) {
+        for (String level : srv.listLogLevel()) {
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, level));
+        }
 
-   }
+    }
 
 }

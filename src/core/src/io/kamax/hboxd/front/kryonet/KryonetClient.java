@@ -27,41 +27,41 @@ import com.esotericsoftware.kryonet.Connection;
 
 public class KryonetClient implements _Client {
 
-   private Connection client;
-   private String id;
-   private String address;
+    private Connection client;
+    private String id;
+    private String address;
 
-   public KryonetClient(Connection client) {
-      this.client = client;
-      id = Integer.toString(client.getID());
-      address = client.getRemoteAddressTCP().getAddress().getHostAddress() + ":" + client.getRemoteAddressTCP().getPort();
-   }
+    public KryonetClient(Connection client) {
+        this.client = client;
+        id = Integer.toString(client.getID());
+        address = client.getRemoteAddressTCP().getAddress().getHostAddress() + ":" + client.getRemoteAddressTCP().getPort();
+    }
 
-   @Override
-   public String getId() {
-      return id;
-   }
+    @Override
+    public String getId() {
+        return id;
+    }
 
-   @Override
-   public String getAddress() {
-      return address;
-   }
+    @Override
+    public String getAddress() {
+        return address;
+    }
 
-   @Override
-   public void putAnswer(Answer ans) {
+    @Override
+    public void putAnswer(Answer ans) {
 
-      client.sendTCP(ans);
-   }
+        client.sendTCP(ans);
+    }
 
-   @Override
-   public void post(EventOut evOut) {
+    @Override
+    public void post(EventOut evOut) {
 
-      client.sendTCP(evOut);
-   }
+        client.sendTCP(evOut);
+    }
 
-   @Override
-   public String toString() {
-      return "Client ID #" + getId() + " (" + getAddress() + ")";
-   }
+    @Override
+    public String toString() {
+        return "Client ID #" + getId() + " (" + getAddress() + ")";
+    }
 
 }

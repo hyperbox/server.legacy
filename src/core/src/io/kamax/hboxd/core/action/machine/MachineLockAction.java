@@ -32,21 +32,21 @@ import java.util.List;
 
 public class MachineLockAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineLock.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineLock.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      ServerIn srvIn = request.get(ServerIn.class);
-      MachineIn mIn = request.get(MachineIn.class);
-      hbox.getServer(srvIn.getId()).getMachine(mIn.getId()).lock();
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        ServerIn srvIn = request.get(ServerIn.class);
+        MachineIn mIn = request.get(MachineIn.class);
+        hbox.getServer(srvIn.getId()).getMachine(mIn.getId()).lock();
+    }
 
 }

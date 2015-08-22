@@ -25,12 +25,12 @@ import io.kamax.hbox.hypervisor.net._NetAdaptor;
 
 public class NetAdaptorIoFactory {
 
-   private NetAdaptorIoFactory() {
-      // static only
-   }
+    private NetAdaptorIoFactory() {
+        // static only
+    }
 
-   public static NetAdaptorOut get(_NetAdaptor adapt) {
-      return new NetAdaptorOut(adapt.getId(), adapt.getLabel(), adapt.getMode().getId(), adapt.isEnabled(), !adapt.getServices().isEmpty());
-   }
+    public static NetAdaptorOut get(_NetAdaptor adapt) {
+        return new NetAdaptorOut(adapt.getId(), adapt.getLabel(), adapt.getMode().getId(), adapt.isEnabled(), !adapt.getServices().isEmpty());
+    }
 
 }

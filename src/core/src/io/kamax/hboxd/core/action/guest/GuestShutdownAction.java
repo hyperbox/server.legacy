@@ -37,62 +37,62 @@ import java.util.List;
 
 public class GuestShutdownAction extends AbstractHyperboxMultiTaskAction {
 
-   private Thread runningThread;
-   private boolean canceled = false;
+    private Thread runningThread;
+    private boolean canceled = false;
 
-   private void init() {
-      runningThread = Thread.currentThread();
-      canceled = false;
-   }
+    private void init() {
+        runningThread = Thread.currentThread();
+        canceled = false;
+    }
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.GuestShutdown.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.GuestShutdown.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public boolean isCancelable() {
-      return true;
-   }
+    @Override
+    public boolean isCancelable() {
+        return true;
+    }
 
-   @Override
-   public void cancel() {
-      if (runningThread == null) {
-         throw new TaskInvalidStateException("Cannot cancel a non-running task");
-      }
+    @Override
+    public void cancel() {
+        if (runningThread == null) {
+            throw new TaskInvalidStateException("Cannot cancel a non-running task");
+        }
 
-      canceled = true;
-      runningThread.interrupt();
-   }
+        canceled = true;
+        runningThread.interrupt();
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      init();
-      try {
-         MachineIn mIn = request.get(MachineIn.class);
-         _RawVM m = hbox.getHypervisor().getMachine(mIn.getUuid());
-         while (!m.getState().equals(MachineStates.PoweredOff)) {
-            if (canceled) {
-               Logger.debug("Action has been canceled, interupting");
-               throw new ActionCanceledException();
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        init();
+        try {
+            MachineIn mIn = request.get(MachineIn.class);
+            _RawVM m = hbox.getHypervisor().getMachine(mIn.getUuid());
+            while (!m.getState().equals(MachineStates.PoweredOff)) {
+                if (canceled) {
+                    Logger.debug("Action has been canceled, interupting");
+                    throw new ActionCanceledException();
+                }
+                if (m.getState().equals(MachineStates.Running)) {
+                    m.sendAcpi(ACPI.PowerButton);
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new ActionCanceledException();
+                }
             }
-            if (m.getState().equals(MachineStates.Running)) {
-               m.sendAcpi(ACPI.PowerButton);
-            }
-            try {
-               Thread.sleep(1000);
-            } catch (InterruptedException e) {
-               throw new ActionCanceledException();
-            }
-         }
-      } finally {
-         runningThread = null;
-      }
-   }
+        } finally {
+            runningThread = null;
+        }
+    }
 
 }

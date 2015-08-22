@@ -26,8 +26,8 @@ import io.kamax.hboxd.task._TaskManager;
 
 public final class UserSession extends AbstractSession {
 
-   public UserSession(_Client client, _TaskManager taskMgr) {
-      super(Long.toString(System.currentTimeMillis()), client, new AnonymousUser(), taskMgr);
-   }
+    public UserSession(_Client client, _TaskManager taskMgr) {
+        super(Long.toString(System.currentTimeMillis()), client, new AnonymousUser(), taskMgr);
+    }
 
 }

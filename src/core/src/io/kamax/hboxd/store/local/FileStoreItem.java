@@ -29,53 +29,53 @@ import java.util.List;
 
 public final class FileStoreItem implements _StoreItem {
 
-   private _Store store;
-   private File location;
+    private _Store store;
+    private File location;
 
-   public FileStoreItem(_Store store, File path) {
-      if (!path.exists()) {
-         throw new HyperboxException(path + " does not exist");
-      }
-      if (path.isDirectory()) {
-         throw new HyperboxException(path + " is a folder");
-      }
-      if (!path.isAbsolute()) {
-         throw new HyperboxException(path + " must be a full path");
-      }
+    public FileStoreItem(_Store store, File path) {
+        if (!path.exists()) {
+            throw new HyperboxException(path + " does not exist");
+        }
+        if (path.isDirectory()) {
+            throw new HyperboxException(path + " is a folder");
+        }
+        if (!path.isAbsolute()) {
+            throw new HyperboxException(path + " must be a full path");
+        }
 
-      this.store = store;
-      location = new File(path.getAbsolutePath());
+        this.store = store;
+        location = new File(path.getAbsolutePath());
 
-   }
+    }
 
-   @Override
-   public String getName() {
-      return location.getName();
-   }
+    @Override
+    public String getName() {
+        return location.getName();
+    }
 
-   @Override
-   public boolean isContainer() {
-      return false;
-   }
+    @Override
+    public boolean isContainer() {
+        return false;
+    }
 
-   @Override
-   public String getPath() {
-      return location.getAbsolutePath();
-   }
+    @Override
+    public String getPath() {
+        return location.getAbsolutePath();
+    }
 
-   @Override
-   public long getSize() {
-      return location.length();
-   }
+    @Override
+    public long getSize() {
+        return location.length();
+    }
 
-   @Override
-   public List<_StoreItem> listItems() {
-      throw new StoreItemIsNotContainerException(location);
-   }
+    @Override
+    public List<_StoreItem> listItems() {
+        throw new StoreItemIsNotContainerException(location);
+    }
 
-   @Override
-   public _Store getStore() {
-      return store;
-   }
+    @Override
+    public _Store getStore() {
+        return store;
+    }
 
 }

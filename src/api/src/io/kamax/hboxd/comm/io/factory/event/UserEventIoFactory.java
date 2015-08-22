@@ -33,28 +33,28 @@ import io.kamax.hboxd.event.security.UserEvent;
 
 public class UserEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.UserAdded,
-            HyperboxEvents.UserModified,
-            HyperboxEvents.UserRemoved
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.UserAdded,
+                HyperboxEvents.UserModified,
+                HyperboxEvents.UserRemoved
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      UserEvent usrEv = (UserEvent) ev;
-      switch ((HyperboxEvents) ev.getEventId()) {
-         case UserAdded:
-            return new UserAddedEventOut(usrEv.getTime(), ServerIoFactory.get(), usrEv.getUser());
-         case UserModified:
-            return new UserModifiedEventOut(usrEv.getTime(), ServerIoFactory.get(), usrEv.getUser());
-         case UserRemoved:
-            return new UserRemovedEventOut(usrEv.getTime(), ServerIoFactory.get(), usrEv.getUser());
-         default:
-            return null;
-      }
-   }
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        UserEvent usrEv = (UserEvent) ev;
+        switch ((HyperboxEvents) ev.getEventId()) {
+            case UserAdded:
+                return new UserAddedEventOut(usrEv.getTime(), ServerIoFactory.get(), usrEv.getUser());
+            case UserModified:
+                return new UserModifiedEventOut(usrEv.getTime(), ServerIoFactory.get(), usrEv.getUser());
+            case UserRemoved:
+                return new UserRemovedEventOut(usrEv.getTime(), ServerIoFactory.get(), usrEv.getUser());
+            default:
+                return null;
+        }
+    }
 
 }

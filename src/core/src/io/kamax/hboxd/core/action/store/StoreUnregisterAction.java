@@ -32,21 +32,21 @@ import java.util.List;
 
 public class StoreUnregisterAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.StoreUnregister.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.StoreUnregister.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      // TODO check if still in use
-      StoreIn stoIn = request.get(StoreIn.class);
-      hbox.getStoreManager().unregisterStore(stoIn.getId());
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        // TODO check if still in use
+        StoreIn stoIn = request.get(StoreIn.class);
+        hbox.getStoreManager().unregisterStore(stoIn.getId());
+    }
 
 }

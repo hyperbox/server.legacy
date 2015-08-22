@@ -22,11 +22,13 @@ package io.kamax.hboxd.exception.store;
 
 import io.kamax.hboxd.exception.StoreException;
 
-@SuppressWarnings("serial")
+
 public class StoreNotOpenException extends StoreException {
 
-   public StoreNotOpenException() {
-      super("Store is not open");
-   }
+    private static final long serialVersionUID = -271906950329088127L;
+
+    public StoreNotOpenException() {
+        super("Store is not open");
+    }
 
 }

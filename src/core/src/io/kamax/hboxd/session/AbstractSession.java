@@ -37,138 +37,139 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class AbstractSession implements _Session {
 
-   private final String id;
-   private Date createTime;
-   private SessionStates state;
+    private final String id;
+    private Date createTime;
+    private SessionStates state;
 
-   private _Client client;
-   protected _User user;
+    private _Client client;
+    protected _User user;
 
-   private Thread worker;
-   private volatile boolean running;
-   private BlockingQueue<Request> msgQueue;
+    private Thread worker;
+    private volatile boolean running;
+    private BlockingQueue<Request> msgQueue;
 
-   private _TaskManager taskMgr;
+    private _TaskManager taskMgr;
 
-   public AbstractSession(String id, _Client client, _User user, _TaskManager taskMgr) {
+    public AbstractSession(String id, _Client client, _User user, _TaskManager taskMgr) {
 
-      this.id = id;
-      createTime = new Date();
+        this.id = id;
+        createTime = new Date();
 
-      msgQueue = new LinkedBlockingQueue<Request>();
-      this.client = client;
-      this.user = user;
-      this.taskMgr = taskMgr;
+        msgQueue = new LinkedBlockingQueue<Request>();
+        this.client = client;
+        this.user = user;
+        this.taskMgr = taskMgr;
 
-      init();
-      setState(SessionStates.Created);
-   }
+        init();
+        setState(SessionStates.Created);
+    }
 
-   private void init() {
+    private void init() {
 
-      running = true;
-      worker = new Thread(this, "SessWT - Session #" + id + " - Connection #" + client.getId());
-      worker.start();
-   }
+        running = true;
+        worker = new Thread(this, "SessWT - Session #" + id + " - Connection #" + client.getId());
+        worker.start();
+    }
 
-   protected void setState(SessionStates state) {
-      this.state = state;
-      EventManager.post(new SessionStateEvent(this));
-   }
+    protected void setState(SessionStates state) {
+        this.state = state;
+        EventManager.post(new SessionStateEvent(this));
+    }
 
-   @Override
-   public String getId() {
-      return id;
-   }
+    @Override
+    public String getId() {
+        return id;
+    }
 
-   @Override
-   public SessionStates getState() {
-      return state;
-   }
+    @Override
+    public SessionStates getState() {
+        return state;
+    }
 
-   @Override
-   public _User getUser() {
-      return user;
-   }
+    @Override
+    public _User getUser() {
+        return user;
+    }
 
-   @Override
-   public void login() {
-      user = SecurityContext.getUser();
-   }
+    @Override
+    public void login() {
+        user = SecurityContext.getUser();
+    }
 
-   @Override
-   public void logout() {
-      close();
-   }
+    @Override
+    public void logout() {
+        close();
+    }
 
-   @Override
-   public void close() {
+    @Override
+    public void close() {
 
-      running = false;
+        running = false;
 
-      if (!Thread.currentThread().equals(worker)) {
-         worker.interrupt();
-         try {
-            worker.join(1000);
-         } catch (InterruptedException e) {
-            Logger.debug("Session worker thread ID: " + worker.getId());
-            Logger.debug("Thread ID #" + Thread.currentThread().getId() + " [" + Thread.currentThread().getName() + "] forcefully destroyed for Session ID #"
-                  + getId());
-         }
-      }
+        if (!Thread.currentThread().equals(worker)) {
+            worker.interrupt();
+            try {
+                worker.join(1000);
+            } catch (InterruptedException e) {
+                Logger.debug("Session worker thread ID: " + worker.getId());
+                Logger.debug("Thread ID #" + Thread.currentThread().getId() + " [" + Thread.currentThread().getName()
+                        + "] forcefully destroyed for Session ID #"
+                        + getId());
+            }
+        }
 
-   }
+    }
 
-   @Override
-   public void putRequest(Request req) {
+    @Override
+    public void putRequest(Request req) {
 
-      if (!msgQueue.offer(req)) {
-         throw new HyperboxException("Message queue is full, try again later.");
-      }
-   }
+        if (!msgQueue.offer(req)) {
+            throw new HyperboxException("Message queue is full, try again later.");
+        }
+    }
 
-   protected void process(Request req) {
-      taskMgr.process(req);
-   }
+    protected void process(Request req) {
+        taskMgr.process(req);
+    }
 
-   @Override
-   public void post(EventOut ev) {
+    @Override
+    public void post(EventOut ev) {
 
-      client.post(ev);
-   }
+        client.post(ev);
+    }
 
-   @Override
-   public void run() {
+    @Override
+    public void run() {
 
-      SecurityContext.setUser(user);
-      SessionContext.setClient(client);
-      running = true;
+        SecurityContext.setUser(user);
+        SessionContext.setClient(client);
+        running = true;
 
-      Logger.debug("Session ID #" + getId() + " | " + getUser().getDomainLogonName() + " | Message Queue Runner started");
+        Logger.debug("Session ID #" + getId() + " | " + getUser().getDomainLogonName() + " | Message Queue Runner started");
 
-      while (running) {
-         try {
-            Request r = msgQueue.take();
-            taskMgr.process(r);
-         } catch (InterruptedException e) {
-            Logger.debug("Session ID #" + getId() + " | " + getUser().getDomainLogonName() + " | Message Queue Runner interupted, halting...");
-            running = false;
-         } catch (Throwable e) {
-            Logger.error("Fatal error while trying to process a client request : " + e.getMessage());
-            Logger.exception(e);
-         }
-      }
-      Logger.debug("Session ID #" + getId() + " | " + getUser().getDomainLogonName() + " | Message Queue Runner halted");
-      setState(SessionStates.Destroyed);
-   }
+        while (running) {
+            try {
+                Request r = msgQueue.take();
+                taskMgr.process(r);
+            } catch (InterruptedException e) {
+                Logger.debug("Session ID #" + getId() + " | " + getUser().getDomainLogonName() + " | Message Queue Runner interupted, halting...");
+                running = false;
+            } catch (Throwable e) {
+                Logger.error("Fatal error while trying to process a client request : " + e.getMessage());
+                Logger.exception(e);
+            }
+        }
+        Logger.debug("Session ID #" + getId() + " | " + getUser().getDomainLogonName() + " | Message Queue Runner halted");
+        setState(SessionStates.Destroyed);
+    }
 
-   @Override
-   public Date getCreateTime() {
-      return createTime;
-   }
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-   protected _Client getClient() {
-      return client;
-   }
+    protected _Client getClient() {
+        return client;
+    }
 
 }

@@ -26,13 +26,13 @@ import io.kamax.hboxd.session._Session;
 
 public final class SessionStateEvent extends SessionEvent {
 
-   public SessionStateEvent(_Session s) {
-      super(HyperboxEvents.SessionState, s);
-      set(s.getState());
-   }
+    public SessionStateEvent(_Session s) {
+        super(HyperboxEvents.SessionState, s);
+        set(s.getState());
+    }
 
-   public SessionStates getState() {
-      return get(SessionStates.class);
-   }
+    public SessionStates getState() {
+        return get(SessionStates.class);
+    }
 
 }

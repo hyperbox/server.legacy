@@ -24,15 +24,15 @@ import io.kamax.hbox.event.Event;
 
 public abstract class MachineEvent extends Event {
 
-   private String vmId;
+    private String vmId;
 
-   public MachineEvent(Enum<?> eventId, String vmId) {
-      super(eventId);
-      this.vmId = vmId;
-   }
+    public MachineEvent(Enum<?> eventId, String vmId) {
+        super(eventId);
+        this.vmId = vmId;
+    }
 
-   public String getMachineId() {
-      return vmId;
-   }
+    public String getMachineId() {
+        return vmId;
+    }
 
 }

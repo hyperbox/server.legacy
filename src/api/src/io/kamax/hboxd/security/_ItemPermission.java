@@ -22,6 +22,6 @@ package io.kamax.hboxd.security;
 
 public interface _ItemPermission extends _ActionPermission {
 
-   public String getItemId();
+    public String getItemId();
 
 }

@@ -23,8 +23,8 @@ package io.kamax.hboxd.persistence;
 
 public interface _SettingPersistor {
 
-   public void storeSetting(String name, String value);
+    public void storeSetting(String name, String value);
 
-   public String loadSetting(String name);
+    public String loadSetting(String name);
 
 }

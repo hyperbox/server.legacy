@@ -37,26 +37,26 @@ import java.util.List;
 
 public class MachineLogFileListAction extends ServerAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineLogFileList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineLogFileList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   protected void run(Request request, _Hyperbox hbox, _Server srv) {
-      MachineIn machine = request.get(MachineIn.class);
+    @Override
+    protected void run(Request request, _Hyperbox hbox, _Server srv) {
+        MachineIn machine = request.get(MachineIn.class);
 
-      List<String> logFileIdList = srv.getHypervisor().getLogFileList(machine.getId());
-      for (String logFileId : logFileIdList) {
-         MachineLogFileIO logIo = MachineLogFileIoFactory.get(logFileId);
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, MachineLogFileIO.class, logIo));
-      }
+        List<String> logFileIdList = srv.getHypervisor().getLogFileList(machine.getId());
+        for (String logFileId : logFileIdList) {
+            MachineLogFileIO logIo = MachineLogFileIoFactory.get(logFileId);
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, MachineLogFileIO.class, logIo));
+        }
 
-   }
+    }
 
 }

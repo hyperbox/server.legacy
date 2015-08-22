@@ -26,14 +26,14 @@ import java.util.List;
 
 public interface _HypervisorPersistor {
 
-   public void add(_HypervisorConnector connector);
+    public void add(_HypervisorConnector connector);
 
-   public void modify(_HypervisorConnector connector);
+    public void modify(_HypervisorConnector connector);
 
-   public void delete(_HypervisorConnector connector);
+    public void delete(_HypervisorConnector connector);
 
-   public List<_HypervisorConnector> list();
+    public List<_HypervisorConnector> list();
 
-   public _HypervisorConnector get(String id);
+    public _HypervisorConnector get(String id);
 
 }

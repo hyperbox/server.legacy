@@ -35,24 +35,24 @@ import java.util.List;
 
 public class NetworkAttachNameListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetworkAttachNameList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetworkAttachNameList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      NetworkAttachModeIn namIn = request.get(NetworkAttachModeIn.class);
-      List<String> attachNames = hbox.getHypervisor().listNicAttachNames(namIn.getId());
-      for (String attachName : attachNames) {
-         NetworkAttachNameOut nanOut = new NetworkAttachNameOut(attachName);
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, nanOut));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        NetworkAttachModeIn namIn = request.get(NetworkAttachModeIn.class);
+        List<String> attachNames = hbox.getHypervisor().listNicAttachNames(namIn.getId());
+        for (String attachName : attachNames) {
+            NetworkAttachNameOut nanOut = new NetworkAttachNameOut(attachName);
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, nanOut));
+        }
+    }
 
 }

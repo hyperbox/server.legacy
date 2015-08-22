@@ -25,18 +25,18 @@ import io.kamax.hboxd.security._SecurityManager;
 
 public class SecurityManagerFactory {
 
-   private static _SecurityManager secMgr;
+    private static _SecurityManager secMgr;
 
-   private SecurityManagerFactory() {
-      throw new RuntimeException("Not allowed");
-   }
+    private SecurityManagerFactory() {
+        throw new RuntimeException("Not allowed");
+    }
 
-   public static _SecurityManager get() {
+    public static _SecurityManager get() {
 
-      if (secMgr == null) {
-         secMgr = new SecurityManager();
-      }
-      return secMgr;
-   }
+        if (secMgr == null) {
+            secMgr = new SecurityManager();
+        }
+        return secMgr;
+    }
 
 }

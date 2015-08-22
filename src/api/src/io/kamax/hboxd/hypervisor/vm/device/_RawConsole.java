@@ -26,52 +26,52 @@ import java.util.Set;
 
 public interface _RawConsole extends _RawItem {
 
-   public Boolean isEnabled();
+    public Boolean isEnabled();
 
-   public void setEnabled(Boolean enable);
+    public void setEnabled(Boolean enable);
 
-   public Boolean isActive();
+    public Boolean isActive();
 
-   public String getAddress();
+    public String getAddress();
 
-   public Long getPort();
+    public Long getPort();
 
-   public String getProtocol();
+    public String getProtocol();
 
-   public String getAuthType();
+    public String getAuthType();
 
-   public void setAuthType(String authType);
+    public void setAuthType(String authType);
 
-   public String getAuthLibrary();
+    public String getAuthLibrary();
 
-   public void setAuthLibrary(String library);
+    public void setAuthLibrary(String library);
 
-   public Long getAuthTimeout();
+    public Long getAuthTimeout();
 
-   public void setAuthTimeout(Long timeout);
+    public void setAuthTimeout(Long timeout);
 
-   public Boolean getAllowMultiConnection();
+    public Boolean getAllowMultiConnection();
 
-   public void setAllowMultiConnection(Boolean allow);
+    public void setAllowMultiConnection(Boolean allow);
 
-   public Set<String> listProperties();
+    public Set<String> listProperties();
 
-   public boolean hasProperty(String key);
+    public boolean hasProperty(String key);
 
-   public String getProperty(String key);
+    public String getProperty(String key);
 
-   public void setProperty(String key, String value);
+    public void setProperty(String key, String value);
 
-   public void unsetProperty(String key);
+    public void unsetProperty(String key);
 
-   /*
-   public Boolean getReuseSingleConnection();
-   
-   public void setReuseSingleConnection(Boolean reuse);
-   
-   public String getModule();
-   
-   public void setModule(String module);
-    */
+    /*
+    public Boolean getReuseSingleConnection();
+    
+    public void setReuseSingleConnection(Boolean reuse);
+    
+    public String getModule();
+    
+    public void setModule(String module);
+     */
 
 }

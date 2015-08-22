@@ -25,8 +25,8 @@ import io.kamax.hboxd.module._Module;
 
 public class ModuleLoadedEvent extends ModuleEvent {
 
-   public ModuleLoadedEvent(_Module mod) {
-      super(HyperboxEvents.ModuleLoaded, mod);
-   }
+    public ModuleLoadedEvent(_Module mod) {
+        super(HyperboxEvents.ModuleLoaded, mod);
+    }
 
 }

@@ -35,155 +35,155 @@ import java.util.Map;
 
 public final class StoreManager implements _StoreManager {
 
-   private _StorePersistor persistor;
+    private _StorePersistor persistor;
 
-   private StoreIdGenerator IdGen = new StoreIdGenerator();
-   private Map<String, _Store> stores = new HashMap<String, _Store>();
+    private StoreIdGenerator IdGen = new StoreIdGenerator();
+    private Map<String, _Store> stores = new HashMap<String, _Store>();
 
-   private void saveStores() {
+    private void saveStores() {
 
-      Logger.debug("Saving stores config");
-      for (_Store s : stores.values()) {
-         persistor.updateStore(s);
-      }
-   }
+        Logger.debug("Saving stores config");
+        for (_Store s : stores.values()) {
+            persistor.updateStore(s);
+        }
+    }
 
-   @Override
-   public void init(_StorePersistor persistor) throws HyperboxException {
-      this.persistor = persistor;
-   }
+    @Override
+    public void init(_StorePersistor persistor) throws HyperboxException {
+        this.persistor = persistor;
+    }
 
-   @Override
-   public void start() throws HyperboxException {
+    @Override
+    public void start() throws HyperboxException {
 
-      Logger.verbose("Filesystem Store Manager is starting...");
-      List<_Store> storeList = persistor.listStores();
-      for (_Store store : storeList) {
-         stores.put(store.getId(), store);
-      }
+        Logger.verbose("Filesystem Store Manager is starting...");
+        List<_Store> storeList = persistor.listStores();
+        for (_Store store : storeList) {
+            stores.put(store.getId(), store);
+        }
 
-      // We assume this is the first launch
-      // TODO check in a more effective way that this is the first launch
-      if (stores.isEmpty()) {
-         for (File rootFs : File.listRoots()) {
-            if (rootFs.getAbsolutePath().contentEquals("/")) {
-               // We are on a UNIX-type of OS
-               registerStore(rootFs.getAbsolutePath(), "Root");
-            } else {
-               // We are on Windows
-               if (rootFs.isDirectory()) {
-                  // Empty drives (CD/DVD drives) are skipped, they are not considered as directories
-                  registerStore(rootFs.getAbsolutePath(), rootFs.getAbsolutePath().split(":", 2)[0]);
-               }
+        // We assume this is the first launch
+        // TODO check in a more effective way that this is the first launch
+        if (stores.isEmpty()) {
+            for (File rootFs : File.listRoots()) {
+                if (rootFs.getAbsolutePath().contentEquals("/")) {
+                    // We are on a UNIX-type of OS
+                    registerStore(rootFs.getAbsolutePath(), "Root");
+                } else {
+                    // We are on Windows
+                    if (rootFs.isDirectory()) {
+                        // Empty drives (CD/DVD drives) are skipped, they are not considered as directories
+                        registerStore(rootFs.getAbsolutePath(), rootFs.getAbsolutePath().split(":", 2)[0]);
+                    }
+                }
+
             }
+        }
+        Logger.verbose("Filesystem Store Manager started");
+    }
 
-         }
-      }
-      Logger.verbose("Filesystem Store Manager started");
-   }
+    @Override
+    public void stop() {
 
-   @Override
-   public void stop() {
+        Logger.verbose("Filesystem Store Manager is stopping...");
+        saveStores();
+        Logger.verbose("Filesystem Store Manager stopped");
+    }
 
-      Logger.verbose("Filesystem Store Manager is stopping...");
-      saveStores();
-      Logger.verbose("Filesystem Store Manager stopped");
-   }
+    @Override
+    public List<_Store> listStores() {
+        SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.List);
 
-   @Override
-   public List<_Store> listStores() {
-      SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.List);
+        return new ArrayList<_Store>(stores.values());
+    }
 
-      return new ArrayList<_Store>(stores.values());
-   }
+    @Override
+    public _Store getStore(String id) {
+        SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Get, id);
 
-   @Override
-   public _Store getStore(String id) {
-      SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Get, id);
+        if (!stores.containsKey(id)) {
+            throw new HyperboxException("Cannot find a Store with \"" + id + "\" as ID");
+        }
 
-      if (!stores.containsKey(id)) {
-         throw new HyperboxException("Cannot find a Store with \"" + id + "\" as ID");
-      }
+        return stores.get(id);
+    }
 
-      return stores.get(id);
-   }
+    @Override
+    public _Store createStore(String location, String label) {
 
-   @Override
-   public _Store createStore(String location, String label) {
+        SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Create);
 
-      SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Create);
+        File path = new File(location);
 
-      File path = new File(location);
+        if (path.exists()) {
+            throw new HyperboxException("This path already exist, cannot create the store");
+        }
+        if (!path.mkdirs()) {
+            throw new HyperboxException("Unable to create the store, folder creation failed");
+        }
 
-      if (path.exists()) {
-         throw new HyperboxException("This path already exist, cannot create the store");
-      }
-      if (!path.mkdirs()) {
-         throw new HyperboxException("Unable to create the store, folder creation failed");
-      }
+        return registerStore(location, label);
+    }
 
-      return registerStore(location, label);
-   }
+    @Override
+    public _Store registerStore(String location, String label) {
 
-   @Override
-   public _Store registerStore(String location, String label) {
+        SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Add);
 
-      SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Add);
+        File path = new File(location);
 
-      File path = new File(location);
+        Logger.debug("Trying to register " + path.getAbsolutePath() + " under " + label);
+        if (!path.exists()) {
+            throw new HyperboxException("Store location must exist");
+        }
+        if (!path.isDirectory()) {
+            throw new HyperboxException("Store location must represent a directory");
+        }
+        if (!path.isAbsolute()) {
+            throw new HyperboxException("Store location must be an absolute path");
+        }
 
-      Logger.debug("Trying to register " + path.getAbsolutePath() + " under " + label);
-      if (!path.exists()) {
-         throw new HyperboxException("Store location must exist");
-      }
-      if (!path.isDirectory()) {
-         throw new HyperboxException("Store location must represent a directory");
-      }
-      if (!path.isAbsolute()) {
-         throw new HyperboxException("Store location must be an absolute path");
-      }
+        // TODO implement registration event
+        _Store s = StoreFactory.get("localFolder", IdGen.get(), label, path);
+        persistor.insertStore(s);
+        stores.put(s.getId(), s);
+        persistor.updateStore(s);
+        return s;
+    }
 
-      // TODO implement registration event
-      _Store s = StoreFactory.get("localFolder", IdGen.get(), label, path);
-      persistor.insertStore(s);
-      stores.put(s.getId(), s);
-      persistor.updateStore(s);
-      return s;
-   }
+    @Override
+    public void unregisterStore(String id) {
 
-   @Override
-   public void unregisterStore(String id) {
+        SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Delete, id);
 
-      SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Delete, id);
+        _Store s = getStore(id);
+        persistor.deleteStore(s);
+        stores.remove(s.getId());
+        // TODO implement registration event
+    }
 
-      _Store s = getStore(id);
-      persistor.deleteStore(s);
-      stores.remove(s.getId());
-      // TODO implement registration event
-   }
+    @Override
+    public void deleteStore(String id) {
 
-   @Override
-   public void deleteStore(String id) {
+        SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Delete, id);
 
-      SecurityContext.get().authorize(SecurityItem.Store, SecurityAction.Delete, id);
+        if (!new File(getStore(id).getLocation()).delete()) {
+            throw new HyperboxException("Unable to delete the store");
+        }
+        unregisterStore(id);
+    }
 
-      if (!new File(getStore(id).getLocation()).delete()) {
-         throw new HyperboxException("Unable to delete the store");
-      }
-      unregisterStore(id);
-   }
+    private class StoreIdGenerator {
 
-   private class StoreIdGenerator {
+        private Integer nextId = 1;
 
-      private Integer nextId = 1;
+        public String get() {
 
-      public String get() {
-
-         while (stores.containsKey(nextId.toString())) {
-            nextId++;
-         }
-         return nextId.toString();
-      }
-   }
+            while (stores.containsKey(nextId.toString())) {
+                nextId++;
+            }
+            return nextId.toString();
+        }
+    }
 
 }

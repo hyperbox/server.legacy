@@ -33,24 +33,24 @@ import java.util.List;
 
 public final class MachineResumeAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineResume.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineResume.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      ServerIn srvIn = request.get(ServerIn.class);
-      MachineIn mIn = request.get(MachineIn.class);
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        ServerIn srvIn = request.get(ServerIn.class);
+        MachineIn mIn = request.get(MachineIn.class);
 
-      _Machine vm = hbox.getServer(srvIn.getId()).getMachine(mIn.getUuid());
+        _Machine vm = hbox.getServer(srvIn.getId()).getMachine(mIn.getUuid());
 
-      vm.resume();
-   }
+        vm.resume();
+    }
 
 }

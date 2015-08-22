@@ -39,27 +39,27 @@ import java.util.Set;
 
 public class NetworkInterfaceListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetworkInterfaceList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetworkInterfaceList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      MachineIn mIn = request.get(MachineIn.class);
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        MachineIn mIn = request.get(MachineIn.class);
 
-      _RawVM rawVm = hbox.getHypervisor().getMachine(mIn.getUuid());
-      Set<_RawNetworkInterface> rawNics = rawVm.listNetworkInterfaces();
+        _RawVM rawVm = hbox.getHypervisor().getMachine(mIn.getUuid());
+        Set<_RawNetworkInterface> rawNics = rawVm.listNetworkInterfaces();
 
-      for (_RawNetworkInterface rawNic : rawNics) {
-         NetworkInterfaceOut nicOut = NetworkInterfaceIoFactory.get(rawNic);
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, nicOut));
-      }
-   }
+        for (_RawNetworkInterface rawNic : rawNics) {
+            NetworkInterfaceOut nicOut = NetworkInterfaceIoFactory.get(rawNic);
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, nicOut));
+        }
+    }
 
 }

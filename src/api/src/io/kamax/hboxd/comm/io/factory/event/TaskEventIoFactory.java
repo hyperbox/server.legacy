@@ -30,21 +30,21 @@ import io.kamax.hboxd.core._Hyperbox;
 
 public class TaskEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.TaskState
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.TaskState
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      switch ((HyperboxEvents) ev.getEventId()) {
-         case TaskState:
-            return new TaskStateEventOut(ev.getTime(), ServerIoFactory.get(), ev.get(TaskOut.class));
-         default:
-            return null;
-      }
-   }
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        switch ((HyperboxEvents) ev.getEventId()) {
+            case TaskState:
+                return new TaskStateEventOut(ev.getTime(), ServerIoFactory.get(), ev.get(TaskOut.class));
+            default:
+                return null;
+        }
+    }
 
 }

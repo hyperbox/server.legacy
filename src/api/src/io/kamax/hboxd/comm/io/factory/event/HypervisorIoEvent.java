@@ -36,34 +36,34 @@ import io.kamax.hboxd.event.hypervisor.HypervisorEvent;
 
 public class HypervisorIoEvent implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.HypervisorConfigured,
-            HyperboxEvents.HypervisorConnected,
-            HyperboxEvents.HypervisorDisconnected
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.HypervisorConfigured,
+                HyperboxEvents.HypervisorConnected,
+                HyperboxEvents.HypervisorDisconnected
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      if (ev instanceof HypervisorEvent) {
-         HypervisorEvent hypEv = (HypervisorEvent) ev;
-         ServerOut srvOut = ServerIoFactory.get();
-         HypervisorOut hypOut = HypervisorIoFactory.getOut(hypEv.getHypervisor());
-         switch ((HyperboxEvents) hypEv.getEventId()) {
-            case HypervisorConfigured:
-               return new HypervisorConfiguredEventOut(hypEv.getTime(), srvOut, hypOut);
-            case HypervisorConnected:
-               return new HypervisorConnectedEventOut(hypEv.getTime(), srvOut, hypOut);
-            case HypervisorDisconnected:
-               return new HypervisorDisconnectedEventOut(hypEv.getTime(), srvOut, hypOut);
-            default:
-               return null;
-         }
-      } else {
-         return null;
-      }
-   }
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        if (ev instanceof HypervisorEvent) {
+            HypervisorEvent hypEv = (HypervisorEvent) ev;
+            ServerOut srvOut = ServerIoFactory.get();
+            HypervisorOut hypOut = HypervisorIoFactory.getOut(hypEv.getHypervisor());
+            switch ((HyperboxEvents) hypEv.getEventId()) {
+                case HypervisorConfigured:
+                    return new HypervisorConfiguredEventOut(hypEv.getTime(), srvOut, hypOut);
+                case HypervisorConnected:
+                    return new HypervisorConnectedEventOut(hypEv.getTime(), srvOut, hypOut);
+                case HypervisorDisconnected:
+                    return new HypervisorDisconnectedEventOut(hypEv.getTime(), srvOut, hypOut);
+                default:
+                    return null;
+            }
+        } else {
+            return null;
+        }
+    }
 
 }

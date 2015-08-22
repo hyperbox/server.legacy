@@ -42,78 +42,78 @@ import org.xml.sax.SAXException;
 
 public class ModuleFactory {
 
-   private ModuleFactory() {
-      throw new RuntimeException("Not allowed");
-   }
+    private ModuleFactory() {
+        throw new RuntimeException("Not allowed");
+    }
 
-   public static _Module get(File descriptorFile) {
-      // TODO put the hardcoded values into config variables
-      try {
-         Logger.debug("Start module creation: " + descriptorFile.getAbsolutePath());
-         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-         DocumentBuilder dBuilder;
-         dBuilder = dbFactory.newDocumentBuilder();
-         Document doc = dBuilder.parse(descriptorFile);
-         doc.getDocumentElement().normalize();
+    public static _Module get(File descriptorFile) {
+        // TODO put the hardcoded values into config variables
+        try {
+            Logger.debug("Start module creation: " + descriptorFile.getAbsolutePath());
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder;
+            dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(descriptorFile);
+            doc.getDocumentElement().normalize();
 
-         XPath xPath = XPathFactory.newInstance().newXPath();
-         if (!"module".equals(doc.getDocumentElement().getNodeName())) {
-            throw new ModuleInvalidDescriptorFileException("Invalid module descriptor file, invalid root tag: " + doc.getDocumentElement().getNodeName());
-         } else {
-            String id = (String) xPath.evaluate("/module/id", doc, XPathConstants.STRING);
-            Logger.debug("id: " + id);
-            String path = (String) xPath.evaluate("/module/path", doc, XPathConstants.STRING);
-            Logger.debug("path: " + path);
-            String name = (String) xPath.evaluate("/module/name", doc, XPathConstants.STRING);
-            Logger.debug("name: " + name);
-            String desc = (String) xPath.evaluate("/module/desc", doc, XPathConstants.STRING);
-            Logger.debug("desc: " + desc);
-            String version = (String) xPath.evaluate("/module/version", doc, XPathConstants.STRING);
-            Logger.debug("version: " + version);
-            String vendor = (String) xPath.evaluate("/module/vendor", doc, XPathConstants.STRING);
-            Logger.debug("vendor: " + vendor);
-            String url = (String) xPath.evaluate("/module/url", doc, XPathConstants.STRING);
-            Logger.debug("url: " + url);
-            NodeList providerNodeList = (NodeList) xPath.evaluate("/module/providers/provider", doc, XPathConstants.NODESET);
-            Map<String, String> providers = new HashMap<String, String>();
-            Logger.debug("providers: " + providerNodeList.getLength());
-            for (int i = 0; i < providerNodeList.getLength(); i++) {
-               String type = (String) xPath.evaluate("type", providerNodeList.item(i), XPathConstants.STRING);
-               Logger.debug("type #" + i + ": " + type);
-               String imp = (String) xPath.evaluate("impl", providerNodeList.item(i), XPathConstants.STRING);
-               Logger.debug("imp #" + i + ": " + imp);
-               if (!AxStrings.isEmpty(type) && !AxStrings.isEmpty(imp)) {
-                  Logger.debug("Added to providers map.");
-                  providers.put(type, imp);
-               }
+            XPath xPath = XPathFactory.newInstance().newXPath();
+            if (!"module".equals(doc.getDocumentElement().getNodeName())) {
+                throw new ModuleInvalidDescriptorFileException("Invalid module descriptor file, invalid root tag: " + doc.getDocumentElement().getNodeName());
+            } else {
+                String id = (String) xPath.evaluate("/module/id", doc, XPathConstants.STRING);
+                Logger.debug("id: " + id);
+                String path = (String) xPath.evaluate("/module/path", doc, XPathConstants.STRING);
+                Logger.debug("path: " + path);
+                String name = (String) xPath.evaluate("/module/name", doc, XPathConstants.STRING);
+                Logger.debug("name: " + name);
+                String desc = (String) xPath.evaluate("/module/desc", doc, XPathConstants.STRING);
+                Logger.debug("desc: " + desc);
+                String version = (String) xPath.evaluate("/module/version", doc, XPathConstants.STRING);
+                Logger.debug("version: " + version);
+                String vendor = (String) xPath.evaluate("/module/vendor", doc, XPathConstants.STRING);
+                Logger.debug("vendor: " + vendor);
+                String url = (String) xPath.evaluate("/module/url", doc, XPathConstants.STRING);
+                Logger.debug("url: " + url);
+                NodeList providerNodeList = (NodeList) xPath.evaluate("/module/providers/provider", doc, XPathConstants.NODESET);
+                Map<String, String> providers = new HashMap<String, String>();
+                Logger.debug("providers: " + providerNodeList.getLength());
+                for (int i = 0; i < providerNodeList.getLength(); i++) {
+                    String type = (String) xPath.evaluate("type", providerNodeList.item(i), XPathConstants.STRING);
+                    Logger.debug("type #" + i + ": " + type);
+                    String imp = (String) xPath.evaluate("impl", providerNodeList.item(i), XPathConstants.STRING);
+                    Logger.debug("imp #" + i + ": " + imp);
+                    if (!AxStrings.isEmpty(type) && !AxStrings.isEmpty(imp)) {
+                        Logger.debug("Added to providers map.");
+                        providers.put(type, imp);
+                    }
+                }
+                Logger.debug("providers done.");
+
+                File modPath = new File(AxStrings.isEmpty(path) ? id : path);
+                Logger.debug("mod raw path: " + path);
+                Logger.debug("mod path: " + modPath.getAbsolutePath());
+                if (!modPath.isAbsolute()) {
+                    modPath = new File(descriptorFile.getAbsoluteFile().getParent() + File.separator + path).getAbsoluteFile();
+                }
+                Logger.debug("mod abs path: " + modPath.getPath());
+                Logger.debug("mod path read: " + modPath.canRead());
+                if (!modPath.canRead()) {
+                    throw new ModuleInvalidDescriptorFileException("Module base path is not readable: " + modPath.getAbsolutePath());
+                }
+
+                Logger.debug("Found a valid module for " + descriptorFile.getAbsolutePath());
+                Logger.debug("End Module creation.");
+                return new Module(id, descriptorFile, modPath, name, version, vendor, desc, url, providers);
             }
-            Logger.debug("providers done.");
-
-            File modPath = new File(AxStrings.isEmpty(path) ? id : path);
-            Logger.debug("mod raw path: " + path);
-            Logger.debug("mod path: " + modPath.getAbsolutePath());
-            if (!modPath.isAbsolute()) {
-               modPath = new File(descriptorFile.getAbsoluteFile().getParent() + File.separator + path).getAbsoluteFile();
-            }
-            Logger.debug("mod abs path: " + modPath.getPath());
-            Logger.debug("mod path read: " + modPath.canRead());
-            if (!modPath.canRead()) {
-               throw new ModuleInvalidDescriptorFileException("Module base path is not readable: " + modPath.getAbsolutePath());
-            }
-
-            Logger.debug("Found a valid module for " + descriptorFile.getAbsolutePath());
-            Logger.debug("End Module creation.");
-            return new Module(id, descriptorFile, modPath, name, version, vendor, desc, url, providers);
-         }
-      } catch (ParserConfigurationException e) {
-         throw new ModuleInvalidDescriptorFileException("Error when reading/parsing " + descriptorFile.getAbsolutePath() + ": " + e.getMessage());
-      } catch (SAXException e) {
-         throw new ModuleInvalidDescriptorFileException("Error when reading/parsing " + descriptorFile.getAbsolutePath() + ": " + e.getMessage());
-      } catch (IOException e) {
-         throw new ModuleInvalidDescriptorFileException("Error when reading/parsing " + descriptorFile.getAbsolutePath() + ": " + e.getMessage());
-      } catch (XPathExpressionException e) {
-         throw new ModuleInvalidDescriptorFileException("Error when reading/parsing " + descriptorFile.getAbsolutePath() + ": " + e.getMessage());
-      }
-   }
+        } catch (ParserConfigurationException e) {
+            throw new ModuleInvalidDescriptorFileException("Error when reading/parsing " + descriptorFile.getAbsolutePath() + ": " + e.getMessage());
+        } catch (SAXException e) {
+            throw new ModuleInvalidDescriptorFileException("Error when reading/parsing " + descriptorFile.getAbsolutePath() + ": " + e.getMessage());
+        } catch (IOException e) {
+            throw new ModuleInvalidDescriptorFileException("Error when reading/parsing " + descriptorFile.getAbsolutePath() + ": " + e.getMessage());
+        } catch (XPathExpressionException e) {
+            throw new ModuleInvalidDescriptorFileException("Error when reading/parsing " + descriptorFile.getAbsolutePath() + ": " + e.getMessage());
+        }
+    }
 
 }

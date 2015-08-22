@@ -25,10 +25,10 @@ import io.kamax.setting._Settable;
 
 public interface _Device extends _Settable {
 
-   public _Machine getMachine();
+    public _Machine getMachine();
 
-   public String getId();
+    public String getId();
 
-   public EntityType getType();
+    public EntityType getType();
 
 }

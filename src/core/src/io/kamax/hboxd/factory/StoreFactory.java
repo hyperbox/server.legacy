@@ -28,20 +28,20 @@ import java.io.File;
 
 public class StoreFactory {
 
-   private StoreFactory() {
-      throw new RuntimeException("Not allowed");
-   }
+    private StoreFactory() {
+        throw new RuntimeException("Not allowed");
+    }
 
-   public static _Store get(String moduleId, String storeId, String storeName, File storePath) {
-      if (moduleId.equalsIgnoreCase("localFolder")) {
-         return new FolderStore(storeId, storeName, storePath);
-      } else {
-         throw new HyperboxException("Unsupported Store Type : " + moduleId);
-      }
-   }
+    public static _Store get(String moduleId, String storeId, String storeName, File storePath) {
+        if (moduleId.equalsIgnoreCase("localFolder")) {
+            return new FolderStore(storeId, storeName, storePath);
+        } else {
+            throw new HyperboxException("Unsupported Store Type : " + moduleId);
+        }
+    }
 
-   public static _Store get(String moduleId, String storeId, String storeName, String storePath) {
-      return get(moduleId, storeId, storeName, new File(storePath));
-   }
+    public static _Store get(String moduleId, String storeId, String storeName, String storePath) {
+        return get(moduleId, storeId, storeName, new File(storePath));
+    }
 
 }

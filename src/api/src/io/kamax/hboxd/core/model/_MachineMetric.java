@@ -24,10 +24,10 @@ import java.util.Date;
 
 public interface _MachineMetric {
 
-   public String getMachineUuid();
+    public String getMachineUuid();
 
-   public Date getTime();
+    public Date getTime();
 
-   public double getValue();
+    public double getValue();
 
 }

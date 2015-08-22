@@ -30,21 +30,21 @@ import io.kamax.hboxd.core._Hyperbox;
 
 public final class SystemEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.SystemState
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.SystemState
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      switch ((HyperboxEvents) ev.getEventId()) {
-         case SystemState:
-            return new SystemStateEventOut(ev.getTime(), ServerIoFactory.get(), ev.get(ServerState.class));
-         default:
-            return null;
-      }
-   }
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        switch ((HyperboxEvents) ev.getEventId()) {
+            case SystemState:
+                return new SystemStateEventOut(ev.getTime(), ServerIoFactory.get(), ev.get(ServerState.class));
+            default:
+                return null;
+        }
+    }
 
 }

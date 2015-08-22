@@ -37,22 +37,22 @@ import java.util.List;
 
 public class NetModeListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetModeList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetModeList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      ServerIn srvIn = request.get(ServerIn.class);
-      for (_NetMode netMode : hbox.getServer(srvIn.getId()).getHypervisor().listNetworkModes()) {
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, NetModeOut.class, NetModeIoFactory.get(netMode)));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        ServerIn srvIn = request.get(ServerIn.class);
+        for (_NetMode netMode : hbox.getServer(srvIn.getId()).getHypervisor().listNetworkModes()) {
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, NetModeOut.class, NetModeIoFactory.get(netMode)));
+        }
+    }
 
 }

@@ -37,28 +37,28 @@ import java.util.List;
 
 public final class MachineListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MachineList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      if (!request.has(ServerIn.class)) {
-         throw new HyperboxException("missing serverinput");
-      }
-      ServerIn srvIn = request.get(ServerIn.class);
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        if (!request.has(ServerIn.class)) {
+            throw new HyperboxException("missing serverinput");
+        }
+        ServerIn srvIn = request.get(ServerIn.class);
 
-      List<_Machine> vms = hbox.getServer(srvIn.getId()).listMachines();
+        List<_Machine> vms = hbox.getServer(srvIn.getId()).listMachines();
 
-      for (_Machine vm : vms) {
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, MachineIoFactory.getSimple(vm)));
-      }
-   }
+        for (_Machine vm : vms) {
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, MachineIoFactory.getSimple(vm)));
+        }
+    }
 
 }

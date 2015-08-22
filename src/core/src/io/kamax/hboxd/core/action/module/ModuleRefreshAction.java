@@ -30,19 +30,19 @@ import java.util.List;
 
 public class ModuleRefreshAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ModuleRefresh.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ModuleRefresh.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      hbox.getModuleManager().refreshModules();
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        hbox.getModuleManager().refreshModules();
+    }
 
 }

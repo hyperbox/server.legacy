@@ -28,63 +28,63 @@ import io.kamax.tool.logging.Logger;
 
 public class HBoxServer {
 
-   private static _Persistor persistor;
-   private static _Server srv;
+    private static _Persistor persistor;
+    private static _Server srv;
 
-   public static void initPersistor(_Persistor persistor) {
+    public static void initPersistor(_Persistor persistor) {
 
-      if (HBoxServer.persistor == null) {
-         HBoxServer.persistor = persistor;
-      }
-   }
+        if (HBoxServer.persistor == null) {
+            HBoxServer.persistor = persistor;
+        }
+    }
 
-   public static void initServer(_Server srv) {
+    public static void initServer(_Server srv) {
 
-      HBoxServer.srv = srv;
-   }
+        HBoxServer.srv = srv;
+    }
 
-   public static _Server get() {
-      return srv;
-   }
+    public static _Server get() {
+        return srv;
+    }
 
-   public static String getSetting(String key, String defaultValue) {
-      try {
-         if (Configuration.hasSetting(key)) {
-            return Configuration.getSetting(key, defaultValue);
-         } else {
-            return persistor.loadSetting(key);
-         }
-      } catch (Throwable e) {
-         return defaultValue;
-      }
-   }
+    public static String getSetting(String key, String defaultValue) {
+        try {
+            if (Configuration.hasSetting(key)) {
+                return Configuration.getSetting(key, defaultValue);
+            } else {
+                return persistor.loadSetting(key);
+            }
+        } catch (Throwable e) {
+            return defaultValue;
+        }
+    }
 
-   public static String getSetting(String key) {
-      return getSetting(key, null);
-   }
+    public static String getSetting(String key) {
+        return getSetting(key, null);
+    }
 
-   public static boolean hasSetting(String key) {
+    public static boolean hasSetting(String key) {
 
-      try {
-         Logger.debug("Checking key \"" + key + "\" in storage");
-         return persistor.loadSetting(key) != null;
-      } catch (Throwable e) {
-         Logger.debug("Key is not in storage, checking in memory or env - Error: " + e.getMessage());
-         return Configuration.hasSetting(key);
-      }
-   }
+        try {
+            Logger.debug("Checking key \"" + key + "\" in storage");
+            return persistor.loadSetting(key) != null;
+        } catch (Throwable e) {
+            Logger.debug("Key is not in storage, checking in memory or env - Error: " + e.getMessage());
+            return Configuration.hasSetting(key);
+        }
+    }
 
-   public static String getSettingOrFail(String key) {
-      if (!hasSetting(key)) {
-         throw new HyperboxException("Setting key not found: " + key);
-      } else {
-         return getSetting(key);
-      }
-   }
+    public static String getSettingOrFail(String key) {
+        if (!hasSetting(key)) {
+            throw new HyperboxException("Setting key not found: " + key);
+        } else {
+            return getSetting(key);
+        }
+    }
 
-   public static void setSetting(String key, Object value) {
+    public static void setSetting(String key, Object value) {
 
-      persistor.storeSetting(key, value.toString());
-      Configuration.setSetting(key, value);
-   }
+        persistor.storeSetting(key, value.toString());
+        Configuration.setSetting(key, value);
+    }
 }

@@ -24,6 +24,6 @@ import io.kamax.hboxd.hypervisor.vm._RawVM;
 
 public interface _RawMetricMachine extends _RawMetricData {
 
-   public _RawVM getMachine();
+    public _RawVM getMachine();
 
 }

@@ -29,65 +29,65 @@ import java.util.List;
 
 public final class FolderStoreItem implements _StoreItem {
 
-   private _Store store;
-   private File location;
+    private _Store store;
+    private File location;
 
-   public FolderStoreItem(_Store store, File path) {
-      path = path.getAbsoluteFile();
-      if (!path.exists()) {
-         throw new HyperboxException(path + " does not exist");
-      }
-      if (!path.isDirectory()) {
-         throw new HyperboxException(path + " is not a folder");
-      }
-      if (!path.isAbsolute()) {
-         throw new HyperboxException(path + " must be a full path");
-      }
+    public FolderStoreItem(_Store store, File path) {
+        path = path.getAbsoluteFile();
+        if (!path.exists()) {
+            throw new HyperboxException(path + " does not exist");
+        }
+        if (!path.isDirectory()) {
+            throw new HyperboxException(path + " is not a folder");
+        }
+        if (!path.isAbsolute()) {
+            throw new HyperboxException(path + " must be a full path");
+        }
 
-      this.store = store;
-      location = path;
-   }
+        this.store = store;
+        location = path;
+    }
 
-   @Override
-   public String getName() {
-      return location.getName();
-   }
+    @Override
+    public String getName() {
+        return location.getName();
+    }
 
-   @Override
-   public boolean isContainer() {
-      return true;
-   }
+    @Override
+    public boolean isContainer() {
+        return true;
+    }
 
-   @Override
-   public String getPath() {
-      return location.getAbsolutePath();
-   }
+    @Override
+    public String getPath() {
+        return location.getAbsolutePath();
+    }
 
-   @Override
-   public long getSize() {
-      return 0;
-   }
+    @Override
+    public long getSize() {
+        return 0;
+    }
 
-   @Override
-   public List<_StoreItem> listItems() {
-      List<_StoreItem> list = new ArrayList<_StoreItem>();
-      if (location.isDirectory()) {
-         for (File f : location.listFiles()) {
-            if (f.isDirectory()) {
-               list.add(new FolderStoreItem(store, f));
-            } else if (f.isFile()) {
-               list.add(new FileStoreItem(store, f));
-            } else {
-               list.add(new LinkStoreItem(store, f));
+    @Override
+    public List<_StoreItem> listItems() {
+        List<_StoreItem> list = new ArrayList<_StoreItem>();
+        if (location.isDirectory()) {
+            for (File f : location.listFiles()) {
+                if (f.isDirectory()) {
+                    list.add(new FolderStoreItem(store, f));
+                } else if (f.isFile()) {
+                    list.add(new FileStoreItem(store, f));
+                } else {
+                    list.add(new LinkStoreItem(store, f));
+                }
             }
-         }
-      }
-      return list;
-   }
+        }
+        return list;
+    }
 
-   @Override
-   public _Store getStore() {
-      return store;
-   }
+    @Override
+    public _Store getStore() {
+        return store;
+    }
 
 }

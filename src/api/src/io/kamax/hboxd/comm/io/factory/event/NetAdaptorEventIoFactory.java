@@ -33,31 +33,31 @@ import io.kamax.tool.logging.Logger;
 
 public class NetAdaptorEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.NetAdaptorAdded,
-            HyperboxEvents.NetAdaptorRemoved
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.NetAdaptorAdded,
+                HyperboxEvents.NetAdaptorRemoved
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      if (!(ev instanceof NetAdaptorEvent)) {
-         Logger.warning("Was given event of type " + ev.getClass().getName());
-         return null;
-      }
-
-      NetAdaptorEvent adaptEv = (NetAdaptorEvent) ev;
-      ServerOut srvOut = ServerIoFactory.get();
-      switch ((HyperboxEvents) ev.getEventId()) {
-         case NetAdaptorAdded:
-            return new NetAdaptorAddedEventOut(ev.getTime(), srvOut, adaptEv.getHypervisor().getId(), adaptEv.getMode(), adaptEv.getAdaptor());
-         case NetAdaptorRemoved:
-            return new NetAdaptorRemovedEventOut(ev.getTime(), srvOut, adaptEv.getHypervisor().getId(), adaptEv.getMode(), adaptEv.getAdaptor());
-         default:
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        if (!(ev instanceof NetAdaptorEvent)) {
+            Logger.warning("Was given event of type " + ev.getClass().getName());
             return null;
-      }
-   }
+        }
+
+        NetAdaptorEvent adaptEv = (NetAdaptorEvent) ev;
+        ServerOut srvOut = ServerIoFactory.get();
+        switch ((HyperboxEvents) ev.getEventId()) {
+            case NetAdaptorAdded:
+                return new NetAdaptorAddedEventOut(ev.getTime(), srvOut, adaptEv.getHypervisor().getId(), adaptEv.getMode(), adaptEv.getAdaptor());
+            case NetAdaptorRemoved:
+                return new NetAdaptorRemovedEventOut(ev.getTime(), srvOut, adaptEv.getHypervisor().getId(), adaptEv.getMode(), adaptEv.getAdaptor());
+            default:
+                return null;
+        }
+    }
 
 }

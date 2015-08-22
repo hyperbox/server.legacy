@@ -35,7 +35,7 @@ import io.kamax.hboxd.session.SessionContext;
  * <li>Finish : AnswerType.SUCCESS</li>
  * <li>Failed : AnswerType.FAILED</li>
  * </ul>
- * 
+ *
  * @see AnswerType
  * @see _Action
  * @see AbstractHyperboxAction
@@ -43,71 +43,71 @@ import io.kamax.hboxd.session.SessionContext;
  */
 public abstract class ASingleTaskAction extends AbstractHyperboxAction {
 
-   private Request request;
+    private Request request;
 
-   @Override
-   public AnswerType getStartReturn() {
-      return AnswerType.STARTED;
-   }
+    @Override
+    public AnswerType getStartReturn() {
+        return AnswerType.STARTED;
+    }
 
-   @Override
-   public AnswerType getFinishReturn() {
-      return AnswerType.SUCCESS;
-   }
+    @Override
+    public AnswerType getFinishReturn() {
+        return AnswerType.SUCCESS;
+    }
 
-   @Override
-   public AnswerType getFailReturn() {
-      return AnswerType.FAILED;
-   }
+    @Override
+    public AnswerType getFailReturn() {
+        return AnswerType.FAILED;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      this.request = request;
-      process(request, hbox);
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        this.request = request;
+        process(request, hbox);
+    }
 
-   protected void process(Request request, _Hyperbox hbox) {
-      // TODO turn into abstract
-      // stub
-   }
+    protected void process(Request request, _Hyperbox hbox) {
+        // TODO turn into abstract
+        // stub
+    }
 
-   /**
-    * {@link #send(Class, Object)}
-    * 
-    * @param k the data
-    */
-   protected void send(Object k) {
-      send(k.getClass(), k);
-   }
+    /**
+     * {@link #send(Class, Object)}
+     * 
+     * @param k the data
+     */
+    protected void send(Object k) {
+        send(k.getClass(), k);
+    }
 
-   /**
-    * SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value))
-    * 
-    * @param key Enum
-    * @param value Object
-    */
-   protected void send(Enum<?> key, Object value) {
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value));
-   }
+    /**
+     * SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value))
+     * 
+     * @param key Enum
+     * @param value Object
+     */
+    protected void send(Enum<?> key, Object value) {
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value));
+    }
 
-   /**
-    * SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value))
-    * 
-    * @param key Class key
-    * @param value Object
-    */
-   protected void send(Class<?> key, Object value) {
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value));
-   }
+    /**
+     * SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value))
+     * 
+     * @param key Class key
+     * @param value Object
+     */
+    protected void send(Class<?> key, Object value) {
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value));
+    }
 
-   /**
-    * SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value))
-    * 
-    * @param key String key
-    * @param value Object
-    */
-   protected void send(String key, Object value) {
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value));
-   }
+    /**
+     * SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value))
+     * 
+     * @param key String key
+     * @param value Object
+     */
+    protected void send(String key, Object value) {
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, key, value));
+    }
 
 }

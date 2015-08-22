@@ -22,28 +22,28 @@ package io.kamax.hboxd.security;
 
 public interface _User {
 
-   public static final String ADMIN_ID = "0";
+    public static final String ADMIN_ID = "0";
 
-   public String getId();
+    public String getId();
 
-   public String getName();
+    public String getName();
 
-   public void setName(String name);
+    public void setName(String name);
 
-   public String getDomain();
+    public String getDomain();
 
-   public void setDomain(String domain);
+    public void setDomain(String domain);
 
-   public String getDomainLogonName();
+    public String getDomainLogonName();
 
-   public String getSalt();
+    public String getSalt();
 
-   public void setSalt(String salt);
+    public void setSalt(String salt);
 
-   public boolean isAnnonyomous();
+    public boolean isAnnonyomous();
 
-   public void save();
+    public void save();
 
-   public void delete();
+    public void delete();
 
 }

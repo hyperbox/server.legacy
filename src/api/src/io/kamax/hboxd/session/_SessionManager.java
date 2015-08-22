@@ -28,16 +28,16 @@ import java.util.List;
 
 public interface _SessionManager extends _RequestReceiver {
 
-   public void start(_Hyperbox hbox) throws HyperboxException;
+    public void start(_Hyperbox hbox) throws HyperboxException;
 
-   public void stop();
+    public void stop();
 
-   public boolean hasSession(_Client c);
+    public boolean hasSession(_Client c);
 
-   public List<_Session> list();
+    public List<_Session> list();
 
-   public _Session getSession(_Client c);
+    public _Session getSession(_Client c);
 
-   public void closeSession(_Client c);
+    public void closeSession(_Client c);
 
 }

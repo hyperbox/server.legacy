@@ -26,13 +26,13 @@ import io.kamax.hboxd.hypervisor._Hypervisor;
 
 public abstract class HypervisorEvent extends Event {
 
-   public HypervisorEvent(Enum<?> eventId, _Hypervisor hyp) {
-      super(eventId);
-      set(_Hypervisor.class, hyp);
-   }
+    public HypervisorEvent(Enum<?> eventId, _Hypervisor hyp) {
+        super(eventId);
+        set(_Hypervisor.class, hyp);
+    }
 
-   public _Hypervisor getHypervisor() {
-      return get(_Hypervisor.class);
-   }
+    public _Hypervisor getHypervisor() {
+        return get(_Hypervisor.class);
+    }
 
 }

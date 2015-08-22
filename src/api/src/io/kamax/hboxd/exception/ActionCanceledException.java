@@ -22,11 +22,13 @@ package io.kamax.hboxd.exception;
 
 import io.kamax.hbox.exception.HyperboxException;
 
-@SuppressWarnings("serial")
+
 public final class ActionCanceledException extends HyperboxException {
 
-   public ActionCanceledException() {
-      super("Action was canceled");
-   }
+    private static final long serialVersionUID = -5943644980926298114L;
+
+    public ActionCanceledException() {
+        super("Action was canceled");
+    }
 
 }

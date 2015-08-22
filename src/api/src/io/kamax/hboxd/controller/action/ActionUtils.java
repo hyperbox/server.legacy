@@ -27,26 +27,26 @@ import io.kamax.hboxd.core.model._Machine;
 
 /**
  * Utils to extract & manipulate well-known information from Request objects.
- * 
+ *
  * @author max
  */
 // TODO implement all normal & IO objects
 public class ActionUtils {
 
-   /**
-    * Get the machine referenced from the request message contained into the ClientRequest object.<br/>
-    * This method does not validate the presence of the MachineIO.class object)
-    * 
-    * @param core The core to extract the machine from
-    * @param req The Request object where the MachineIO object is referenced
-    * @return a _Machine object usable for task
-    */
-   public static _Machine extractMachine(_Hyperbox core, Request req) {
-      return null;
-   }
+    /**
+     * Get the machine referenced from the request message contained into the ClientRequest object.<br/>
+     * This method does not validate the presence of the MachineIO.class object)
+     * 
+     * @param core The core to extract the machine from
+     * @param req The Request object where the MachineIO object is referenced
+     * @return a _Machine object usable for task
+     */
+    public static _Machine extractMachine(_Hyperbox core, Request req) {
+        return null;
+    }
 
-   public static MachineIn extractMachineInput(_Hyperbox core, Request req) {
-      return req.get(MachineIn.class);
-   }
+    public static MachineIn extractMachineInput(_Hyperbox core, Request req) {
+        return req.get(MachineIn.class);
+    }
 
 }

@@ -50,223 +50,224 @@ import net.engio.mbassy.listener.Handler;
 
 public final class TaskManager implements _TaskManager {
 
-   private volatile boolean running;
-   private long taskId = 1;
-   private volatile _Task currentTask;
+    private volatile boolean running;
+    private long taskId = 1;
+    private volatile _Task currentTask;
 
-   private Map<String, _Task> tasks;
-   private BlockingQueue<_Task> taskQueue;
-   private BlockingDeque<_Task> finishedTaskDeque;
+    private Map<String, _Task> tasks;
+    private BlockingQueue<_Task> taskQueue;
+    private BlockingDeque<_Task> finishedTaskDeque;
 
-   private TaskQueueWorker queueWorker = new TaskQueueWorker();
-   private Thread worker;
+    private TaskQueueWorker queueWorker = new TaskQueueWorker();
+    private Thread worker;
 
-   private _Hyperbox hbox;
+    private _Hyperbox hbox;
 
-   @Override
-   public void start(_Hyperbox hbox) {
+    @Override
+    public void start(_Hyperbox hbox) {
 
-      this.hbox = hbox;
+        this.hbox = hbox;
 
-      taskQueue = new LinkedBlockingQueue<_Task>();
-      finishedTaskDeque = new LinkedBlockingDeque<_Task>(10);
-      Logger.debug("Task history size: " + finishedTaskDeque.remainingCapacity());
-      tasks = new HashMap<String, _Task>();
-      worker = new Thread(queueWorker, "TaskMgrQW");
-      SecurityContext.addAdminThread(worker);
+        taskQueue = new LinkedBlockingQueue<_Task>();
+        finishedTaskDeque = new LinkedBlockingDeque<_Task>(10);
+        Logger.debug("Task history size: " + finishedTaskDeque.remainingCapacity());
+        tasks = new HashMap<String, _Task>();
+        worker = new Thread(queueWorker, "TaskMgrQW");
+        SecurityContext.addAdminThread(worker);
 
-      EventManager.register(this);
-   }
+        EventManager.register(this);
+    }
 
-   @Override
-   public void stop() {
+    @Override
+    public void stop() {
 
-      running = false;
-      if ((worker != null) && !Thread.currentThread().equals(worker)) {
-         worker.interrupt();
-         try {
-            worker.join(1000);
-         } catch (InterruptedException e) {
-            Logger.debug("Error while waiting for Task Manager worker thread to finish : " + e.getMessage());
-            Logger.exception(e);
-         }
-      }
-   }
-
-   @Override
-   public void process(Request req) {
-
-      try {
-         Logger.debug("Received Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "] "
-               + "from Client #" + SessionContext.getClient().getId() + " ("
-               + SessionContext.getClient().getAddress() + ")"
-               + " under " + SecurityContext.getUser().getName());
-         hbox.getSecurityManager().authorize(req);
-         _HyperboxAction ac = hbox.getActionManager().get(req);
-         if (ac.isQueueable() && req.isQueueable()) {
-            queueWorker.queue(req, ac);
-         } else {
-            Logger.debug("Immediate execute of Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]");
-            TaskWorker.execute(req, ac, hbox);
-         }
-      } catch (HyperboxCommunicationException e) {
-         Logger.debug("Communication error : " + e.getMessage());
-         SessionContext.getClient().putAnswer(new Answer(req, AnswerType.UNKNOWN, e));
-      }
-   }
-
-   @Override
-   public List<_Task> list() {
-      List<_Task> taskList = new ArrayList<_Task>();
-      if ((currentTask != null) && !taskQueue.contains(currentTask)) {
-         taskList.add(currentTask);
-      }
-      for (_Task task : taskQueue) {
-         taskList.add(task);
-      }
-      for (_Task task : finishedTaskDeque) {
-         taskList.add(task);
-      }
-      return taskList;
-   }
-
-   @Override
-   public void remove(String taskId) {
-
-      _Task task = get(taskId);
-      task.cancel();
-      queueWorker.remove(task);
-   }
-
-   @Override
-   public _Task get(String taskId) {
-      if (!tasks.containsKey(taskId)) {
-         throw new HyperboxException("Unknown Task ID: " + taskId);
-      }
-
-      return tasks.get(taskId);
-   }
-
-   private static class TaskWorker {
-
-      public static void execute(Request req, _HyperboxAction ca, _Hyperbox hbox) {
-         try {
-            Logger.debug("Processing Request #" + req.getExchangeId());
-
-            SessionContext.getClient().putAnswer(new Answer(req, ca.getStartReturn()));
+        running = false;
+        if ((worker != null) && !Thread.currentThread().equals(worker)) {
+            worker.interrupt();
             try {
-               ca.run(req, hbox);
-               Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " succeeded.");
-               SessionContext.getClient().putAnswer(new Answer(req, ca.getFinishReturn()));
-            } catch (HyperboxException e) {
-               Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " failed: " + e.getMessage());
-               if (Logger.isLevel(LogLevel.Debug)) {
-                  Logger.exception(e);
-               }
-               SessionContext.getClient().putAnswer(new Answer(req, ca.getFailReturn(), e));
-            }
-         } catch (Throwable e) {
-            Logger.debug("Server Error when executing #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + ": "
-                  + e.getMessage());
-            Logger.exception(e);
-            SessionContext.getClient().putAnswer(new Answer(req, AnswerType.SERVER_ERROR, e));
-         }
-      }
-
-   }
-
-   private class TaskQueueWorker implements Runnable {
-
-      private boolean add(_Task t) {
-
-         if (!taskQueue.offer(t)) {
-            return false;
-         }
-         tasks.put(t.getId(), t);
-         t.queue();
-         Logger.debug("Added Request #" + t.getRequest().getExchangeId() + " [" + t.getRequest().getCommand() + ":" + t.getRequest().getName() + "] to queue.");
-         EventManager.post(new TaskQueueEvent(TaskQueueEvents.TaskAdded, t));
-         return true;
-      }
-
-      // TODO use events to clean up the queues
-      private void remove(_Task t) {
-
-         if (t != null) {
-            taskQueue.remove(t);
-            if (!finishedTaskDeque.contains(t) && (finishedTaskDeque.remainingCapacity() == 0)) {
-               _Task oldTask = finishedTaskDeque.pollLast();
-               tasks.remove(oldTask.getId());
-               Logger.debug("Removed Request #" + oldTask.getRequest().getExchangeId() + " [" + oldTask.getRequest().getCommand() + ":"
-                     + oldTask.getRequest().getName() + "] from queue.");
-               EventManager.post(new TaskQueueEvent(TaskQueueEvents.TaskRemoved, oldTask));
-            }
-            finishedTaskDeque.offerFirst(t);
-            Logger.debug("Archived Request #" + t.getRequest().getExchangeId() + " [" + t.getRequest().getCommand() + ":" + t.getRequest().getName()
-                  + "]");
-         }
-      }
-
-      public void queue(Request req, _HyperboxAction ca) {
-
-         Logger.debug("Queueing Request #" + req.getExchangeId());
-         SessionContext.getClient().putAnswer(new Answer(req, AnswerType.STARTED));
-         // TODO do a better Task ID generator
-         _Task t = new HyperboxTask(Long.toString(taskId++), ca, req, SecurityContext.getUser(), SessionContext.getClient(), hbox);
-         if (add(t)) {
-            SessionContext.getClient().putAnswer(new Answer(req, AnswerType.DATA, TaskIoFactory.get(t)));
-            SessionContext.getClient().putAnswer(new Answer(req, AnswerType.QUEUED));
-         } else {
-            Logger.debug("Failed to queue Request - Queue is full");
-            SessionContext.getClient().putAnswer(new Answer(req, AnswerType.SERVER_ERROR));
-         }
-      }
-
-      @Override
-      public void run() {
-
-         running = true;
-         Logger.verbose("Task Queue Worker started");
-
-         while (running) {
-            try {
-               while ((taskQueue.peek() == null) || taskQueue.peek().getState().equals(TaskState.Created)) {
-                  Thread.sleep(100);
-               }
-               currentTask = taskQueue.take();
-               currentTask.start();
+                worker.join(1000);
             } catch (InterruptedException e) {
-               Logger.debug("Task Queue Worker was interupted, halting...");
-               running = false;
-            } catch (Throwable e) {
-               Logger.error("Exception in Task #" + currentTask.getId() + " : " + e.getMessage());
-            } finally {
-               remove(currentTask);
-               currentTask = null;
+                Logger.debug("Error while waiting for Task Manager worker thread to finish : " + e.getMessage());
+                Logger.exception(e);
             }
-         }
-         Logger.info("Task Queue Worker halted");
-      }
-   }
+        }
+    }
 
-   @Handler
-   public void putSystemEvent(SystemStateEvent ev) {
+    @Override
+    public void process(Request req) {
 
-      if (ServerState.Running.equals(ev.getState())) {
-         worker.start();
-      }
-   }
+        try {
+            Logger.debug("Received Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "] "
+                    + "from Client #" + SessionContext.getClient().getId() + " ("
+                    + SessionContext.getClient().getAddress() + ")"
+                    + " under " + SecurityContext.getUser().getName());
+            hbox.getSecurityManager().authorize(req);
+            _HyperboxAction ac = hbox.getActionManager().get(req);
+            if (ac.isQueueable() && req.isQueueable()) {
+                queueWorker.queue(req, ac);
+            } else {
+                Logger.debug("Immediate execute of Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]");
+                TaskWorker.execute(req, ac, hbox);
+            }
+        } catch (HyperboxCommunicationException e) {
+            Logger.debug("Communication error : " + e.getMessage());
+            SessionContext.getClient().putAnswer(new Answer(req, AnswerType.UNKNOWN, e));
+        }
+    }
 
-   @Override
-   public long getHistorySize() {
-      // TODO Auto-generated method stub
-      return 0;
-   }
+    @Override
+    public List<_Task> list() {
+        List<_Task> taskList = new ArrayList<_Task>();
+        if ((currentTask != null) && !taskQueue.contains(currentTask)) {
+            taskList.add(currentTask);
+        }
+        for (_Task task : taskQueue) {
+            taskList.add(task);
+        }
+        for (_Task task : finishedTaskDeque) {
+            taskList.add(task);
+        }
+        return taskList;
+    }
 
-   @Override
-   public void setHistorySize(long size) {
-      // TODO Auto-generated method stub
+    @Override
+    public void remove(String taskId) {
 
-   }
+        _Task task = get(taskId);
+        task.cancel();
+        queueWorker.remove(task);
+    }
+
+    @Override
+    public _Task get(String taskId) {
+        if (!tasks.containsKey(taskId)) {
+            throw new HyperboxException("Unknown Task ID: " + taskId);
+        }
+
+        return tasks.get(taskId);
+    }
+
+    private static class TaskWorker {
+
+        public static void execute(Request req, _HyperboxAction ca, _Hyperbox hbox) {
+            try {
+                Logger.debug("Processing Request #" + req.getExchangeId());
+
+                SessionContext.getClient().putAnswer(new Answer(req, ca.getStartReturn()));
+                try {
+                    ca.run(req, hbox);
+                    Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " succeeded.");
+                    SessionContext.getClient().putAnswer(new Answer(req, ca.getFinishReturn()));
+                } catch (HyperboxException e) {
+                    Logger.debug("Request #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + " failed: " + e.getMessage());
+                    if (Logger.isLevel(LogLevel.Debug)) {
+                        Logger.exception(e);
+                    }
+                    SessionContext.getClient().putAnswer(new Answer(req, ca.getFailReturn(), e));
+                }
+            } catch (Throwable e) {
+                Logger.debug("Server Error when executing #" + req.getExchangeId() + " [" + req.getCommand() + ":" + req.getName() + "]" + ": "
+                        + e.getMessage());
+                Logger.exception(e);
+                SessionContext.getClient().putAnswer(new Answer(req, AnswerType.SERVER_ERROR, e));
+            }
+        }
+
+    }
+
+    private class TaskQueueWorker implements Runnable {
+
+        private boolean add(_Task t) {
+
+            if (!taskQueue.offer(t)) {
+                return false;
+            }
+            tasks.put(t.getId(), t);
+            t.queue();
+            Logger.debug("Added Request #" + t.getRequest().getExchangeId() + " [" + t.getRequest().getCommand() + ":" + t.getRequest().getName()
+                    + "] to queue.");
+            EventManager.post(new TaskQueueEvent(TaskQueueEvents.TaskAdded, t));
+            return true;
+        }
+
+        // TODO use events to clean up the queues
+        private void remove(_Task t) {
+
+            if (t != null) {
+                taskQueue.remove(t);
+                if (!finishedTaskDeque.contains(t) && (finishedTaskDeque.remainingCapacity() == 0)) {
+                    _Task oldTask = finishedTaskDeque.pollLast();
+                    tasks.remove(oldTask.getId());
+                    Logger.debug("Removed Request #" + oldTask.getRequest().getExchangeId() + " [" + oldTask.getRequest().getCommand() + ":"
+                            + oldTask.getRequest().getName() + "] from queue.");
+                    EventManager.post(new TaskQueueEvent(TaskQueueEvents.TaskRemoved, oldTask));
+                }
+                finishedTaskDeque.offerFirst(t);
+                Logger.debug("Archived Request #" + t.getRequest().getExchangeId() + " [" + t.getRequest().getCommand() + ":" + t.getRequest().getName()
+                        + "]");
+            }
+        }
+
+        public void queue(Request req, _HyperboxAction ca) {
+
+            Logger.debug("Queueing Request #" + req.getExchangeId());
+            SessionContext.getClient().putAnswer(new Answer(req, AnswerType.STARTED));
+            // TODO do a better Task ID generator
+            _Task t = new HyperboxTask(Long.toString(taskId++), ca, req, SecurityContext.getUser(), SessionContext.getClient(), hbox);
+            if (add(t)) {
+                SessionContext.getClient().putAnswer(new Answer(req, AnswerType.DATA, TaskIoFactory.get(t)));
+                SessionContext.getClient().putAnswer(new Answer(req, AnswerType.QUEUED));
+            } else {
+                Logger.debug("Failed to queue Request - Queue is full");
+                SessionContext.getClient().putAnswer(new Answer(req, AnswerType.SERVER_ERROR));
+            }
+        }
+
+        @Override
+        public void run() {
+
+            running = true;
+            Logger.verbose("Task Queue Worker started");
+
+            while (running) {
+                try {
+                    while ((taskQueue.peek() == null) || taskQueue.peek().getState().equals(TaskState.Created)) {
+                        Thread.sleep(100);
+                    }
+                    currentTask = taskQueue.take();
+                    currentTask.start();
+                } catch (InterruptedException e) {
+                    Logger.debug("Task Queue Worker was interupted, halting...");
+                    running = false;
+                } catch (Throwable e) {
+                    Logger.error("Exception in Task #" + currentTask.getId() + " : " + e.getMessage());
+                } finally {
+                    remove(currentTask);
+                    currentTask = null;
+                }
+            }
+            Logger.info("Task Queue Worker halted");
+        }
+    }
+
+    @Handler
+    public void putSystemEvent(SystemStateEvent ev) {
+
+        if (ServerState.Running.equals(ev.getState())) {
+            worker.start();
+        }
+    }
+
+    @Override
+    public long getHistorySize() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setHistorySize(long size) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

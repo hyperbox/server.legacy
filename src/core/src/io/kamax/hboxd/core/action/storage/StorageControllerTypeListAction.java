@@ -36,23 +36,23 @@ import java.util.List;
 
 public final class StorageControllerTypeListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.StorageControllerTypeList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.StorageControllerTypeList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      List<_RawStorageControllerType> typeList = hbox.getHypervisor().listStorageControllerType();
-      for (_RawStorageControllerType type : typeList) {
-         StorageControllerTypeOut sctOut = StorageControllerTypeIoFactory.get(type);
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, sctOut));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        List<_RawStorageControllerType> typeList = hbox.getHypervisor().listStorageControllerType();
+        for (_RawStorageControllerType type : typeList) {
+            StorageControllerTypeOut sctOut = StorageControllerTypeIoFactory.get(type);
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, sctOut));
+        }
+    }
 
 }

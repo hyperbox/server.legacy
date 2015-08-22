@@ -22,22 +22,24 @@ package io.kamax.hboxd.exception.machine;
 
 import io.kamax.hbox.exception.HyperboxException;
 
-@SuppressWarnings("serial")
+
 public abstract class MachineException extends HyperboxException {
 
-   public MachineException(String s) {
-      super(s);
-      // TODO Auto-generated constructor stub
-   }
+    private static final long serialVersionUID = -4987939845805356290L;
 
-   public MachineException(Throwable t) {
-      super(t);
-      // TODO Auto-generated constructor stub
-   }
+    public MachineException(String s) {
+        super(s);
+        // TODO Auto-generated constructor stub
+    }
 
-   public MachineException(String s, Throwable t) {
-      super(s, t);
-      // TODO Auto-generated constructor stub
-   }
+    public MachineException(Throwable t) {
+        super(t);
+        // TODO Auto-generated constructor stub
+    }
+
+    public MachineException(String s, Throwable t) {
+        super(s, t);
+        // TODO Auto-generated constructor stub
+    }
 
 }

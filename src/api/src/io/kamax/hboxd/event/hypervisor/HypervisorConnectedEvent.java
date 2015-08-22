@@ -26,8 +26,8 @@ import io.kamax.hboxd.hypervisor._Hypervisor;
 
 public class HypervisorConnectedEvent extends HypervisorEvent {
 
-   public HypervisorConnectedEvent(_Hypervisor hyp) {
-      super(HyperboxEvents.HypervisorConnected, hyp);
-   }
+    public HypervisorConnectedEvent(_Hypervisor hyp) {
+        super(HyperboxEvents.HypervisorConnected, hyp);
+    }
 
 }

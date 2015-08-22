@@ -20,19 +20,21 @@
 
 package io.kamax.hboxd.exception.machine;
 
-@SuppressWarnings("serial")
+
 public class DeviceException extends MachineException {
 
-   public DeviceException(String s, Throwable t) {
-      super(s, t);
-   }
+    private static final long serialVersionUID = 5952052047200613617L;
 
-   public DeviceException(Throwable t) {
-      super(t);
-   }
+    public DeviceException(String s, Throwable t) {
+        super(s, t);
+    }
 
-   public DeviceException(String s) {
-      super(s);
-   }
+    public DeviceException(Throwable t) {
+        super(t);
+    }
+
+    public DeviceException(String s) {
+        super(s);
+    }
 
 }

@@ -24,8 +24,8 @@ import io.kamax.hboxd.hypervisor._RawItem;
 
 public interface _RawCPU extends _RawItem {
 
-   public long getAmount();
+    public long getAmount();
 
-   public void setAmount(long amount);
+    public void setAmount(long amount);
 
 }

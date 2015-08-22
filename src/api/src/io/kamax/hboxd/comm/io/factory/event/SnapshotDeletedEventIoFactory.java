@@ -35,21 +35,21 @@ import io.kamax.hboxd.event.snapshot.SnapshotEvent;
 
 public class SnapshotDeletedEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.SnapshotDeleted,
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.SnapshotDeleted,
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      SnapshotEvent sEv = (SnapshotEvent) ev;
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        SnapshotEvent sEv = (SnapshotEvent) ev;
 
-      _Machine vm = HBoxServer.get().getMachine(sEv.getMachineId());
-      MachineOut mOut = MachineIoFactory.get(vm);
-      SnapshotOut snapOut = new SnapshotOut(sEv.getSnapshotUuid());
-      return new SnapshotDeletedEventOut(sEv.getTime(), ServerIoFactory.get(), mOut, snapOut);
-   }
+        _Machine vm = HBoxServer.get().getMachine(sEv.getMachineId());
+        MachineOut mOut = MachineIoFactory.get(vm);
+        SnapshotOut snapOut = new SnapshotOut(sEv.getSnapshotUuid());
+        return new SnapshotDeletedEventOut(sEv.getTime(), ServerIoFactory.get(), mOut, snapOut);
+    }
 
 }

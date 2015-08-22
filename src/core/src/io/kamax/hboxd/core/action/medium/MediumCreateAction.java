@@ -40,34 +40,34 @@ import com.google.common.io.Files;
 
 public final class MediumCreateAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MediumCreate.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MediumCreate.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      ServerIn srvIn = request.get(ServerIn.class);
-      MediumIn medIn = request.get(MediumIn.class);
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        ServerIn srvIn = request.get(ServerIn.class);
+        MediumIn medIn = request.get(MediumIn.class);
 
-      Logger.debug("Creating a new hard disk at location [" + medIn.getLocation() + "] with format [" + medIn.getFormat() + "] and size ["
-            + medIn.getLogicalSize() + "]");
-      Logger.debug("File extension: " + Files.getFileExtension(medIn.getLocation()));
-      if (Files.getFileExtension(medIn.getLocation()).isEmpty()) {
-         Logger.debug("Will add extention to filename: " + medIn.getFormat().toLowerCase());
-         medIn.setLocation(medIn.getLocation() + "." + medIn.getFormat().toLowerCase());
-      } else {
-         Logger.debug("No need to add extension");
-      }
+        Logger.debug("Creating a new hard disk at location [" + medIn.getLocation() + "] with format [" + medIn.getFormat() + "] and size ["
+                + medIn.getLogicalSize() + "]");
+        Logger.debug("File extension: " + Files.getFileExtension(medIn.getLocation()));
+        if (Files.getFileExtension(medIn.getLocation()).isEmpty()) {
+            Logger.debug("Will add extention to filename: " + medIn.getFormat().toLowerCase());
+            medIn.setLocation(medIn.getLocation() + "." + medIn.getFormat().toLowerCase());
+        } else {
+            Logger.debug("No need to add extension");
+        }
 
-      _Medium med = hbox.getServer(srvIn.getId()).createMedium(medIn.getLocation(), medIn.getFormat(), medIn.getLogicalSize());
-      MediumOut medOut = MediumIoFactory.get(med);
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, medOut));
-   }
+        _Medium med = hbox.getServer(srvIn.getId()).createMedium(medIn.getLocation(), medIn.getFormat(), medIn.getLogicalSize());
+        MediumOut medOut = MediumIoFactory.get(med);
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, medOut));
+    }
 
 }

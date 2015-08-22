@@ -41,27 +41,27 @@ import java.util.List;
 
 public class NetAdaptorAddAction extends ServerAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetAdaptorAdd.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetAdaptorAdd.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   protected void run(Request request, _Hyperbox hbox, _Server srv) {
-      NetAdaptorIn adaptIn = request.get(NetAdaptorIn.class);
-      _NetAdaptor adapt = srv.getHypervisor().createAdaptor(adaptIn.getModeId(), adaptIn.getLabel());
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, NetAdaptorOut.class, NetAdaptorIoFactory.get(adapt)));
-      if (!adaptIn.getServices().isEmpty()) {
-         for (NetServiceIO svcIn : adaptIn.getServices()) {
-            _NetService svc = NetServiceIoFactory.get(svcIn);
-            adapt.setService(svc);
-         }
-      }
-   }
+    @Override
+    protected void run(Request request, _Hyperbox hbox, _Server srv) {
+        NetAdaptorIn adaptIn = request.get(NetAdaptorIn.class);
+        _NetAdaptor adapt = srv.getHypervisor().createAdaptor(adaptIn.getModeId(), adaptIn.getLabel());
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, NetAdaptorOut.class, NetAdaptorIoFactory.get(adapt)));
+        if (!adaptIn.getServices().isEmpty()) {
+            for (NetServiceIO svcIn : adaptIn.getServices()) {
+                _NetService svc = NetServiceIoFactory.get(svcIn);
+                adapt.setService(svc);
+            }
+        }
+    }
 
 }

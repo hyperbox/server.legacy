@@ -23,15 +23,17 @@ package io.kamax.hboxd.exception.server;
 import io.kamax.hbox.exception.HyperboxException;
 import io.kamax.hboxd.server._Server;
 
-@SuppressWarnings("serial")
+
 public final class ServerNotFoundException extends HyperboxException {
 
-   public ServerNotFoundException(String id) {
-      super("Server [" + id + "] was not found");
-   }
+    private static final long serialVersionUID = 1534628364728552203L;
 
-   public ServerNotFoundException(_Server s) {
-      this(s.getId());
-   }
+    public ServerNotFoundException(String id) {
+        super("Server [" + id + "] was not found");
+    }
+
+    public ServerNotFoundException(_Server s) {
+        this(s.getId());
+    }
 
 }

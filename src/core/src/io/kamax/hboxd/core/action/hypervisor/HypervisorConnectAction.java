@@ -32,20 +32,20 @@ import java.util.List;
 
 public class HypervisorConnectAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.HypervisorConnect.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.HypervisorConnect.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      HypervisorIn hypIn = request.get(HypervisorIn.class);
-      hbox.getServerManager().getServer().connect(hypIn.getId(), hypIn.getConnectOptions());
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        HypervisorIn hypIn = request.get(HypervisorIn.class);
+        hbox.getServerManager().getServer().connect(hypIn.getId(), hypIn.getConnectOptions());
+    }
 
 }

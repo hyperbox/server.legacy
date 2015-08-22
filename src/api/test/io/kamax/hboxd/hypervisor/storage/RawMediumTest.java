@@ -25,14 +25,14 @@ import static org.junit.Assert.assertNotNull;
 
 public final class RawMediumTest {
 
-   public static void validate(_RawMedium rawMed) {
-      assertFalse(rawMed.getUuid().isEmpty());
-      assertFalse(rawMed.getLocation().isEmpty());
-      assertNotNull(rawMed.getLogicalSize());
-      assertFalse(rawMed.getDeviceType().isEmpty());
-      assertFalse(rawMed.getFormat().isEmpty());
-      assertFalse(rawMed.getMediumFormat().isEmpty());
-      assertFalse(rawMed.getName().isEmpty());
-   }
+    public static void validate(_RawMedium rawMed) {
+        assertFalse(rawMed.getUuid().isEmpty());
+        assertFalse(rawMed.getLocation().isEmpty());
+        assertNotNull(rawMed.getLogicalSize());
+        assertFalse(rawMed.getDeviceType().isEmpty());
+        assertFalse(rawMed.getFormat().isEmpty());
+        assertFalse(rawMed.getMediumFormat().isEmpty());
+        assertFalse(rawMed.getName().isEmpty());
+    }
 
 }

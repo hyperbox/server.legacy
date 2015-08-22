@@ -28,34 +28,34 @@ import java.util.Date;
 
 public interface _Task {
 
-   public String getId();
+    public String getId();
 
-   public Throwable getError();
+    public Throwable getError();
 
-   public _HyperboxAction getAction();
+    public _HyperboxAction getAction();
 
-   public Request getRequest();
+    public Request getRequest();
 
-   public _ProgressTracker getProgress();
+    public _ProgressTracker getProgress();
 
-   public _User getUser();
+    public _User getUser();
 
-   public TaskState getState();
+    public TaskState getState();
 
-   public boolean isCancelable();
+    public boolean isCancelable();
 
-   public void queue();
+    public void queue();
 
-   public void start();
+    public void start();
 
-   public void cancel();
+    public void cancel();
 
-   public Date getCreateTime();
+    public Date getCreateTime();
 
-   public Date getQueueTime();
+    public Date getQueueTime();
 
-   public Date getStartTime();
+    public Date getStartTime();
 
-   public Date getStopTime();
+    public Date getStopTime();
 
 }

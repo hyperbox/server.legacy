@@ -24,6 +24,6 @@ import io.kamax.hboxd.hypervisor.host._RawHost;
 
 public interface _RawMetricHost extends _RawMetricData {
 
-   public _RawHost getHost();
+    public _RawHost getHost();
 
 }

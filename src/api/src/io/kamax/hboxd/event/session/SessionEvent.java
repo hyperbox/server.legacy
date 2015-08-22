@@ -27,13 +27,13 @@ import io.kamax.hboxd.session._Session;
 
 public abstract class SessionEvent extends Event {
 
-   public SessionEvent(Enum<?> id, _Session s) {
-      super(id);
-      set(SessionIoFactory.get(s));
-   }
+    public SessionEvent(Enum<?> id, _Session s) {
+        super(id);
+        set(SessionIoFactory.get(s));
+    }
 
-   public String getSessionId() {
-      return get(SessionOut.class).getId();
-   }
+    public String getSessionId() {
+        return get(SessionOut.class).getId();
+    }
 
 }

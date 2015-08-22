@@ -24,8 +24,8 @@ import io.kamax.hboxd.hypervisor._RawItem;
 
 public interface _Mouse extends _RawItem {
 
-   public String getMode();
+    public String getMode();
 
-   public void setMode(String modeId);
+    public void setMode(String modeId);
 
 }

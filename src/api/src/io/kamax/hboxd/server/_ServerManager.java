@@ -24,10 +24,10 @@ import java.util.List;
 
 public interface _ServerManager {
 
-   public _Server getServer();
+    public _Server getServer();
 
-   public _Server getServer(String uuid);
+    public _Server getServer(String uuid);
 
-   public List<_Server> listServer();
+    public List<_Server> listServer();
 
 }

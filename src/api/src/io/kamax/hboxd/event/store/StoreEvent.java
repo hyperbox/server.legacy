@@ -27,13 +27,13 @@ import io.kamax.hboxd.store._Store;
 
 public abstract class StoreEvent extends Event {
 
-   public StoreEvent(Enum<?> eventId, _Store s) {
-      super(eventId);
-      set(StoreIoFactory.get(s));
-   }
+    public StoreEvent(Enum<?> eventId, _Store s) {
+        super(eventId);
+        set(StoreIoFactory.get(s));
+    }
 
-   public String getStoreId() {
-      return get(StoreOut.class).getId();
-   }
+    public String getStoreId() {
+        return get(StoreOut.class).getId();
+    }
 
 }

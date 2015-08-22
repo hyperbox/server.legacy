@@ -28,32 +28,32 @@ import io.kamax.hboxd.task._Task;
 
 public class TaskIoFactory {
 
-   private TaskIoFactory() {
-      // will not be used
-   }
+    private TaskIoFactory() {
+        // will not be used
+    }
 
-   public static TaskOut get(_Task t) {
-      UserOut uOut = UserIoFactory.get(t.getUser());
+    public static TaskOut get(_Task t) {
+        UserOut uOut = UserIoFactory.get(t.getUser());
 
-      ExceptionOut eOut = null;
-      if (t.getError() != null) {
-         eOut = ExceptionIoFactory.get(t.getError());
-      }
+        ExceptionOut eOut = null;
+        if (t.getError() != null) {
+            eOut = ExceptionIoFactory.get(t.getError());
+        }
 
-      TaskOut tOut = new TaskOut(
-            HBoxServer.get().getId(),
-            t.getId(),
-            t.getRequest().getName(),
-            t.getRequest().getExchangeId(),
-            t.getState(),
-            uOut,
-            t.getCreateTime(),
-            t.getQueueTime(),
-            t.getStartTime(),
-            t.getStopTime(),
-            eOut);
+        TaskOut tOut = new TaskOut(
+                HBoxServer.get().getId(),
+                t.getId(),
+                t.getRequest().getName(),
+                t.getRequest().getExchangeId(),
+                t.getState(),
+                uOut,
+                t.getCreateTime(),
+                t.getQueueTime(),
+                t.getStartTime(),
+                t.getStopTime(),
+                eOut);
 
-      return tOut;
-   }
+        return tOut;
+    }
 
 }

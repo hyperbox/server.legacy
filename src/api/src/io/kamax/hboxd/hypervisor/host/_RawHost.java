@@ -22,14 +22,14 @@ package io.kamax.hboxd.hypervisor.host;
 
 public interface _RawHost {
 
-   public String getHostname();
+    public String getHostname();
 
-   public String getOSName();
+    public String getOSName();
 
-   public String getOSVersion();
+    public String getOSVersion();
 
-   public long getMemorySize();
+    public long getMemorySize();
 
-   public long getMemoryAvailable();
+    public long getMemoryAvailable();
 
 }

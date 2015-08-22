@@ -22,12 +22,12 @@ package io.kamax.hboxd.security;
 
 public interface _EntityPermission {
 
-   public String getEntityId();
+    public String getEntityId();
 
-   public String getEntityTypeId();
+    public String getEntityTypeId();
 
-   public String getPermissionId();
+    public String getPermissionId();
 
-   public String getPermissionLabel();
+    public String getPermissionLabel();
 
 }

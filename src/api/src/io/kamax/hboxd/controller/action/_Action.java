@@ -35,7 +35,7 @@ import java.util.List;
  * The supported tasks need to be given into the <code>getRegistrations()</code> method.
  * </p>
  * This class will be auto-loaded at startup.
- * 
+ *
  * @author max
  * @see AbstractHyperboxMultiTaskAction
  * @see ASingleTaskAction
@@ -46,45 +46,45 @@ import java.util.List;
 // TODO somehow, check that the required module is loaded.
 public interface _Action {
 
-   /**
-    * To which task should this action answer to
-    * 
-    * @return a list of task as String
-    */
-   public List<String> getRegistrations();
+    /**
+     * To which task should this action answer to
+     * 
+     * @return a list of task as String
+     */
+    public List<String> getRegistrations();
 
-   public AnswerType getStartReturn();
+    public AnswerType getStartReturn();
 
-   /**
-    * null if none is required
-    * 
-    * @return AnswerType for the return
-    */
-   public AnswerType getFinishReturn();
+    /**
+     * null if none is required
+     * 
+     * @return AnswerType for the return
+     */
+    public AnswerType getFinishReturn();
 
-   public AnswerType getFailReturn();
+    public AnswerType getFailReturn();
 
-   /**
-    * Not implemented
-    * 
-    * @return Not implemented
-    */
-   public Class<?>[] getRequiredClasses();
+    /**
+     * Not implemented
+     * 
+     * @return Not implemented
+     */
+    public Class<?>[] getRequiredClasses();
 
-   /**
-    * Not implemented
-    * 
-    * @return Not implemented
-    */
-   public Enum<?>[] getRequiredEnums();
+    /**
+     * Not implemented
+     * 
+     * @return Not implemented
+     */
+    public Enum<?>[] getRequiredEnums();
 
-   /**
-    * Not implemented
-    * 
-    * @return Not implemented
-    */
-   public String[] getRequiredData();
+    /**
+     * Not implemented
+     * 
+     * @return Not implemented
+     */
+    public String[] getRequiredData();
 
-   public void run(_Hyperbox core, Request req, _Client client);
+    public void run(_Hyperbox core, Request req, _Client client);
 
 }

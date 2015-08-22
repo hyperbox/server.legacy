@@ -38,23 +38,23 @@ import java.util.List;
 
 public class SnapshotTakeAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.SnapshotTake.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.SnapshotTake.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      MachineIn mIn = request.get(MachineIn.class);
-      SnapshotIn snapIn = request.get(SnapshotIn.class);
-      _RawSnapshot rawSnap = hbox.getHypervisor().getMachine(mIn.getUuid()).takeSnapshot(snapIn.getName(), snapIn.getDescription());
-      SnapshotOut snapOut = SnapshotIoFactory.get(rawSnap);
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, snapOut));
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        MachineIn mIn = request.get(MachineIn.class);
+        SnapshotIn snapIn = request.get(SnapshotIn.class);
+        _RawSnapshot rawSnap = hbox.getHypervisor().getMachine(mIn.getUuid()).takeSnapshot(snapIn.getName(), snapIn.getDescription());
+        SnapshotOut snapOut = SnapshotIoFactory.get(rawSnap);
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, snapOut));
+    }
 
 }

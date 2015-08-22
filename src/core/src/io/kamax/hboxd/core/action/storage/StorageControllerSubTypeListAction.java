@@ -37,24 +37,24 @@ import java.util.List;
 
 public class StorageControllerSubTypeListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.StorageControllerSubTypeList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.StorageControllerSubTypeList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      StorageControllerTypeIn sctIn = request.get(StorageControllerTypeIn.class);
-      List<_RawStorageControllerSubType> subtypeList = hbox.getHypervisor().listStorageControllerSubType(sctIn.getId());
-      for (_RawStorageControllerSubType subtype : subtypeList) {
-         StorageControllerSubTypeOut scstOut = StorageControllerSubTypeIoFactory.get(subtype);
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, scstOut));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        StorageControllerTypeIn sctIn = request.get(StorageControllerTypeIn.class);
+        List<_RawStorageControllerSubType> subtypeList = hbox.getHypervisor().listStorageControllerSubType(sctIn.getId());
+        for (_RawStorageControllerSubType subtype : subtypeList) {
+            StorageControllerSubTypeOut scstOut = StorageControllerSubTypeIoFactory.get(subtype);
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, scstOut));
+        }
+    }
 
 }

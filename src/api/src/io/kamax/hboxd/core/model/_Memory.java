@@ -24,24 +24,24 @@ import io.kamax.hboxd.hypervisor._RawItem;
 
 public interface _Memory extends _RawItem {
 
-   public long getAmount();
+    public long getAmount();
 
-   public void setAmount(long amount);
+    public void setAmount(long amount);
 
-   public boolean isLargePageEnabled();
+    public boolean isLargePageEnabled();
 
-   public void setLargePage(boolean isEnabled);
+    public void setLargePage(boolean isEnabled);
 
-   public boolean isPageFusionEnabled();
+    public boolean isPageFusionEnabled();
 
-   public void setPageFusion(boolean isEnabled);
+    public void setPageFusion(boolean isEnabled);
 
-   public boolean isNestedPagingEnabled();
+    public boolean isNestedPagingEnabled();
 
-   public void setNestedPaging(boolean isEnabled);
+    public void setNestedPaging(boolean isEnabled);
 
-   public boolean isVTxvpidEnabled();
+    public boolean isVTxvpidEnabled();
 
-   public void setVtxvpid(boolean isEnabled);
+    public void setVtxvpid(boolean isEnabled);
 
 }

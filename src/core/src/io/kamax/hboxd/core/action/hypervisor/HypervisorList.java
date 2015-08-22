@@ -38,32 +38,32 @@ import java.util.List;
 
 public class HypervisorList extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.HypervisorList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.HypervisorList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      List<Class<? extends _Hypervisor>> loaders = null;
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        List<Class<? extends _Hypervisor>> loaders = null;
 
-      if (request.has(ServerIn.class)) {
-         ServerIn srvIn = request.get(ServerIn.class);
-         loaders = hbox.getServerManager().getServer(srvIn.getId()).listHypervisors();
-      } else {
-         loaders = hbox.getServerManager().getServer().listHypervisors();
-      }
+        if (request.has(ServerIn.class)) {
+            ServerIn srvIn = request.get(ServerIn.class);
+            loaders = hbox.getServerManager().getServer(srvIn.getId()).listHypervisors();
+        } else {
+            loaders = hbox.getServerManager().getServer().listHypervisors();
+        }
 
-      for (Class<? extends _Hypervisor> loader : loaders) {
-         for (HypervisorLoaderOut loaderOut : HypervisorIoFactory.getOut(loader)) {
-            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, loaderOut));
-         }
-      }
-   }
+        for (Class<? extends _Hypervisor> loader : loaders) {
+            for (HypervisorLoaderOut loaderOut : HypervisorIoFactory.getOut(loader)) {
+                SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, loaderOut));
+            }
+        }
+    }
 
 }

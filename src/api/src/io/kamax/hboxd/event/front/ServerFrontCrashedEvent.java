@@ -26,8 +26,8 @@ import io.kamax.hboxd.front._Front;
 
 public class ServerFrontCrashedEvent extends ServerFrontEvent {
 
-   public ServerFrontCrashedEvent(_Front front) {
-      super(HyperboxEvents.ServerFrontCrashed, front);
-   }
+    public ServerFrontCrashedEvent(_Front front) {
+        super(HyperboxEvents.ServerFrontCrashed, front);
+    }
 
 }

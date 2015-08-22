@@ -26,13 +26,13 @@ import io.kamax.hboxd.task._Task;
 
 public class TaskStateEvent extends TaskEvent {
 
-   public TaskStateEvent(_Task t, TaskState state) {
-      super(HyperboxEvents.TaskState, t);
-      set(state);
-   }
+    public TaskStateEvent(_Task t, TaskState state) {
+        super(HyperboxEvents.TaskState, t);
+        set(state);
+    }
 
-   public TaskState getState() {
-      return get(TaskState.class);
-   }
+    public TaskState getState() {
+        return get(TaskState.class);
+    }
 
 }

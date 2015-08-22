@@ -23,15 +23,17 @@ package io.kamax.hboxd.exception.module;
 import io.kamax.hbox.exception.ModuleException;
 import java.io.File;
 
-@SuppressWarnings("serial")
+
 public class ModuleInvalidDescriptorFileException extends ModuleException {
 
-   public ModuleInvalidDescriptorFileException(String s) {
-      super(s);
-   }
+    private static final long serialVersionUID = -3798315071032526654L;
 
-   public ModuleInvalidDescriptorFileException(File file, String error) {
-      this(file.getAbsolutePath() + " is not a valid descriptor file: " + error);
-   }
+    public ModuleInvalidDescriptorFileException(String s) {
+        super(s);
+    }
+
+    public ModuleInvalidDescriptorFileException(File file, String error) {
+        this(file.getAbsolutePath() + " is not a valid descriptor file: " + error);
+    }
 
 }

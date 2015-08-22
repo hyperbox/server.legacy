@@ -24,8 +24,8 @@ import io.kamax.hbox.event.HyperboxEvents;
 
 public class SnapshotTakenEvent extends SnapshotEvent {
 
-   public SnapshotTakenEvent(String machineUuid, String snapUuid) {
-      super(HyperboxEvents.SnapshotTaken, machineUuid, snapUuid);
-   }
+    public SnapshotTakenEvent(String machineUuid, String snapUuid) {
+        super(HyperboxEvents.SnapshotTaken, machineUuid, snapUuid);
+    }
 
 }

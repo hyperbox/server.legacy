@@ -26,29 +26,29 @@ import io.kamax.hboxd.event._EventManager;
 
 public class DummyEventManager implements _EventManager {
 
-   @Override
-   public void start() throws HyperboxException {
-      // stub
-   }
+    @Override
+    public void start() throws HyperboxException {
+        // stub
+    }
 
-   @Override
-   public void stop() {
-      // stub
-   }
+    @Override
+    public void stop() {
+        // stub
+    }
 
-   @Override
-   public void register(Object o) {
-      // stub
-   }
+    @Override
+    public void register(Object o) {
+        // stub
+    }
 
-   @Override
-   public void unregister(Object o) {
-      // stub
-   }
+    @Override
+    public void unregister(Object o) {
+        // stub
+    }
 
-   @Override
-   public void post(_Event ev) {
-      // stub
-   }
+    @Override
+    public void post(_Event ev) {
+        // stub
+    }
 
 }

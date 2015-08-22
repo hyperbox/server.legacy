@@ -27,29 +27,29 @@ import io.kamax.hbox.exception.HyperboxException;
  * This represent a communication protocol system for the server to be able to connect with clients.<br/>
  * Any protocol implementation (e.g. SOAP, XML-RPC, REST, Java RMI) should implement this interface.<br/>
  * Any class implementing this interface will be automatically loaded.
- * 
+ *
  * @author max
  */
 public interface _Front {
 
-   /**
-    * Called by the controller to start listening for clients and send any message to the receiver class.
-    * 
-    * @param receiver Receiver to use
-    * @throws HyperboxException If something goes wrong
-    */
-   public void start(_RequestReceiver receiver) throws HyperboxException;
+    /**
+     * Called by the controller to start listening for clients and send any message to the receiver class.
+     * 
+     * @param receiver Receiver to use
+     * @throws HyperboxException If something goes wrong
+     */
+    public void start(_RequestReceiver receiver) throws HyperboxException;
 
-   /**
-    * Called by the controller when this front-end needs to stop listening and shutdown.
-    */
-   public void stop();
+    /**
+     * Called by the controller when this front-end needs to stop listening and shutdown.
+     */
+    public void stop();
 
-   /**
-    * Called by the controller when a event occurred and needs to be sent to all clients to inform about the state change.
-    * 
-    * @param ev The event to send to all clients
-    */
-   public void broadcast(EventOut ev);
+    /**
+     * Called by the controller when a event occurred and needs to be sent to all clients to inform about the state change.
+     * 
+     * @param ev The event to send to all clients
+     */
+    public void broadcast(EventOut ev);
 
 }

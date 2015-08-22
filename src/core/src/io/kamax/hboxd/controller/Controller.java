@@ -49,192 +49,192 @@ import java.util.Set;
 
 public final class Controller implements _Controller {
 
-   private int exitCode = 0;
-   private _Hyperbox model;
-   private List<_Front> fronts = new ArrayList<_Front>();
+    private int exitCode = 0;
+    private _Hyperbox model;
+    private List<_Front> fronts = new ArrayList<_Front>();
 
-   private Thread shutdownHook;
+    private Thread shutdownHook;
 
-   static {
-      try {
-         if (new File(Hyperbox.getConfigFilePath()).exists()) {
-            Configuration.init(Hyperbox.getConfigFilePath());
-         } else {
-            Logger.debug("Default config file does not exist, skipping: " + Hyperbox.getConfigFilePath());
-         }
-      } catch (HyperboxException e) {
-         Logger.error(e);
-         System.exit(1);
-      }
-   }
-
-   public static String getHeader() {
-      return HyperboxAPI.getLogHeader(Hyperbox.getVersion().toString());
-   }
-
-   private void startBack() {
-
-      try {
-         model = ModelFactory.get();
-         model.init();
-         model.start();
-      } catch (HyperboxException e) {
-         Logger.error(e);
-         Logger.exception(e);
-         stop();
-      }
-   }
-
-   private void startFront() throws HyperboxException {
-
-      Set<_Front> subTypes = ClassManager.getAtLeastOneOrFail(_Front.class);
-      for (_Front test : subTypes) {
-         fronts.add(test);
-      }
-
-      Logger.info("Starting Front-ends");
-      for (final _Front f : fronts) {
-         try {
-            f.start(model.getReceiver());
-            Logger.info(f.getClass().getSimpleName() + " has started");
-         } catch (HyperboxException e1) {
-            Logger.info(f.getClass().getSimpleName() + " failed to start");
-            throw new HyperboxException(e1);
-         }
-      }
-      Logger.info("Done starting Front-ends");
-
-   }
-
-   @Override
-   public void start(String[] args) {
-      Hyperbox.setArgs(args);
-      shutdownHook = new Thread() {
-
-         @Override
-         public void run() {
-            SecurityContext.setUser(new SystemUser());
-            SessionContext.setClient(new Client());
-            Controller.this.stop();
-         }
-      };
-      Runtime.getRuntime().addShutdownHook(shutdownHook);
-
-      try {
-         Long startTime = System.currentTimeMillis();
-
-         Logger.setLevel(LogLevel.valueOf(Configuration.getSetting("log.level", LogLevel.Info.toString())));
-
-         String logFilename = Configuration.getSetting("log.file", "log/hboxd.log");
-         if (!logFilename.contentEquals("none")) {
-            Logger.log(logFilename, 4);
-         }
-
-         Logger.raw(getHeader());
-         Logger.info("Hyperbox Init Sequence started");
-
-         SecurityContext.init();
-         SecurityContext.addAdminThread(shutdownHook);
-
-         ShutdownAction.setController(this);
-
-         Logger.verbose("-------- Environment variables -------");
-         for (String name : System.getenv().keySet()) {
-            if (name.startsWith(Configuration.CFG_ENV_PREFIX + Configuration.CFG_ENV_SEPERATOR)) {
-               Logger.verbose(name + " | " + System.getenv(name));
+    static {
+        try {
+            if (new File(Hyperbox.getConfigFilePath()).exists()) {
+                Configuration.init(Hyperbox.getConfigFilePath());
             } else {
-               Logger.debug(name + " | " + System.getenv(name));
+                Logger.debug("Default config file does not exist, skipping: " + Hyperbox.getConfigFilePath());
             }
-         }
-         Logger.verbose("--------------------------------------");
+        } catch (HyperboxException e) {
+            Logger.error(e);
+            System.exit(1);
+        }
+    }
 
-         Logger.verbose("-------- Classpath entries -----------");
-         for (URL classPathEntry : ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs()) {
-            Logger.verbose(classPathEntry);
-         }
-         Logger.verbose("--------------------------------------");
+    public static String getHeader() {
+        return HyperboxAPI.getLogHeader(Hyperbox.getVersion().toString());
+    }
 
-         startBack();
-         startFront();
-         Long endTime = System.currentTimeMillis();
-         Logger.verbose("Hyperbox started in " + (endTime - startTime) + "ms");
-         Logger.info("-------> Hyperbox is running <-------");
-      } catch (Throwable e) {
-         Logger.error("Hyperbox Init Sequence failed!");
-         exitCode = 1;
-         Logger.exception(e);
-         stop();
-      }
+    private void startBack() {
 
-   }
+        try {
+            model = ModelFactory.get();
+            model.init();
+            model.start();
+        } catch (HyperboxException e) {
+            Logger.error(e);
+            Logger.exception(e);
+            stop();
+        }
+    }
 
-   @Override
-   public void stop() {
+    private void startFront() throws HyperboxException {
 
-      Long startTime = System.currentTimeMillis();
-      Logger.info("-------> Hyperbox is stopping <-------");
-      try {
-         stopFront();
-         stopBack();
-      } catch (Throwable e) {
-         Logger.error("Exception when stopping Hyperbox: " + e.getMessage());
-         Logger.exception(e);
-      } finally {
-         Long endTime = System.currentTimeMillis();
-         Logger.verbose("Hyperbox Stop Sequence finished in " + (endTime - startTime) + "ms");
-         Logger.info("-------> Hyperbox halt <-------");
+        Set<_Front> subTypes = ClassManager.getAtLeastOneOrFail(_Front.class);
+        for (_Front test : subTypes) {
+            fronts.add(test);
+        }
 
-         if (!Thread.currentThread().equals(shutdownHook)) {
-            Runtime.getRuntime().removeShutdownHook(shutdownHook);
-            System.exit(exitCode);
-         }
-      }
+        Logger.info("Starting Front-ends");
+        for (final _Front f : fronts) {
+            try {
+                f.start(model.getReceiver());
+                Logger.info(f.getClass().getSimpleName() + " has started");
+            } catch (HyperboxException e1) {
+                Logger.info(f.getClass().getSimpleName() + " failed to start");
+                throw new HyperboxException(e1);
+            }
+        }
+        Logger.info("Done starting Front-ends");
 
-   }
+    }
 
-   private void stopFront() {
+    @Override
+    public void start(String[] args) {
+        Hyperbox.setArgs(args);
+        shutdownHook = new Thread() {
 
-      Logger.info("Stopping front-ends");
-      EventOut evOut = new ServerShutdownEventOut(new Date(), ServerIoFactory.get(model.getServerManager().getServer()));
-      for (_Front f : fronts) {
-         f.broadcast(evOut);
-         f.stop();
-         Logger.info("\t" + f.getClass().getSimpleName() + " stopped");
-      }
-      Logger.info("Finished stopping front-ends");
-   }
+            @Override
+            public void run() {
+                SecurityContext.setUser(new SystemUser());
+                SessionContext.setClient(new Client());
+                Controller.this.stop();
+            }
+        };
+        Runtime.getRuntime().addShutdownHook(shutdownHook);
 
-   private void stopBack() {
+        try {
+            Long startTime = System.currentTimeMillis();
 
-      Logger.info("Stopping back-ends");
-      if (model != null) {
-         model.stop();
-      }
-      Logger.info("Finished stopping back-ends");
-   }
+            Logger.setLevel(LogLevel.valueOf(Configuration.getSetting("log.level", LogLevel.Info.toString())));
 
-   private class Client implements _Client {
+            String logFilename = Configuration.getSetting("log.file", "log/hboxd.log");
+            if (!logFilename.contentEquals("none")) {
+                Logger.log(logFilename, 4);
+            }
 
-      @Override
-      public void putAnswer(Answer ans) {
-         // stub
-      }
+            Logger.raw(getHeader());
+            Logger.info("Hyperbox Init Sequence started");
 
-      @Override
-      public String getId() {
-         return "System";
-      }
+            SecurityContext.init();
+            SecurityContext.addAdminThread(shutdownHook);
 
-      @Override
-      public String getAddress() {
-         return "System";
-      }
+            ShutdownAction.setController(this);
 
-      @Override
-      public void post(EventOut evOut) {
-         // stub
-      }
+            Logger.verbose("-------- Environment variables -------");
+            for (String name : System.getenv().keySet()) {
+                if (name.startsWith(Configuration.CFG_ENV_PREFIX + Configuration.CFG_ENV_SEPERATOR)) {
+                    Logger.verbose(name + " | " + System.getenv(name));
+                } else {
+                    Logger.debug(name + " | " + System.getenv(name));
+                }
+            }
+            Logger.verbose("--------------------------------------");
 
-   }
+            Logger.verbose("-------- Classpath entries -----------");
+            for (URL classPathEntry : ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs()) {
+                Logger.verbose(classPathEntry);
+            }
+            Logger.verbose("--------------------------------------");
+
+            startBack();
+            startFront();
+            Long endTime = System.currentTimeMillis();
+            Logger.verbose("Hyperbox started in " + (endTime - startTime) + "ms");
+            Logger.info("-------> Hyperbox is running <-------");
+        } catch (Throwable e) {
+            Logger.error("Hyperbox Init Sequence failed!");
+            exitCode = 1;
+            Logger.exception(e);
+            stop();
+        }
+
+    }
+
+    @Override
+    public void stop() {
+
+        Long startTime = System.currentTimeMillis();
+        Logger.info("-------> Hyperbox is stopping <-------");
+        try {
+            stopFront();
+            stopBack();
+        } catch (Throwable e) {
+            Logger.error("Exception when stopping Hyperbox: " + e.getMessage());
+            Logger.exception(e);
+        } finally {
+            Long endTime = System.currentTimeMillis();
+            Logger.verbose("Hyperbox Stop Sequence finished in " + (endTime - startTime) + "ms");
+            Logger.info("-------> Hyperbox halt <-------");
+
+            if (!Thread.currentThread().equals(shutdownHook)) {
+                Runtime.getRuntime().removeShutdownHook(shutdownHook);
+                System.exit(exitCode);
+            }
+        }
+
+    }
+
+    private void stopFront() {
+
+        Logger.info("Stopping front-ends");
+        EventOut evOut = new ServerShutdownEventOut(new Date(), ServerIoFactory.get(model.getServerManager().getServer()));
+        for (_Front f : fronts) {
+            f.broadcast(evOut);
+            f.stop();
+            Logger.info("\t" + f.getClass().getSimpleName() + " stopped");
+        }
+        Logger.info("Finished stopping front-ends");
+    }
+
+    private void stopBack() {
+
+        Logger.info("Stopping back-ends");
+        if (model != null) {
+            model.stop();
+        }
+        Logger.info("Finished stopping back-ends");
+    }
+
+    private class Client implements _Client {
+
+        @Override
+        public void putAnswer(Answer ans) {
+            // stub
+        }
+
+        @Override
+        public String getId() {
+            return "System";
+        }
+
+        @Override
+        public String getAddress() {
+            return "System";
+        }
+
+        @Override
+        public void post(EventOut evOut) {
+            // stub
+        }
+
+    }
 
 }

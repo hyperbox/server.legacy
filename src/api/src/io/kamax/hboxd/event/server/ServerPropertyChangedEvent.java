@@ -25,21 +25,21 @@ import io.kamax.hboxd.server._Server;
 
 public class ServerPropertyChangedEvent extends ServerEvent {
 
-   private Object property;
-   private Object newValue;
+    private Object property;
+    private Object newValue;
 
-   public ServerPropertyChangedEvent(_Server srv, Object property, Object newValue) {
-      super(HyperboxEvents.ServerPropertyChanged, srv);
-      this.property = property;
-      this.newValue = newValue;
-   }
+    public ServerPropertyChangedEvent(_Server srv, Object property, Object newValue) {
+        super(HyperboxEvents.ServerPropertyChanged, srv);
+        this.property = property;
+        this.newValue = newValue;
+    }
 
-   public Object getProperty() {
-      return property;
-   }
+    public Object getProperty() {
+        return property;
+    }
 
-   public Object getValue() {
-      return newValue;
-   }
+    public Object getValue() {
+        return newValue;
+    }
 
 }

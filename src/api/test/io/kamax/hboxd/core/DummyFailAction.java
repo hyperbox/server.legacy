@@ -29,21 +29,21 @@ import java.util.List;
 
 public class DummyFailAction extends ASingleTaskAction {
 
-   public static final String ID = "fail";
+    public static final String ID = "fail";
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + ID);
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + ID);
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      throw new HyperboxException("I failed!");
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        throw new HyperboxException("I failed!");
+    }
 
 }

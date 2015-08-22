@@ -29,35 +29,35 @@ import java.util.List;
 
 public final class DummyAction extends AbstractHyperboxMultiTaskAction {
 
-   private Thread runningThread;
+    private Thread runningThread;
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + "dummy");
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + "dummy");
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      runningThread = Thread.currentThread();
-      for (int i = 3; (i > 0) && !Thread.currentThread().isInterrupted(); i--) {
-         try {
-            Thread.sleep(1000);
-         } catch (InterruptedException e) {
-            throw new ActionCanceledException();
-         }
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        runningThread = Thread.currentThread();
+        for (int i = 3; (i > 0) && !Thread.currentThread().isInterrupted(); i--) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new ActionCanceledException();
+            }
+        }
+    }
 
-   @Override
-   public void cancel() {
-      if (runningThread != null) {
-         runningThread.interrupt();
-      }
-   }
+    @Override
+    public void cancel() {
+        if (runningThread != null) {
+            runningThread.interrupt();
+        }
+    }
 
 }

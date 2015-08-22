@@ -26,8 +26,8 @@ import io.kamax.hboxd.security._User;
 
 public class UserAddedEvent extends UserEvent {
 
-   public UserAddedEvent(_User usr) {
-      super(HyperboxEvents.UserAdded, usr);
-   }
+    public UserAddedEvent(_User usr) {
+        super(HyperboxEvents.UserAdded, usr);
+    }
 
 }

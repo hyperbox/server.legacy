@@ -20,19 +20,21 @@
 
 package io.kamax.hboxd.exception.machine;
 
-@SuppressWarnings("serial")
+
 public class DeviceNotFoundException extends DeviceException {
 
-   public DeviceNotFoundException(String s, Throwable t) {
-      super(s, t);
-   }
+    private static final long serialVersionUID = 4608516577680177130L;
 
-   public DeviceNotFoundException(Throwable t) {
-      super(t);
-   }
+    public DeviceNotFoundException(String s, Throwable t) {
+        super(s, t);
+    }
 
-   public DeviceNotFoundException(String s) {
-      super(s);
-   }
+    public DeviceNotFoundException(Throwable t) {
+        super(t);
+    }
+
+    public DeviceNotFoundException(String s) {
+        super(s);
+    }
 
 }

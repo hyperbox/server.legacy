@@ -23,16 +23,16 @@ package io.kamax.hboxd.hypervisor;
 
 public interface _HypervisorConnector {
 
-   public String getHypervisorId();
+    public String getHypervisorId();
 
-   public String getOptions();
+    public String getOptions();
 
-   public Boolean isAutoConnect();
+    public Boolean isAutoConnect();
 
-   public void setHypervisorId(String hypervisorId);
+    public void setHypervisorId(String hypervisorId);
 
-   public void setOptions(String options);
+    public void setOptions(String options);
 
-   public void setAutoConnect(Boolean autoConnect);
+    public void setAutoConnect(Boolean autoConnect);
 
 }

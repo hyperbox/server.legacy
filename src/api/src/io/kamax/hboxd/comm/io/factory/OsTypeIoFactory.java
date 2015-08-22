@@ -25,9 +25,9 @@ import io.kamax.hboxd.hypervisor._RawOsType;
 
 public class OsTypeIoFactory {
 
-   public static OsTypeOut get(_RawOsType osType) {
-      OsTypeOut osTypeIo = new OsTypeOut(osType.getId(), osType.getName(), osType.getBitness());
-      return osTypeIo;
-   }
+    public static OsTypeOut get(_RawOsType osType) {
+        OsTypeOut osTypeIo = new OsTypeOut(osType.getId(), osType.getName(), osType.getBitness());
+        return osTypeIo;
+    }
 
 }

@@ -25,12 +25,12 @@ import io.kamax.hboxd.hypervisor._RawItem;
 // TODO add filters
 public interface _RawUSB extends _RawItem {
 
-   public boolean isEnabled();
+    public boolean isEnabled();
 
-   public void setEnabled(boolean isEnabled);
+    public void setEnabled(boolean isEnabled);
 
-   public boolean isEhciEnabled();
+    public boolean isEhciEnabled();
 
-   public void setEhciEnabled(boolean isEnabled);
+    public void setEhciEnabled(boolean isEnabled);
 
 }

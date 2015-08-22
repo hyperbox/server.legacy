@@ -40,28 +40,28 @@ import java.util.List;
 
 public class SnapshotGetAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.SnapshotGet.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.SnapshotGet.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      MachineIn mIn = request.get(MachineIn.class);
-      SnapshotIn snapIn = request.get(SnapshotIn.class);
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        MachineIn mIn = request.get(MachineIn.class);
+        SnapshotIn snapIn = request.get(SnapshotIn.class);
 
-      Logger.debug("Fetching Snapshot #" + snapIn.getUuid() + " of VM #" + mIn.getUuid());
+        Logger.debug("Fetching Snapshot #" + snapIn.getUuid() + " of VM #" + mIn.getUuid());
 
-      _RawVM rawVM = hbox.getHypervisor().getMachine(mIn.getUuid());
-      _RawSnapshot rawSnap = rawVM.getSnapshot(snapIn.getUuid());
+        _RawVM rawVM = hbox.getHypervisor().getMachine(mIn.getUuid());
+        _RawSnapshot rawSnap = rawVM.getSnapshot(snapIn.getUuid());
 
-      SnapshotOut snapOut = SnapshotIoFactory.get(rawSnap);
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, snapOut));
-   }
+        SnapshotOut snapOut = SnapshotIoFactory.get(rawSnap);
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, snapOut));
+    }
 
 }

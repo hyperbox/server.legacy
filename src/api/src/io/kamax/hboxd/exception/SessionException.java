@@ -20,11 +20,13 @@
 
 package io.kamax.hboxd.exception;
 
-@SuppressWarnings("serial")
+
 public class SessionException extends RuntimeException {
 
-   public SessionException(String s) {
-      super(s);
-   }
+    private static final long serialVersionUID = 8402813732788462167L;
+
+    public SessionException(String s) {
+        super(s);
+    }
 
 }

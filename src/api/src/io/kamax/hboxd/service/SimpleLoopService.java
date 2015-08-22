@@ -32,94 +32,94 @@ import io.kamax.tool.logging.Logger;
  * destruct code is needed.
  * </p>
  * TODO javadoc
- * 
+ *
  * @author max
  */
 public abstract class SimpleLoopService extends SkeletonService {
 
-   private volatile boolean running;
-   private volatile long sleepingTime = 1000;
+    private volatile boolean running;
+    private volatile long sleepingTime = 1000;
 
-   @Override
-   public final void run() {
-      try {
-         beforeLooping();
-         setState(ServiceState.Running);
-         while (running) {
-            doLoop();
-            Thread.sleep(sleepingTime);
-         }
-      } catch (InterruptedException e) {
-         Logger.debug(getClass().getSimpleName() + " got shutdown signal, stopping...");
-         running = false;
-      } finally {
-         afterLooping();
-         setState(ServiceState.Stopped);
-      }
-   }
+    @Override
+    public final void run() {
+        try {
+            beforeLooping();
+            setState(ServiceState.Running);
+            while (running) {
+                doLoop();
+                Thread.sleep(sleepingTime);
+            }
+        } catch (InterruptedException e) {
+            Logger.debug(getClass().getSimpleName() + " got shutdown signal, stopping...");
+            running = false;
+        } finally {
+            afterLooping();
+            setState(ServiceState.Stopped);
+        }
+    }
 
-   @Override
-   protected final void starting() {
-      running = true;
-      beforeRunning();
-   }
+    @Override
+    protected final void starting() {
+        running = true;
+        beforeRunning();
+    }
 
-   @Override
-   protected final void stopping() {
-      afterRunning();
-      running = false;
-   }
+    @Override
+    protected final void stopping() {
+        afterRunning();
+        running = false;
+    }
 
-   /**
-    * Set the sleep time for the next before the next iteration. Any negative value will set a sleep time of 0.
-    * 
-    * @param sleepingTime a
-    */
-   protected final void setSleepingTime(long sleepingTime) {
-      if (sleepingTime < 0) {
-         sleepingTime = 0;
-      }
-      this.sleepingTime = sleepingTime;
-   }
+    /**
+     * Set the sleep time for the next before the next iteration. Any negative value will set a sleep time of 0.
+     * 
+     * @param sleepingTime a
+     */
+    protected final void setSleepingTime(long sleepingTime) {
+        if (sleepingTime < 0) {
+            sleepingTime = 0;
+        }
+        this.sleepingTime = sleepingTime;
+    }
 
-   /**
-    * If initialisation is required OUTSIDE the service thread.<br>
-    * This code will run on the main thread.
-    */
-   protected void beforeRunning() {
-      // stub method - left to be implemented if required by subclasses
-   }
+    /**
+     * If initialisation is required OUTSIDE the service thread.<br>
+     * This code will run on the main thread.
+     */
+    protected void beforeRunning() {
+        // stub method - left to be implemented if required by subclasses
+    }
 
-   /**
-    * If destruction is required OUTSIDE the service thread.<br>
-    * This code will run on the main thread.
-    */
-   protected void afterRunning() {
-      // stub method - left to be implemented if required by subclasses
-   }
+    /**
+     * If destruction is required OUTSIDE the service thread.<br>
+     * This code will run on the main thread.
+     */
+    protected void afterRunning() {
+        // stub method - left to be implemented if required by subclasses
+    }
 
-   /**
-    * If initialisation is required INSIDE the service thread.<br>
-    * This code will run on the service thread.
-    */
-   protected void beforeLooping() {
-      // stub method - left to be implemented if required by subclasses
-   }
+    /**
+     * If initialisation is required INSIDE the service thread.<br>
+     * This code will run on the service thread.
+     */
+    protected void beforeLooping() {
+        // stub method - left to be implemented if required by subclasses
+    }
 
-   /**
-    * If destruction is required INSIDE the service thread.<br>
-    * This code will run on the service thread.
-    */
-   protected void afterLooping() {
-      // stub method - left to be implemented if required by subclasses
-   }
+    /**
+     * If destruction is required INSIDE the service thread.<br>
+     * This code will run on the service thread.
+     */
+    protected void afterLooping() {
+        // stub method - left to be implemented if required by subclasses
+    }
 
-   /**
-    * The main looping code.
-    * 
-    * @throws InterruptedException When the service is required to stop, {@link Thread#interrupt()} is called on the service thread.<br/>
-    *            This is handled by SimpleLoopService.
-    */
-   protected abstract void doLoop() throws InterruptedException;
+    /**
+     * The main looping code.
+     * 
+     * @throws InterruptedException When the service is required to stop, {@link Thread#interrupt()} is called on the service thread.<br/>
+     *             This is handled by SimpleLoopService.
+     */
+    protected abstract void doLoop() throws InterruptedException;
 
 }

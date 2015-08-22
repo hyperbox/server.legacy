@@ -32,23 +32,23 @@ import io.kamax.tool.logging.Logger;
 
 public final class TaskQueueEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.TaskQueue
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.TaskQueue
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
 
-      switch ((HyperboxEvents) ev.getEventId()) {
-         case TaskQueue:
-            Logger.debug("Creating a new TaskQueueEvent of type " + ev.get(TaskQueueEvents.class));
-            return new TaskQueueEventOut(ev.getTime(), ServerIoFactory.get(), ev.get(TaskOut.class), ev.get(TaskQueueEvents.class));
-         default:
-            return null;
-      }
-   }
+        switch ((HyperboxEvents) ev.getEventId()) {
+            case TaskQueue:
+                Logger.debug("Creating a new TaskQueueEvent of type " + ev.get(TaskQueueEvents.class));
+                return new TaskQueueEventOut(ev.getTime(), ServerIoFactory.get(), ev.get(TaskOut.class), ev.get(TaskQueueEvents.class));
+            default:
+                return null;
+        }
+    }
 
 }

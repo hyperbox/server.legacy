@@ -25,23 +25,23 @@ import io.kamax.hboxd.hypervisor.vm.guest._RawGuestNetworkInterface;
 
 public class GuestNetworkInterfaceIoFactory {
 
-   private GuestNetworkInterfaceIoFactory() {
+    private GuestNetworkInterfaceIoFactory() {
 
-   }
+    }
 
-   public static GuestNetworkInterfaceOut get(_RawGuestNetworkInterface rawGnic) {
-      if (rawGnic == null) {
-         return null;
-      }
+    public static GuestNetworkInterfaceOut get(_RawGuestNetworkInterface rawGnic) {
+        if (rawGnic == null) {
+            return null;
+        }
 
-      return new GuestNetworkInterfaceOut(
-            Integer.toString(rawGnic.getId()),
-            rawGnic.isUp(),
-            rawGnic.getMacAddress(),
-            rawGnic.getIp4Address(),
-            rawGnic.getIp4Subnet(),
-            rawGnic.getIp6Address(),
-            rawGnic.getIp6Subnet());
-   }
+        return new GuestNetworkInterfaceOut(
+                Integer.toString(rawGnic.getId()),
+                rawGnic.isUp(),
+                rawGnic.getMacAddress(),
+                rawGnic.getIp4Address(),
+                rawGnic.getIp4Subnet(),
+                rawGnic.getIp6Address(),
+                rawGnic.getIp6Subnet());
+    }
 
 }

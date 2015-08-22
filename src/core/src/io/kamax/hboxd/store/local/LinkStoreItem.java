@@ -31,64 +31,64 @@ import java.util.List;
 
 public class LinkStoreItem implements _StoreItem {
 
-   private _Store store;
-   private File location;
+    private _Store store;
+    private File location;
 
-   public LinkStoreItem(_Store store, File path) {
-      if (!path.isAbsolute()) {
-         throw new HyperboxException(path + " must be a full path");
-      }
+    public LinkStoreItem(_Store store, File path) {
+        if (!path.isAbsolute()) {
+            throw new HyperboxException(path + " must be a full path");
+        }
 
-      this.store = store;
-      location = new File(path.getAbsolutePath());
-   }
+        this.store = store;
+        location = new File(path.getAbsolutePath());
+    }
 
-   @Override
-   public String getName() {
-      return location.getName();
-   }
+    @Override
+    public String getName() {
+        return location.getName();
+    }
 
-   @Override
-   public boolean isContainer() {
-      return true;
-   }
+    @Override
+    public boolean isContainer() {
+        return true;
+    }
 
-   @Override
-   public String getPath() {
-      return location.getAbsolutePath();
-   }
+    @Override
+    public String getPath() {
+        return location.getAbsolutePath();
+    }
 
-   @Override
-   public long getSize() {
-      return 0;
-   }
+    @Override
+    public long getSize() {
+        return 0;
+    }
 
-   @Override
-   public List<_StoreItem> listItems() {
-      try {
-         File realLoc = location.getCanonicalFile();
-         List<_StoreItem> list = new ArrayList<_StoreItem>();
-         if (realLoc.isDirectory()) {
-            for (File f : realLoc.listFiles()) {
-               if (f.isDirectory()) {
-                  list.add(new FolderStoreItem(store, f));
-               } else if (f.isFile()) {
-                  list.add(new FileStoreItem(store, f));
-               } else {
-                  list.add(new LinkStoreItem(store, f));
-               }
+    @Override
+    public List<_StoreItem> listItems() {
+        try {
+            File realLoc = location.getCanonicalFile();
+            List<_StoreItem> list = new ArrayList<_StoreItem>();
+            if (realLoc.isDirectory()) {
+                for (File f : realLoc.listFiles()) {
+                    if (f.isDirectory()) {
+                        list.add(new FolderStoreItem(store, f));
+                    } else if (f.isFile()) {
+                        list.add(new FileStoreItem(store, f));
+                    } else {
+                        list.add(new LinkStoreItem(store, f));
+                    }
+                }
             }
-         }
-         return list;
-      } catch (IOException e) {
-         throw new StoreException(e);
-      }
+            return list;
+        } catch (IOException e) {
+            throw new StoreException(e);
+        }
 
-   }
+    }
 
-   @Override
-   public _Store getStore() {
-      return store;
-   }
+    @Override
+    public _Store getStore() {
+        return store;
+    }
 
 }

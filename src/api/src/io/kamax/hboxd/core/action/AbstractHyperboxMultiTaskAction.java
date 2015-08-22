@@ -32,7 +32,7 @@ import javax.swing.AbstractAction;
  * <li>Finish : AnswerType.COMPLETED</li>
  * <li>Failed : AnswerType.FAILED</li>
  * </ul>
- * 
+ *
  * @see AnswerType
  * @see _Action
  * @see AbstractAction
@@ -40,19 +40,19 @@ import javax.swing.AbstractAction;
  */
 public abstract class AbstractHyperboxMultiTaskAction extends AbstractHyperboxAction {
 
-   @Override
-   public AnswerType getStartReturn() {
-      return AnswerType.STARTED;
-   }
+    @Override
+    public AnswerType getStartReturn() {
+        return AnswerType.STARTED;
+    }
 
-   @Override
-   public AnswerType getFinishReturn() {
-      return AnswerType.COMPLETED;
-   }
+    @Override
+    public AnswerType getFinishReturn() {
+        return AnswerType.COMPLETED;
+    }
 
-   @Override
-   public AnswerType getFailReturn() {
-      return AnswerType.FAILED;
-   }
+    @Override
+    public AnswerType getFailReturn() {
+        return AnswerType.FAILED;
+    }
 
 }

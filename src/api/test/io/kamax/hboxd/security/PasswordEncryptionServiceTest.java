@@ -30,13 +30,13 @@ import org.junit.Test;
 
 public class PasswordEncryptionServiceTest {
 
-   @Test
-   public void test() throws NoSuchAlgorithmException, InvalidKeySpecException {
-      byte[] firstPass = PasswordEncryptionService.getEncryptedPassword("test".toCharArray(), "AhahahEREZRRZ".getBytes());
-      byte[] secondPass = PasswordEncryptionService.getEncryptedPassword("test".toCharArray(), "AhahahEREZRRZ".getBytes());
-      System.out.println(firstPass.length);
-      System.out.println(secondPass.length);
-      assertTrue(Arrays.equals(firstPass, secondPass));
-   }
+    @Test
+    public void test() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        byte[] firstPass = PasswordEncryptionService.getEncryptedPassword("test".toCharArray(), "AhahahEREZRRZ".getBytes());
+        byte[] secondPass = PasswordEncryptionService.getEncryptedPassword("test".toCharArray(), "AhahahEREZRRZ".getBytes());
+        System.out.println(firstPass.length);
+        System.out.println(secondPass.length);
+        assertTrue(Arrays.equals(firstPass, secondPass));
+    }
 
 }

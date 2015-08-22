@@ -25,19 +25,19 @@ import io.kamax.hboxd.core._Hyperbox;
 
 public class ModelFactory {
 
-   private static _Hyperbox hyperbox;
+    private static _Hyperbox hyperbox;
 
-   private ModelFactory() {
-      throw new RuntimeException("Not allowed");
-   }
+    private ModelFactory() {
+        throw new RuntimeException("Not allowed");
+    }
 
-   public static _Hyperbox get() {
+    public static _Hyperbox get() {
 
-      if (hyperbox == null) {
-         hyperbox = new SingleHostServer();
-      }
+        if (hyperbox == null) {
+            hyperbox = new SingleHostServer();
+        }
 
-      return hyperbox;
-   }
+        return hyperbox;
+    }
 
 }

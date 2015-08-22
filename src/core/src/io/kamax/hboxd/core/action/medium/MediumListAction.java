@@ -36,23 +36,23 @@ import java.util.List;
 
 public final class MediumListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MediumList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.MediumList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      List<_RawMedium> medList = hbox.getHypervisor().listMediums();
-      for (_RawMedium med : medList) {
-         MediumOut medOut = MediumIoFactory.get(med);
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, medOut));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        List<_RawMedium> medList = hbox.getHypervisor().listMediums();
+        for (_RawMedium med : medList) {
+            MediumOut medOut = MediumIoFactory.get(med);
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, medOut));
+        }
+    }
 
 }

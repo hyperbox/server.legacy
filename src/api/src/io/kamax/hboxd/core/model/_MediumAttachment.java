@@ -22,20 +22,20 @@ package io.kamax.hboxd.core.model;
 
 public interface _MediumAttachment {
 
-   public String getMachineId();
+    public String getMachineId();
 
-   public String getMediumId();
+    public String getMediumId();
 
-   public String getControllerId();
+    public String getControllerId();
 
-   public long getPortId();
+    public long getPortId();
 
-   public long getDeviceId();
+    public long getDeviceId();
 
-   public String getDeviceType();
+    public String getDeviceType();
 
-   public boolean isPassThrough();
+    public boolean isPassThrough();
 
-   public boolean hasMedium();
+    public boolean hasMedium();
 
 }

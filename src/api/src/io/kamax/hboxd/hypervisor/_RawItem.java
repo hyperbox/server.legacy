@@ -26,12 +26,12 @@ import java.util.List;
 // TODO find a better name
 public interface _RawItem {
 
-   public List<_Setting> listSettings();
+    public List<_Setting> listSettings();
 
-   public _Setting getSetting(Object id);
+    public _Setting getSetting(Object id);
 
-   public void setSetting(_Setting s);
+    public void setSetting(_Setting s);
 
-   public void setSetting(List<_Setting> s);
+    public void setSetting(List<_Setting> s);
 
 }

@@ -26,12 +26,12 @@ import io.kamax.hboxd.server._ServerManager;
 
 public interface _Hyperbox extends _HyperboxManipulator, _ServerManager {
 
-   public void init() throws HyperboxException;
+    public void init() throws HyperboxException;
 
-   public void start() throws HyperboxException;
+    public void start() throws HyperboxException;
 
-   public _RequestReceiver getReceiver();
+    public _RequestReceiver getReceiver();
 
-   public void stop();
+    public void stop();
 
 }

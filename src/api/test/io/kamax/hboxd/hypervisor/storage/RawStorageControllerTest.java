@@ -27,20 +27,20 @@ import io.kamax.hbox.constant.StorageControllerAttribute;
 
 public class RawStorageControllerTest {
 
-   public static void validateSimple(_RawStorageController rawSc) {
-      assertFalse(rawSc.getMachineUuid().isEmpty());
-      assertFalse(rawSc.getName().isEmpty());
-   }
+    public static void validateSimple(_RawStorageController rawSc) {
+        assertFalse(rawSc.getMachineUuid().isEmpty());
+        assertFalse(rawSc.getName().isEmpty());
+    }
 
-   public static void validateFull(_RawStorageController rawSc) {
-      validateSimple(rawSc);
-      assertNotNull(rawSc.getSetting(StorageControllerAttribute.MinPortCount).getValue());
-      assertNotNull(rawSc.getSetting(StorageControllerAttribute.MaxPortCount).getValue());
-      assertNotNull(rawSc.getSetting(StorageControllerAttribute.MaxDeviceCount).getValue());
-      assertTrue(rawSc.getMinPortCount() >= 0);
-      assertTrue(rawSc.getMaxPortCount() >= 0);
-      assertTrue(rawSc.getMaxPortCount() >= rawSc.getMinPortCount());
-      assertTrue(rawSc.getMaxDeviceCount() >= 0);
-   }
+    public static void validateFull(_RawStorageController rawSc) {
+        validateSimple(rawSc);
+        assertNotNull(rawSc.getSetting(StorageControllerAttribute.MinPortCount).getValue());
+        assertNotNull(rawSc.getSetting(StorageControllerAttribute.MaxPortCount).getValue());
+        assertNotNull(rawSc.getSetting(StorageControllerAttribute.MaxDeviceCount).getValue());
+        assertTrue(rawSc.getMinPortCount() >= 0);
+        assertTrue(rawSc.getMaxPortCount() >= 0);
+        assertTrue(rawSc.getMaxPortCount() >= rawSc.getMinPortCount());
+        assertTrue(rawSc.getMaxDeviceCount() >= 0);
+    }
 
 }

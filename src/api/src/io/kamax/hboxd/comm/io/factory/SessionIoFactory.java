@@ -25,12 +25,12 @@ import io.kamax.hboxd.session._Session;
 
 public class SessionIoFactory {
 
-   private SessionIoFactory() {
-      // static only class
-   }
+    private SessionIoFactory() {
+        // static only class
+    }
 
-   public static SessionOut get(_Session sess) {
-      return new SessionOut(sess.getId(), UserIoFactory.get(sess.getUser()), sess.getState().toString(), sess.getCreateTime());
-   }
+    public static SessionOut get(_Session sess) {
+        return new SessionOut(sess.getId(), UserIoFactory.get(sess.getUser()), sess.getState().toString(), sess.getCreateTime());
+    }
 
 }

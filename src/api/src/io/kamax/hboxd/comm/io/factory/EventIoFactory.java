@@ -35,46 +35,46 @@ import java.util.Set;
 
 public final class EventIoFactory {
 
-   private static Map<Enum<?>, _EventIoFactory> factories;
+    private static Map<Enum<?>, _EventIoFactory> factories;
 
-   private EventIoFactory() {
-      // static class, cannot be instantiated
-   }
+    private EventIoFactory() {
+        // static class, cannot be instantiated
+    }
 
-   static {
-      factories = new HashMap<Enum<?>, _EventIoFactory>();
-      try {
-         Set<_EventIoFactory> preciseFactories = ClassManager.getAtLeastOneOrFail(_EventIoFactory.class);
-         for (_EventIoFactory preciseFactory : preciseFactories) {
-            for (Enum<?> id : preciseFactory.getHandles()) {
-               factories.put(id, preciseFactory);
+    static {
+        factories = new HashMap<Enum<?>, _EventIoFactory>();
+        try {
+            Set<_EventIoFactory> preciseFactories = ClassManager.getAtLeastOneOrFail(_EventIoFactory.class);
+            for (_EventIoFactory preciseFactory : preciseFactories) {
+                for (Enum<?> id : preciseFactory.getHandles()) {
+                    factories.put(id, preciseFactory);
+                }
             }
-         }
-      } catch (HyperboxException e) {
-         throw new HyperboxException(e);
-      }
-   }
+        } catch (HyperboxException e) {
+            throw new HyperboxException(e);
+        }
+    }
 
-   private static EventOut getUnknown(_Event ev) {
-      Logger.debug("Creating Unknown Event for ID " + ev.getEventId() + " @ " + ev.getTime() + ": " + ev);
-      return new UnknownEventOut(ev.getTime(), ev.getEventId(), ServerIoFactory.get(HBoxServer.get()));
-   }
+    private static EventOut getUnknown(_Event ev) {
+        Logger.debug("Creating Unknown Event for ID " + ev.getEventId() + " @ " + ev.getTime() + ": " + ev);
+        return new UnknownEventOut(ev.getTime(), ev.getEventId(), ServerIoFactory.get(HBoxServer.get()));
+    }
 
-   public static EventOut get(_Hyperbox hbox, _Event ev) {
-      try {
-         if (factories.containsKey(ev.getEventId())) {
-            Logger.debug("Using " + factories.get(ev.getEventId()).getClass().getName() + " for " + ev.getEventId());
-            EventOut evOut = factories.get(ev.getEventId()).get(hbox, ev);
-            if (evOut != null) {
-               return evOut;
+    public static EventOut get(_Hyperbox hbox, _Event ev) {
+        try {
+            if (factories.containsKey(ev.getEventId())) {
+                Logger.debug("Using " + factories.get(ev.getEventId()).getClass().getName() + " for " + ev.getEventId());
+                EventOut evOut = factories.get(ev.getEventId()).get(hbox, ev);
+                if (evOut != null) {
+                    return evOut;
+                }
             }
-         }
-      } catch (Throwable t) {
-         Logger.error("Error while trying to Get EventOutput : " + t.getMessage());
-         Logger.exception(t);
-      }
+        } catch (Throwable t) {
+            Logger.error("Error while trying to Get EventOutput : " + t.getMessage());
+            Logger.exception(t);
+        }
 
-      Logger.warning("No factory for Event ID " + ev.getEventId() + ", sending " + UnknownEventOut.class.getName() + " instead");
-      return getUnknown(ev);
-   }
+        Logger.warning("No factory for Event ID " + ev.getEventId() + ", sending " + UnknownEventOut.class.getName() + " instead");
+        return getUnknown(ev);
+    }
 }

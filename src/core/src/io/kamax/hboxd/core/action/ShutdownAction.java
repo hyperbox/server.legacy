@@ -32,30 +32,30 @@ import java.util.List;
 
 public class ShutdownAction extends ASingleTaskAction {
 
-   private static _Controller c;
+    private static _Controller c;
 
-   public static void setController(_Controller c) {
+    public static void setController(_Controller c) {
 
-      if (ShutdownAction.c == null) {
-         ShutdownAction.c = c;
-      }
-   }
+        if (ShutdownAction.c == null) {
+            ShutdownAction.c = c;
+        }
+    }
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ServerShutdown.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ServerShutdown.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
 
-      Logger.info("Server shutdown requested by " + SecurityContext.getUser().getDomainLogonName());
-      c.stop();
-   }
+        Logger.info("Server shutdown requested by " + SecurityContext.getUser().getDomainLogonName());
+        c.stop();
+    }
 
 }

@@ -20,11 +20,13 @@
 
 package io.kamax.hboxd.exception.security;
 
-@SuppressWarnings("serial")
+
 public class InvalidCredentialsException extends SecurityException {
 
-   public InvalidCredentialsException() {
-      super("Invalid Credentials");
-   }
+    private static final long serialVersionUID = -7962878214334865549L;
+
+    public InvalidCredentialsException() {
+        super("Invalid Credentials");
+    }
 
 }

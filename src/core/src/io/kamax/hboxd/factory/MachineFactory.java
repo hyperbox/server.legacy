@@ -28,13 +28,13 @@ import io.kamax.hboxd.server._Server;
 
 public class MachineFactory {
 
-   private MachineFactory() {
-      throw new RuntimeException("Not allowed");
+    private MachineFactory() {
+        throw new RuntimeException("Not allowed");
 
-   }
+    }
 
-   public static _Machine get(_Server server, _Hypervisor hypervisor, _RawVM rawVm) {
-      return new Machine(server, hypervisor, rawVm);
-   }
+    public static _Machine get(_Server server, _Hypervisor hypervisor, _RawVM rawVm) {
+        return new Machine(server, hypervisor, rawVm);
+    }
 
 }

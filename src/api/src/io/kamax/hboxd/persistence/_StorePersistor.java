@@ -26,14 +26,14 @@ import java.util.List;
 
 public interface _StorePersistor {
 
-   public void insertStore(_Store store);
+    public void insertStore(_Store store);
 
-   public void updateStore(_Store store);
+    public void updateStore(_Store store);
 
-   public void deleteStore(_Store store);
+    public void deleteStore(_Store store);
 
-   public _Store getStore(String id);
+    public _Store getStore(String id);
 
-   public List<_Store> listStores();
+    public List<_Store> listStores();
 
 }

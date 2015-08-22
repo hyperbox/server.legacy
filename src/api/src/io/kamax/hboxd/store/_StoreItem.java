@@ -24,16 +24,16 @@ import java.util.List;
 
 public interface _StoreItem {
 
-   public _Store getStore();
+    public _Store getStore();
 
-   public String getName();
+    public String getName();
 
-   public boolean isContainer();
+    public boolean isContainer();
 
-   public String getPath();
+    public String getPath();
 
-   public long getSize();
+    public long getSize();
 
-   public List<_StoreItem> listItems();
+    public List<_StoreItem> listItems();
 
 }

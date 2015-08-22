@@ -24,16 +24,16 @@ import io.kamax.hboxd.hypervisor._RawItem;
 
 public interface _Motherboard extends _RawItem {
 
-   public boolean isAcpiEnabled();
+    public boolean isAcpiEnabled();
 
-   public void setAcpi(boolean isEnabled);
+    public void setAcpi(boolean isEnabled);
 
-   public boolean isIoApicEnabled();
+    public boolean isIoApicEnabled();
 
-   public void setIoApic(boolean isEnabled);
+    public void setIoApic(boolean isEnabled);
 
-   public String getHardwareUuid();
+    public String getHardwareUuid();
 
-   public void setHardwareUuid(String uuid);
+    public void setHardwareUuid(String uuid);
 
 }

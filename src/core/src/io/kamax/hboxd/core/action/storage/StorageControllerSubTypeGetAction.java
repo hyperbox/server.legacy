@@ -37,22 +37,22 @@ import java.util.List;
 
 public final class StorageControllerSubTypeGetAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.StorageControllerSubTypeGet.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.StorageControllerSubTypeGet.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      StorageControllerSubTypeIn scstIn = request.get(StorageControllerSubTypeIn.class);
-      _RawStorageControllerSubType scst = hbox.getHypervisor().getStorageControllerSubType(scstIn.getId());
-      StorageControllerSubTypeOut scstOut = StorageControllerSubTypeIoFactory.get(scst);
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, scstOut));
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        StorageControllerSubTypeIn scstIn = request.get(StorageControllerSubTypeIn.class);
+        _RawStorageControllerSubType scst = hbox.getHypervisor().getStorageControllerSubType(scstIn.getId());
+        StorageControllerSubTypeOut scstOut = StorageControllerSubTypeIoFactory.get(scst);
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, scstOut));
+    }
 
 }

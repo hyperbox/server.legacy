@@ -31,84 +31,84 @@ import net.engio.mbassy.bus.config.BusConfiguration;
 
 public final class DefaultEventManager implements _EventManager, Runnable {
 
-   private BlockingQueue<_Event> eventsQueue;
-   private MBassador<_Event> eventBus;
-   private boolean running = false;
-   private Thread worker;
+    private BlockingQueue<_Event> eventsQueue;
+    private MBassador<_Event> eventBus;
+    private boolean running = false;
+    private Thread worker;
 
-   @Override
-   public void start() throws HyperboxException {
+    @Override
+    public void start() throws HyperboxException {
 
-      Logger.debug("Event Manager Starting");
-      eventBus = new MBassador<_Event>(BusConfiguration.Default());
-      eventsQueue = new LinkedBlockingQueue<_Event>();
-      worker = new Thread(this, "EvMgrWT");
-      worker.setDaemon(true);
-      SecurityContext.addAdminThread(worker);
+        Logger.debug("Event Manager Starting");
+        eventBus = new MBassador<_Event>(BusConfiguration.Default());
+        eventsQueue = new LinkedBlockingQueue<_Event>();
+        worker = new Thread(this, "EvMgrWT");
+        worker.setDaemon(true);
+        SecurityContext.addAdminThread(worker);
 
-      worker.start();
-      Logger.verbose("Event Manager Started");
-   }
+        worker.start();
+        Logger.verbose("Event Manager Started");
+    }
 
-   @Override
-   public void stop() {
+    @Override
+    public void stop() {
 
-      Logger.debug("Event Manager Stopping");
-      running = false;
-      if (worker != null) {
-         worker.interrupt();
-         try {
-            worker.join(1000);
-         } catch (InterruptedException e) {
-            Logger.exception(e);
-         }
-      }
-      eventsQueue = null;
-      Logger.verbose("Event Manager Stopped");
-   }
+        Logger.debug("Event Manager Stopping");
+        running = false;
+        if (worker != null) {
+            worker.interrupt();
+            try {
+                worker.join(1000);
+            } catch (InterruptedException e) {
+                Logger.exception(e);
+            }
+        }
+        eventsQueue = null;
+        Logger.verbose("Event Manager Stopped");
+    }
 
-   @Override
-   public void register(Object o) {
+    @Override
+    public void register(Object o) {
 
-      eventBus.subscribe(o);
-      Logger.debug(o + " has registered for all events.");
-   }
+        eventBus.subscribe(o);
+        Logger.debug(o + " has registered for all events.");
+    }
 
-   @Override
-   public void unregister(Object o) {
+    @Override
+    public void unregister(Object o) {
 
-      eventBus.unsubscribe(o);
-      Logger.debug(o + " has unregistered for all events.");
-   }
+        eventBus.unsubscribe(o);
+        Logger.debug(o + " has unregistered for all events.");
+    }
 
-   @Override
-   public void post(_Event ev) {
+    @Override
+    public void post(_Event ev) {
 
-      Logger.debug("Received Event ID [" + ev.getEventId() + "] fired @ " + ev.getTime());
-      if ((eventsQueue != null) && !eventsQueue.offer(ev)) {
-         Logger.error("Event queue is full (" + eventsQueue.size() + "), cannot add " + ev.getEventId());
-      }
-   }
+        Logger.debug("Received Event ID [" + ev.getEventId() + "] fired @ " + ev.getTime());
+        if ((eventsQueue != null) && !eventsQueue.offer(ev)) {
+            Logger.error("Event queue is full (" + eventsQueue.size() + "), cannot add " + ev.getEventId());
+        }
+    }
 
-   @Override
-   public void run() {
+    @Override
+    public void run() {
 
-      Logger.verbose("Event Manager Worker Started");
-      running = true;
-      while (running) {
-         try {
-            _Event event = eventsQueue.take();
-            Logger.debug("Processing Event: " + event.toString());
-            eventBus.publish(event);
-         } catch (InterruptedException e) {
-            Logger.debug("Got interupted, halting...");
-            running = false;
-         } catch (Throwable t) {
-            Logger.error("Error when processing event: " + t.getMessage());
-            Logger.exception(t);
-         }
-      }
-      Logger.verbose("Event Manager Worker halted.");
-   }
+        Logger.verbose("Event Manager Worker Started");
+        running = true;
+        while (running) {
+            try {
+                _Event event = eventsQueue.take();
+                Logger.debug("Processing Event: " + event.toString());
+                eventBus.publish(event);
+            } catch (InterruptedException e) {
+                Logger.debug("Got interupted, halting...");
+                running = false;
+            } catch (Throwable t) {
+                Logger.error("Error when processing event: " + t.getMessage());
+                Logger.exception(t);
+            }
+        }
+        Logger.verbose("Event Manager Worker halted.");
+    }
 
 }

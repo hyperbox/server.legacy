@@ -34,32 +34,32 @@ import java.util.Date;
 
 public class ModuleEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.ModuleLoaded,
-            HyperboxEvents.ModuleRegistered,
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.ModuleLoaded,
+                HyperboxEvents.ModuleRegistered,
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      if (!(ev instanceof ModuleEvent)) {
-         return null;
-      }
-
-      ModuleEvent modEv = (ModuleEvent) ev;
-      Date time = modEv.getTime();
-      ServerOut srvOut = ServerIoFactory.get();
-
-      switch ((HyperboxEvents) ev.getEventId()) {
-         case ModuleLoaded:
-            return new ModuleLoadedEventOut(time, srvOut, ModuleIoFactory.get(modEv.getModule()));
-         case ModuleRegistered:
-            return new ModuleRegisteredEventOut(time, srvOut, ModuleIoFactory.get(modEv.getModule()));
-         default:
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        if (!(ev instanceof ModuleEvent)) {
             return null;
-      }
-   }
+        }
+
+        ModuleEvent modEv = (ModuleEvent) ev;
+        Date time = modEv.getTime();
+        ServerOut srvOut = ServerIoFactory.get();
+
+        switch ((HyperboxEvents) ev.getEventId()) {
+            case ModuleLoaded:
+                return new ModuleLoadedEventOut(time, srvOut, ModuleIoFactory.get(modEv.getModule()));
+            case ModuleRegistered:
+                return new ModuleRegisteredEventOut(time, srvOut, ModuleIoFactory.get(modEv.getModule()));
+            default:
+                return null;
+        }
+    }
 
 }

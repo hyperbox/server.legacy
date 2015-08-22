@@ -35,22 +35,22 @@ import java.util.List;
 
 public final class TaskListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.TaskList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.TaskList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      for (_Task t : hbox.getTaskManager().list()) {
-         SessionContext.getClient()
-               .putAnswer(new Answer(request, AnswerType.DATA, TaskIoFactory.get(t)));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        for (_Task t : hbox.getTaskManager().list()) {
+            SessionContext.getClient()
+                    .putAnswer(new Answer(request, AnswerType.DATA, TaskIoFactory.get(t)));
+        }
+    }
 
 }

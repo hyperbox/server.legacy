@@ -22,15 +22,17 @@ package io.kamax.hboxd.exception.server;
 
 import io.kamax.hbox.exception.HyperboxException;
 
-@SuppressWarnings("serial")
+
 public class ServerLogLevelInvalidException extends HyperboxException {
 
-   public ServerLogLevelInvalidException(String message, String logLevel) {
-      super(message + ": " + logLevel);
-   }
+    private static final long serialVersionUID = 7240624996626241256L;
 
-   public ServerLogLevelInvalidException(String logLevel) {
-      this("Invalid Log Level", logLevel);
-   }
+    public ServerLogLevelInvalidException(String message, String logLevel) {
+        super(message + ": " + logLevel);
+    }
+
+    public ServerLogLevelInvalidException(String logLevel) {
+        this("Invalid Log Level", logLevel);
+    }
 
 }

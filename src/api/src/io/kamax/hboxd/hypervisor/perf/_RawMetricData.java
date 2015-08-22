@@ -24,10 +24,10 @@ import java.util.Date;
 
 public interface _RawMetricData {
 
-   public _RawMetric getMetric();
+    public _RawMetric getMetric();
 
-   public String getValue();
+    public String getValue();
 
-   public Date getTime();
+    public Date getTime();
 
 }

@@ -25,13 +25,13 @@ import io.kamax.hboxd.event.machine.MachineEvent;
 
 public abstract class StorageControllerEvent extends MachineEvent {
 
-   public StorageControllerEvent(Enum<?> eventId, String vmId, String controllerId) {
-      super(eventId, vmId);
-      set(_StorageController.class, controllerId);
-   }
+    public StorageControllerEvent(Enum<?> eventId, String vmId, String controllerId) {
+        super(eventId, vmId);
+        set(_StorageController.class, controllerId);
+    }
 
-   public String getControllerId() {
-      return get(_StorageController.class, String.class);
-   }
+    public String getControllerId() {
+        return get(_StorageController.class, String.class);
+    }
 
 }

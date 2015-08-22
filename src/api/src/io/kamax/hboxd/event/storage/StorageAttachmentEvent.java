@@ -24,10 +24,10 @@ import io.kamax.hbox.constant.StorageDeviceAttribute;
 
 public abstract class StorageAttachmentEvent extends StorageControllerAttachmentDataModifiedEvent {
 
-   public StorageAttachmentEvent(Enum<?> eventId, String vmId, String controllerId, Long portId, Long deviceId) {
-      super(eventId, vmId, controllerId);
-      set(StorageDeviceAttribute.PortID, portId);
-      set(StorageDeviceAttribute.DeviceID, deviceId);
-   }
+    public StorageAttachmentEvent(Enum<?> eventId, String vmId, String controllerId, Long portId, Long deviceId) {
+        super(eventId, vmId, controllerId);
+        set(StorageDeviceAttribute.PortID, portId);
+        set(StorageDeviceAttribute.DeviceID, deviceId);
+    }
 
 }

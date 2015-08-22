@@ -26,13 +26,13 @@ import io.kamax.hboxd.front._Front;
 
 public abstract class ServerFrontEvent extends Event {
 
-   public ServerFrontEvent(Enum<?> eventId, _Front front) {
-      super(eventId);
-      set(_Front.class, front);
-   }
+    public ServerFrontEvent(Enum<?> eventId, _Front front) {
+        super(eventId);
+        set(_Front.class, front);
+    }
 
-   public _Front getFront() {
-      return get(_Front.class);
-   }
+    public _Front getFront() {
+        return get(_Front.class);
+    }
 
 }

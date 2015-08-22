@@ -36,29 +36,29 @@ import java.util.List;
 
 public class NetAdaptorModifyAction extends ServerAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetAdaptorModify.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetAdaptorModify.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return true;
-   }
+    @Override
+    public boolean isQueueable() {
+        return true;
+    }
 
-   @Override
-   protected void run(Request request, _Hyperbox hbox, _Server srv) {
-      NetAdaptorIn adaptIn = request.get(NetAdaptorIn.class);
-      _NetAdaptor adapt = srv.getHypervisor().getNetAdaptor(adaptIn.getModeId(), adaptIn.getId());
-      if (adapt.getMode().canRenameAdaptor()) {
-         adapt.setLabel(adaptIn.getLabel());
-      }
-      if (!adaptIn.getServices().isEmpty()) {
-         for (NetServiceIO svcIn : adaptIn.getServices()) {
-            _NetService svc = NetServiceIoFactory.get(svcIn);
-            adapt.setService(svc);
-         }
-      }
-   }
+    @Override
+    protected void run(Request request, _Hyperbox hbox, _Server srv) {
+        NetAdaptorIn adaptIn = request.get(NetAdaptorIn.class);
+        _NetAdaptor adapt = srv.getHypervisor().getNetAdaptor(adaptIn.getModeId(), adaptIn.getId());
+        if (adapt.getMode().canRenameAdaptor()) {
+            adapt.setLabel(adaptIn.getLabel());
+        }
+        if (!adaptIn.getServices().isEmpty()) {
+            for (NetServiceIO svcIn : adaptIn.getServices()) {
+                _NetService svc = NetServiceIoFactory.get(svcIn);
+                adapt.setService(svc);
+            }
+        }
+    }
 
 }

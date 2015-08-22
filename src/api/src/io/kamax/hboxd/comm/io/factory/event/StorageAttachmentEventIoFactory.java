@@ -36,35 +36,35 @@ import io.kamax.hboxd.event.storage.StorageAttachmentEvent;
 
 public class StorageAttachmentEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.StorageAttachmentAdded,
-            HyperboxEvents.StorageAttachmentModified,
-            HyperboxEvents.StorageAttachmentRemoved
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.StorageAttachmentAdded,
+                HyperboxEvents.StorageAttachmentModified,
+                HyperboxEvents.StorageAttachmentRemoved
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      StorageAttachmentEvent event = (StorageAttachmentEvent) ev;
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        StorageAttachmentEvent event = (StorageAttachmentEvent) ev;
 
-      _Machine vm = hbox.getServer().getMachine(event.getMachineId());
+        _Machine vm = hbox.getServer().getMachine(event.getMachineId());
 
-      ServerOut srvOut = ServerIoFactory.get();
-      MachineOut vmOut = MachineIoFactory.getSimple(vm);
-      StorageControllerOut stoOut = StorageControllerIoFactory.get(vm.getStorageController(event.getControllerId()));
+        ServerOut srvOut = ServerIoFactory.get();
+        MachineOut vmOut = MachineIoFactory.getSimple(vm);
+        StorageControllerOut stoOut = StorageControllerIoFactory.get(vm.getStorageController(event.getControllerId()));
 
-      switch ((HyperboxEvents) event.getEventId()) {
-         case StorageAttachmentAdded:
-            return new StorageControllerAttachmentDataModifiedEventOut(ev.getTime(), srvOut, vmOut, stoOut);
-         case StorageAttachmentModified:
-            return new StorageControllerAttachmentDataModifiedEventOut(ev.getTime(), srvOut, vmOut, stoOut);
-         case StorageAttachmentRemoved:
-            return new StorageControllerAttachmentDataModifiedEventOut(ev.getTime(), srvOut, vmOut, stoOut);
-         default:
-            return null;
-      }
-   }
+        switch ((HyperboxEvents) event.getEventId()) {
+            case StorageAttachmentAdded:
+                return new StorageControllerAttachmentDataModifiedEventOut(ev.getTime(), srvOut, vmOut, stoOut);
+            case StorageAttachmentModified:
+                return new StorageControllerAttachmentDataModifiedEventOut(ev.getTime(), srvOut, vmOut, stoOut);
+            case StorageAttachmentRemoved:
+                return new StorageControllerAttachmentDataModifiedEventOut(ev.getTime(), srvOut, vmOut, stoOut);
+            default:
+                return null;
+        }
+    }
 
 }

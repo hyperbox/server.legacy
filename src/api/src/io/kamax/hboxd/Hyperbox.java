@@ -29,78 +29,78 @@ import java.util.Set;
 
 public class Hyperbox {
 
-   private static Properties buildProperties = new Properties();
-   private static Version version;
-   private static String cfgFile = "conf/main.cfg";
+    private static Properties buildProperties = new Properties();
+    private static Version version;
+    private static String cfgFile = "conf/main.cfg";
 
-   private static void failedToLoad(Exception e) {
-      version = Version.UNKNOWN;
-      Logger.error("Unable to access the build.properties file: " + e.getMessage());
-      Logger.error("Version and revision will not be accurate");
-   }
+    private static void failedToLoad(Exception e) {
+        version = Version.UNKNOWN;
+        Logger.error("Unable to access the build.properties file: " + e.getMessage());
+        Logger.error("Version and revision will not be accurate");
+    }
 
-   public static Version getVersion() {
-      if (version == null) {
-         loadVersions();
-      }
+    public static Version getVersion() {
+        if (version == null) {
+            loadVersions();
+        }
 
-      return version;
-   }
+        return version;
+    }
 
-   public static String getConfigFilePath() {
-      return cfgFile;
-   }
+    public static String getConfigFilePath() {
+        return cfgFile;
+    }
 
-   private static void loadVersions() {
-      try {
-         buildProperties.load(Hyperbox.class.getResourceAsStream("/server.build.properties"));
-         Version rawVersion = new Version(buildProperties.getProperty("version"));
-         if (rawVersion.isValid()) {
-            version = rawVersion;
-         } else {
-            version = Version.UNKNOWN;
-            Logger.error("Invalid server version in properties: " + rawVersion);
-            Logger.error("Failing back to " + version);
-         }
-      } catch (IOException e) {
-         failedToLoad(e);
-      } catch (NullPointerException e) {
-         failedToLoad(e);
-      }
-   }
+    private static void loadVersions() {
+        try {
+            buildProperties.load(Hyperbox.class.getResourceAsStream("/server.build.properties"));
+            Version rawVersion = new Version(buildProperties.getProperty("version"));
+            if (rawVersion.isValid()) {
+                version = rawVersion;
+            } else {
+                version = Version.UNKNOWN;
+                Logger.error("Invalid server version in properties: " + rawVersion);
+                Logger.error("Failing back to " + version);
+            }
+        } catch (IOException e) {
+            failedToLoad(e);
+        } catch (NullPointerException e) {
+            failedToLoad(e);
+        }
+    }
 
-   static String[] _args;
+    static String[] _args;
 
-   public static void setArgs(String[] args) {
-      if (_args == null) {
-         _args = args;
-      }
-   }
+    public static void setArgs(String[] args) {
+        if (_args == null) {
+            _args = args;
+        }
+    }
 
-   public static String[] getArgs() {
-      return _args;
-   }
+    public static String[] getArgs() {
+        return _args;
+    }
 
-   public static void processArgs(Set<String> args) {
-      HyperboxAPI.processArgs(args);
+    public static void processArgs(Set<String> args) {
+        HyperboxAPI.processArgs(args);
 
-      if (args.contains("-?") || args.contains("--help")) {
-         System.out.println("Hyperbox available executable switches:\n");
-         System.out.println("--help or -? : Print this help");
-         // TODO enable more command line switches
-         System.out.println("--apiversion : Print API version");
-         System.out.println("--apirevision : Print API revision");
-         System.out.println("--netversion : Print Net protocol version");
-         System.out.println("--version : Print Server version");
-         System.out.println("--revision : Print Server revision");
-         System.out.println("--reset-admin-pass : Reset the admin password");
-         System.exit(0);
-      }
-      if (args.contains("--version")) {
-         System.out.println(getVersion());
-         System.exit(0);
-      }
+        if (args.contains("-?") || args.contains("--help")) {
+            System.out.println("Hyperbox available executable switches:\n");
+            System.out.println("--help or -? : Print this help");
+            // TODO enable more command line switches
+            System.out.println("--apiversion : Print API version");
+            System.out.println("--apirevision : Print API revision");
+            System.out.println("--netversion : Print Net protocol version");
+            System.out.println("--version : Print Server version");
+            System.out.println("--revision : Print Server revision");
+            System.out.println("--reset-admin-pass : Reset the admin password");
+            System.exit(0);
+        }
+        if (args.contains("--version")) {
+            System.out.println(getVersion());
+            System.exit(0);
+        }
 
-   }
+    }
 
 }

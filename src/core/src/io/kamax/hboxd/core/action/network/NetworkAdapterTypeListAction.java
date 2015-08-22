@@ -34,23 +34,23 @@ import java.util.List;
 
 public class NetworkAdapterTypeListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetworkAdapterTypeList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetworkAdapterTypeList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      List<String> typesId = hbox.getHypervisor().listNicAdapterTypes();
-      for (String typeId : typesId) {
-         NetworkInterfaceTypeOut nitOut = new NetworkInterfaceTypeOut(typeId);
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, nitOut));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        List<String> typesId = hbox.getHypervisor().listNicAdapterTypes();
+        for (String typeId : typesId) {
+            NetworkInterfaceTypeOut nitOut = new NetworkInterfaceTypeOut(typeId);
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, nitOut));
+        }
+    }
 
 }

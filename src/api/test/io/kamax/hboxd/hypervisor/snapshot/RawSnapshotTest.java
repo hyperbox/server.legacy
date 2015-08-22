@@ -28,31 +28,31 @@ import io.kamax.hboxd.hypervisor.vm.snapshot._RawSnapshot;
 
 public class RawSnapshotTest {
 
-   private RawSnapshotTest() {
-      // not in use
-   }
+    private RawSnapshotTest() {
+        // not in use
+    }
 
-   public static void validateSimple(_RawSnapshot snap) {
-      assertFalse(snap.getUuid().isEmpty());
-      assertFalse(snap.getMachineId().isEmpty());
-   }
+    public static void validateSimple(_RawSnapshot snap) {
+        assertFalse(snap.getUuid().isEmpty());
+        assertFalse(snap.getMachineId().isEmpty());
+    }
 
-   public static void validateFull(_RawSnapshot snap) {
-      validateSimple(snap);
-      assertFalse(snap.getName().isEmpty());
-      assertNotNull(snap.getDescription());
-      assertNotNull(snap.getChildren());
-      if (snap.hasChildren()) {
-         assertFalse(snap.getChildren().isEmpty());
-      } else {
-         assertTrue(snap.getChildren().isEmpty());
-      }
-      if (snap.hasParent()) {
-         assertNotNull(snap.getParent());
-      } else {
-         assertNull(snap.getParent());
-      }
-      assertNotNull(snap.isOnline());
-   }
+    public static void validateFull(_RawSnapshot snap) {
+        validateSimple(snap);
+        assertFalse(snap.getName().isEmpty());
+        assertNotNull(snap.getDescription());
+        assertNotNull(snap.getChildren());
+        if (snap.hasChildren()) {
+            assertFalse(snap.getChildren().isEmpty());
+        } else {
+            assertTrue(snap.getChildren().isEmpty());
+        }
+        if (snap.hasParent()) {
+            assertNotNull(snap.getParent());
+        } else {
+            assertNull(snap.getParent());
+        }
+        assertNotNull(snap.isOnline());
+    }
 
 }

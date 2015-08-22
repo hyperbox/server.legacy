@@ -34,148 +34,148 @@ import java.util.Set;
 
 public class Module implements _Module {
 
-   private String id;
-   private String descFile;
-   private String base;
-   private String name;
-   private String version;
-   private String vendor;
-   private String website;
-   private Map<String, String> providers = new HashMap<String, String>();
+    private String id;
+    private String descFile;
+    private String base;
+    private String name;
+    private String version;
+    private String vendor;
+    private String website;
+    private Map<String, String> providers = new HashMap<String, String>();
 
-   private _ModuleClassLoader loader;
-   private Map<Class<?>, Class<?>> providerClasses;
+    private _ModuleClassLoader loader;
+    private Map<Class<?>, Class<?>> providerClasses;
 
-   public Module(String id, File descFile, File base, String name, String version, String vendor, String desc, String website,
-         Map<String, String> providers) {
-      this.id = id;
-      this.descFile = descFile.getAbsolutePath();
-      this.base = base.getAbsolutePath();
-      this.name = name;
-      this.version = version;
-      this.website = website;
-      this.providers = providers == null ? this.providers : providers;
-   }
+    public Module(String id, File descFile, File base, String name, String version, String vendor, String desc, String website,
+            Map<String, String> providers) {
+        this.id = id;
+        this.descFile = descFile.getAbsolutePath();
+        this.base = base.getAbsolutePath();
+        this.name = name;
+        this.version = version;
+        this.website = website;
+        this.providers = providers == null ? this.providers : providers;
+    }
 
-   @Override
-   public String getId() {
-      return id;
-   }
+    @Override
+    public String getId() {
+        return id;
+    }
 
-   @Override
-   public String getDescriptor() {
-      return descFile;
-   }
+    @Override
+    public String getDescriptor() {
+        return descFile;
+    }
 
-   @Override
-   public String getName() {
-      return name;
-   }
+    @Override
+    public String getName() {
+        return name;
+    }
 
-   @Override
-   public String getLocation() {
-      return base;
-   }
+    @Override
+    public String getLocation() {
+        return base;
+    }
 
-   @Override
-   public String getVersion() {
-      return version;
-   }
+    @Override
+    public String getVersion() {
+        return version;
+    }
 
-   @Override
-   public String getVendor() {
-      return vendor;
-   }
+    @Override
+    public String getVendor() {
+        return vendor;
+    }
 
-   @Override
-   public String getUrl() {
-      return website;
-   }
+    @Override
+    public String getUrl() {
+        return website;
+    }
 
-   @Override
-   public String toString() {
-      return "Module ID " + getId() + " (" + getName() + ")";
-   }
+    @Override
+    public String toString() {
+        return "Module ID " + getId() + " (" + getName() + ")";
+    }
 
-   @Override
-   public void load() throws ModuleException {
-      if (isLoaded()) {
-         throw new ModuleException("Module is already loaded");
-      }
+    @Override
+    public void load() throws ModuleException {
+        if (isLoaded()) {
+            throw new ModuleException("Module is already loaded");
+        }
 
-      loader = new ModuleClassLoader();
-      loader.load(getLocation());
+        loader = new ModuleClassLoader();
+        loader.load(getLocation());
 
-      try {
-         Map<Class<?>, Class<?>> providersRaw = new HashMap<Class<?>, Class<?>>();
-         for (String typeName : providers.keySet()) {
-            Class<?> type = loader.createClass(typeName);
-            Class<?> provider = loader.createClass(providers.get(typeName));
-            providersRaw.put(type, provider);
-         }
-         providerClasses = providersRaw;
-      } catch (Throwable t) {
-         throw new ModuleException("Unable to create provider classes: " + t.getClass().getSimpleName() + ": " + t.getMessage());
-      }
+        try {
+            Map<Class<?>, Class<?>> providersRaw = new HashMap<Class<?>, Class<?>>();
+            for (String typeName : providers.keySet()) {
+                Class<?> type = loader.createClass(typeName);
+                Class<?> provider = loader.createClass(providers.get(typeName));
+                providersRaw.put(type, provider);
+            }
+            providerClasses = providersRaw;
+        } catch (Throwable t) {
+            throw new ModuleException("Unable to create provider classes: " + t.getClass().getSimpleName() + ": " + t.getMessage());
+        }
 
-      ClassManager.reload(getRessources(), loader.getClassLoader());
-      EventManager.post(new ModuleLoadedEvent(this));
-   }
+        ClassManager.reload(getRessources(), loader.getClassLoader());
+        EventManager.post(new ModuleLoadedEvent(this));
+    }
 
-   @Override
-   public boolean isLoaded() {
-      return (loader != null) && (providers != null);
-   }
+    @Override
+    public boolean isLoaded() {
+        return (loader != null) && (providers != null);
+    }
 
-   @Override
-   public boolean isReady() {
-      return isLoaded();
-   }
+    @Override
+    public boolean isReady() {
+        return isLoaded();
+    }
 
-   @Override
-   public Set<URL> getRessources() {
-      if (!isReady()) {
-         throw new ModuleException("Module must be enabled and loaded before retrieving list of ressources");
-      }
+    @Override
+    public Set<URL> getRessources() {
+        if (!isReady()) {
+            throw new ModuleException("Module must be enabled and loaded before retrieving list of ressources");
+        }
 
-      return loader.getRessources();
-   }
+        return loader.getRessources();
+    }
 
-   @Override
-   public Set<Class<?>> getTypes() {
-      if (!isReady()) {
-         throw new ModuleException("Module is not ready");
-      }
+    @Override
+    public Set<Class<?>> getTypes() {
+        if (!isReady()) {
+            throw new ModuleException("Module is not ready");
+        }
 
-      return new HashSet<Class<?>>(providerClasses.keySet());
-   }
+        return new HashSet<Class<?>>(providerClasses.keySet());
+    }
 
-   @Override
-   public Class<?> getProvider(Class<?> type) throws ModuleException {
-      if (!isReady()) {
-         throw new ModuleException("Module is not ready");
-      }
+    @Override
+    public Class<?> getProvider(Class<?> type) throws ModuleException {
+        if (!isReady()) {
+            throw new ModuleException("Module is not ready");
+        }
 
-      if (!providerClasses.containsKey(type)) {
-         throw new ModuleException("No such provider type found: " + type.getName());
-      }
+        if (!providerClasses.containsKey(type)) {
+            throw new ModuleException("No such provider type found: " + type.getName());
+        }
 
-      return providerClasses.get(type);
-   }
+        return providerClasses.get(type);
+    }
 
-   @Override
-   public Object buildProvider(Class<?> type) throws ModuleException {
-      if (!isReady()) {
-         throw new ModuleException("Module is not ready");
-      }
+    @Override
+    public Object buildProvider(Class<?> type) throws ModuleException {
+        if (!isReady()) {
+            throw new ModuleException("Module is not ready");
+        }
 
-      try {
-         return getProvider(type).newInstance();
-      } catch (InstantiationException e) {
-         throw new ModuleException("Couldn't create an instance: " + e.getMessage());
-      } catch (IllegalAccessException e) {
-         throw new ModuleException("Couldn't create an instance: " + e.getMessage());
-      }
-   }
+        try {
+            return getProvider(type).newInstance();
+        } catch (InstantiationException e) {
+            throw new ModuleException("Couldn't create an instance: " + e.getMessage());
+        } catch (IllegalAccessException e) {
+            throw new ModuleException("Couldn't create an instance: " + e.getMessage());
+        }
+    }
 
 }

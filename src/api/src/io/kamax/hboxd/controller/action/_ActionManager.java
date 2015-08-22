@@ -25,12 +25,12 @@ import io.kamax.hbox.exception.HyperboxException;
 
 public interface _ActionManager {
 
-   public void start() throws HyperboxException;
+    public void start() throws HyperboxException;
 
-   public void stop();
+    public void stop();
 
-   public _HyperboxAction get(Request req);
+    public _HyperboxAction get(Request req);
 
-   public _HyperboxAction get(String id);
+    public _HyperboxAction get(String id);
 
 }

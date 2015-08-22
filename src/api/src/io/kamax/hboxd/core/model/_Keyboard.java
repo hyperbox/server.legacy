@@ -25,10 +25,10 @@ import io.kamax.hboxd.hypervisor._RawItem;
 
 public interface _Keyboard extends _RawItem {
 
-   public String getMode();
+    public String getMode();
 
-   public void setMode(String mode);
+    public void setMode(String mode);
 
-   public void setMode(KeyboardMode mode);
+    public void setMode(KeyboardMode mode);
 
 }

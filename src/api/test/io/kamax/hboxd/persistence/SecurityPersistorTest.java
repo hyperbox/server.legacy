@@ -32,28 +32,28 @@ import org.junit.rules.TestName;
 
 public abstract class SecurityPersistorTest {
 
-   @Rule
-   public TestName testName = new TestName();
+    @Rule
+    public TestName testName = new TestName();
 
-   private static boolean initialized = false;
-   protected static _SecurityPersistor persistor;
+    private static boolean initialized = false;
+    protected static _SecurityPersistor persistor;
 
-   public static void init(_SecurityPersistor persistor) throws HyperboxException {
-      Logger.setLevel(LogLevel.Tracking);
+    public static void init(_SecurityPersistor persistor) throws HyperboxException {
+        Logger.setLevel(LogLevel.Tracking);
 
-      SecurityPersistorTest.persistor = persistor;
-      initialized = true;
-   }
+        SecurityPersistorTest.persistor = persistor;
+        initialized = true;
+    }
 
-   @Before
-   public void before() {
-      assertTrue("SecurityPersistorTest is not initiazlied, call init() in @BeforeClass", initialized);
-      System.out.println("--------------- START OF " + testName.getMethodName() + "-----------------------");
-   }
+    @Before
+    public void before() {
+        assertTrue("SecurityPersistorTest is not initiazlied, call init() in @BeforeClass", initialized);
+        System.out.println("--------------- START OF " + testName.getMethodName() + "-----------------------");
+    }
 
-   @After
-   public void after() {
-      System.out.println("--------------- END OF " + testName.getMethodName() + "-----------------------");
-   }
+    @After
+    public void after() {
+        System.out.println("--------------- END OF " + testName.getMethodName() + "-----------------------");
+    }
 
 }

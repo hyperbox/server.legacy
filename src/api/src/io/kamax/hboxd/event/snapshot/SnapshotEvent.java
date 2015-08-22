@@ -24,16 +24,16 @@ import io.kamax.hboxd.event.machine.MachineEvent;
 
 public abstract class SnapshotEvent extends MachineEvent {
 
-   private String snapUuid;
+    private String snapUuid;
 
-   public SnapshotEvent(Enum<?> id, String machineUuid, String snapUuid) {
-      super(id, machineUuid);
-      this.snapUuid = snapUuid;
-      snapUuid.isEmpty();
-   }
+    public SnapshotEvent(Enum<?> id, String machineUuid, String snapUuid) {
+        super(id, machineUuid);
+        this.snapUuid = snapUuid;
+        snapUuid.isEmpty();
+    }
 
-   public String getSnapshotUuid() {
-      return snapUuid;
-   }
+    public String getSnapshotUuid() {
+        return snapUuid;
+    }
 
 }

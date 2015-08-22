@@ -38,30 +38,30 @@ import java.util.List;
 
 public final class StoreItemListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.StoreItemList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.StoreItemList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      StoreIn sIn = request.get(StoreIn.class);
-      StoreItemIn siIn;
-      if (request.has(StoreItemIn.class)) {
-         siIn = request.get(StoreItemIn.class);
-      } else {
-         siIn = new StoreItemIn();
-      }
-      List<_StoreItem> siList = hbox.getStoreManager().getStore(sIn.getId()).getItem(siIn.getPath()).listItems();
-      List<StoreItemOut> siOutList = StoreItemIoFactory.get(siList);
-      for (StoreItemOut siOut : siOutList) {
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, siOut));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        StoreIn sIn = request.get(StoreIn.class);
+        StoreItemIn siIn;
+        if (request.has(StoreItemIn.class)) {
+            siIn = request.get(StoreItemIn.class);
+        } else {
+            siIn = new StoreItemIn();
+        }
+        List<_StoreItem> siList = hbox.getStoreManager().getStore(sIn.getId()).getItem(siIn.getPath()).listItems();
+        List<StoreItemOut> siOutList = StoreItemIoFactory.get(siList);
+        for (StoreItemOut siOut : siOutList) {
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, siOut));
+        }
+    }
 
 }

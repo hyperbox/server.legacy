@@ -26,52 +26,52 @@ import java.util.List;
 
 public interface _StoreManager {
 
-   public void init(_StorePersistor persistor) throws HyperboxException;
+    public void init(_StorePersistor persistor) throws HyperboxException;
 
-   public void start() throws HyperboxException;
+    public void start() throws HyperboxException;
 
-   public void stop();
+    public void stop();
 
-   public List<_Store> listStores();
+    public List<_Store> listStores();
 
-   public _Store getStore(String id);
+    public _Store getStore(String id);
 
-   /**
-    * Will create the store using the location given, register it under the given label and open the store
-    * 
-    * @param location Location of the store
-    * @param label The label to apply
-    * @return The newly created & registered Store
-    */
-   public _Store createStore(String location, String label);
+    /**
+     * Will create the store using the location given, register it under the given label and open the store
+     * 
+     * @param location Location of the store
+     * @param label The label to apply
+     * @return The newly created & registered Store
+     */
+    public _Store createStore(String location, String label);
 
-   /**
-    * Will register the store using the path given under the given label and open the store
-    * 
-    * @param location Full path for the store - must be a directory
-    * @param label The label to apply
-    * @return The newly registered Store
-    */
-   public _Store registerStore(String location, String label);
+    /**
+     * Will register the store using the path given under the given label and open the store
+     * 
+     * @param location Full path for the store - must be a directory
+     * @param label The label to apply
+     * @return The newly registered Store
+     */
+    public _Store registerStore(String location, String label);
 
-   /**
-    * <p>
-    * Will close the store and unregister it from the store list.<br/>
-    * This operation will not delete the actual implementation.
-    * </p>
-    * 
-    * @param id The Store ID to unregister
-    */
-   public void unregisterStore(String id);
+    /**
+     * <p>
+     * Will close the store and unregister it from the store list.<br/>
+     * This operation will not delete the actual implementation.
+     * </p>
+     * 
+     * @param id The Store ID to unregister
+     */
+    public void unregisterStore(String id);
 
-   /**
-    * <p>
-    * Will close the store, unregister it and try to delete the implementation.<br/>
-    * This call could fail if the store is not empty and the implementation doesn't allow the removal of non-empty containers.<br/>
-    * </p>
-    * 
-    * @param id The Store ID to unregister & delete
-    */
-   public void deleteStore(String id);
+    /**
+     * <p>
+     * Will close the store, unregister it and try to delete the implementation.<br/>
+     * This call could fail if the store is not empty and the implementation doesn't allow the removal of non-empty containers.<br/>
+     * </p>
+     * 
+     * @param id The Store ID to unregister & delete
+     */
+    public void deleteStore(String id);
 
 }

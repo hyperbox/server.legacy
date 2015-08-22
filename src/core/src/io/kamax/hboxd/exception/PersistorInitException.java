@@ -22,11 +22,12 @@
 package io.kamax.hboxd.exception;
 
 
-@SuppressWarnings("serial")
 public class PersistorInitException extends PersistorException {
 
-   public PersistorInitException(String s, Throwable e) {
-      super(s, e);
-   }
+    private static final long serialVersionUID = 6957718166546139479L;
+
+    public PersistorInitException(String s, Throwable e) {
+        super(s, e);
+    }
 
 }

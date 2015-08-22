@@ -24,8 +24,8 @@ import io.kamax.hbox.event.HyperboxEvents;
 
 public class SnapshotRestoredEvent extends SnapshotEvent {
 
-   public SnapshotRestoredEvent(String machineUuid, String snapUuid) {
-      super(HyperboxEvents.SnapshotRestored, machineUuid, snapUuid);
-   }
+    public SnapshotRestoredEvent(String machineUuid, String snapUuid) {
+        super(HyperboxEvents.SnapshotRestored, machineUuid, snapUuid);
+    }
 
 }

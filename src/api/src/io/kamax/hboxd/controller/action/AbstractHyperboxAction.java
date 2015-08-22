@@ -24,34 +24,34 @@ import io.kamax.hbox.exception.HyperboxException;
 
 public abstract class AbstractHyperboxAction implements _HyperboxAction {
 
-   @Override
-   public Class<?>[] getRequiredClasses() {
-      return new Class<?>[] {};
-   }
+    @Override
+    public Class<?>[] getRequiredClasses() {
+        return new Class<?>[] {};
+    }
 
-   @Override
-   public Enum<?>[] getRequiredEnums() {
-      return new Enum<?>[] {};
-   }
+    @Override
+    public Enum<?>[] getRequiredEnums() {
+        return new Enum<?>[] {};
+    }
 
-   @Override
-   public String[] getRequiredData() {
-      return new String[] {};
-   }
+    @Override
+    public String[] getRequiredData() {
+        return new String[] {};
+    }
 
-   @Override
-   public void pause() {
-      throw new HyperboxException("This operation is not supported");
-   }
+    @Override
+    public void pause() {
+        throw new HyperboxException("This operation is not supported");
+    }
 
-   @Override
-   public boolean isCancelable() {
-      return false;
-   }
+    @Override
+    public boolean isCancelable() {
+        return false;
+    }
 
-   @Override
-   public void cancel() {
-      throw new HyperboxException("This operation is not supported");
-   }
+    @Override
+    public void cancel() {
+        throw new HyperboxException("This operation is not supported");
+    }
 
 }

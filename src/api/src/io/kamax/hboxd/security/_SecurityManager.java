@@ -33,69 +33,69 @@ import java.util.List;
 
 public interface _SecurityManager {
 
-   public _User init(_SecurityPersistor persistor) throws HyperboxException;
+    public _User init(_SecurityPersistor persistor) throws HyperboxException;
 
-   public void start() throws HyperboxException;
+    public void start() throws HyperboxException;
 
-   public void stop();
+    public void stop();
 
-   public void authenticate(String login, char[] password);
+    public void authenticate(String login, char[] password);
 
-   public void authorize(Request req) throws SecurityException;
+    public void authorize(Request req) throws SecurityException;
 
-   public boolean isAuthorized(_User u, _Event ev);
+    public boolean isAuthorized(_User u, _Event ev);
 
-   public void authorize(SecurityItem item, SecurityAction action);
+    public void authorize(SecurityItem item, SecurityAction action);
 
-   public boolean isAuthorized(SecurityItem item, SecurityAction action);
+    public boolean isAuthorized(SecurityItem item, SecurityAction action);
 
-   public void authorize(SecurityItem item, SecurityAction action, String itemId);
+    public void authorize(SecurityItem item, SecurityAction action, String itemId);
 
-   public boolean isAuthorized(SecurityItem item, SecurityAction action, String itemId);
+    public boolean isAuthorized(SecurityItem item, SecurityAction action, String itemId);
 
-   public List<_User> listUsers();
+    public List<_User> listUsers();
 
-   public _User getUser(String usrId);
+    public _User getUser(String usrId);
 
-   public _User addUser(UserIn uIn);
+    public _User addUser(UserIn uIn);
 
-   public void removeUser(String usrId);
+    public void removeUser(String usrId);
 
-   public _User modifyUser(UserIn uIn);
+    public _User modifyUser(UserIn uIn);
 
-   public void setUserPassword(String userId, char[] password);
+    public void setUserPassword(String userId, char[] password);
 
-   public void set(_User usr, SecurityItem itemType, SecurityAction action, boolean isAllowed);
+    public void set(_User usr, SecurityItem itemType, SecurityAction action, boolean isAllowed);
 
-   public void removePermission(_User usr);
+    public void removePermission(_User usr);
 
-   public void remove(_User usr, SecurityItem itemType, SecurityAction action);
+    public void remove(_User usr, SecurityItem itemType, SecurityAction action);
 
-   public void set(_User usr, SecurityItem itemType, SecurityAction action, String itemId, boolean isAllowed);
+    public void set(_User usr, SecurityItem itemType, SecurityAction action, String itemId, boolean isAllowed);
 
-   public void remove(_User usr, SecurityItem itemType, SecurityAction action, String itemId);
+    public void remove(_User usr, SecurityItem itemType, SecurityAction action, String itemId);
 
-   public List<_ActionPermission> listActionPermissions(_User usr);
+    public List<_ActionPermission> listActionPermissions(_User usr);
 
-   public List<_ItemPermission> listItemPermissions(_User usr);
+    public List<_ItemPermission> listItemPermissions(_User usr);
 
-   /**
-    * List possible permissions for the given entity by using its entity type and ID
-    * 
-    * @param entityTypeId The Entity Type ID to lookup - See {@link EntityType} for default values
-    * @param entityId The Entity ID to lookup
-    * @return List of possible Permission IDs
-    */
-   public List<_EntityPermission> listPermission(String entityTypeId, String entityId);
+    /**
+     * List possible permissions for the given entity by using its entity type and ID
+     * 
+     * @param entityTypeId The Entity Type ID to lookup - See {@link EntityType} for default values
+     * @param entityId The Entity ID to lookup
+     * @return List of possible Permission IDs
+     */
+    public List<_EntityPermission> listPermission(String entityTypeId, String entityId);
 
-   /**
-    * List user permissions for the given entity by using its entity type and ID
-    * 
-    * @param entityTypeId The Entity Type ID - See {@link EntityType} for default values
-    * @param entityId The Entity ID
-    * @param usr The User to lookup the permission for
-    * @return List of possible Permission IDs
-    */
-   public List<_UserPermission> listPermission(String entityTypeId, String entityId, _User usr);
+    /**
+     * List user permissions for the given entity by using its entity type and ID
+     * 
+     * @param entityTypeId The Entity Type ID - See {@link EntityType} for default values
+     * @param entityId The Entity ID
+     * @param usr The User to lookup the permission for
+     * @return List of possible Permission IDs
+     */
+    public List<_UserPermission> listPermission(String entityTypeId, String entityId, _User usr);
 
 }

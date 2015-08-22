@@ -24,14 +24,14 @@ import io.kamax.hbox.event.HyperboxEvents;
 
 public class MachineRegistrationEvent extends MachineEvent {
 
-   private Boolean isRegistered;
+    private Boolean isRegistered;
 
-   public MachineRegistrationEvent(String id, Boolean isRegistrated) {
-      super(HyperboxEvents.MachineRegistration, id);
-      this.isRegistered = isRegistrated;
-   }
+    public MachineRegistrationEvent(String id, Boolean isRegistrated) {
+        super(HyperboxEvents.MachineRegistration, id);
+        this.isRegistered = isRegistrated;
+    }
 
-   public Boolean isRegistrated() {
-      return isRegistered;
-   }
+    public Boolean isRegistrated() {
+        return isRegistered;
+    }
 }

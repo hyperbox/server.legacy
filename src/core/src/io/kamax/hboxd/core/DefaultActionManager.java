@@ -34,45 +34,45 @@ import java.util.Set;
 
 public class DefaultActionManager implements _ActionManager {
 
-   private Map<String, _HyperboxAction> actions = new HashMap<String, _HyperboxAction>();;
+    private Map<String, _HyperboxAction> actions = new HashMap<String, _HyperboxAction>();;
 
-   @Override
-   public void start() throws HyperboxException {
+    @Override
+    public void start() throws HyperboxException {
 
-      Set<_HyperboxAction> subTypes = ClassManager.getAtLeastOneOrFail(_HyperboxAction.class);
-      for (_HyperboxAction action : subTypes) {
-         List<String> mappings = action.getRegistrations();
-         if ((mappings == null) || (mappings.size() == 0)) {
-            Logger.warning("Failed to load " + action.getClass().getSimpleName() + " : No provided mappings");
-         } else {
-            for (String mapping : mappings) {
-               actions.put(mapping, action);
-               Logger.debug("Loaded " + action.getClass().getSimpleName() + " and mapped under " + mapping);
+        Set<_HyperboxAction> subTypes = ClassManager.getAtLeastOneOrFail(_HyperboxAction.class);
+        for (_HyperboxAction action : subTypes) {
+            List<String> mappings = action.getRegistrations();
+            if ((mappings == null) || (mappings.size() == 0)) {
+                Logger.warning("Failed to load " + action.getClass().getSimpleName() + " : No provided mappings");
+            } else {
+                for (String mapping : mappings) {
+                    actions.put(mapping, action);
+                    Logger.debug("Loaded " + action.getClass().getSimpleName() + " and mapped under " + mapping);
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   @Override
-   public _HyperboxAction get(Request req) {
-      return get(req.getCommand() + req.getName());
-   }
+    @Override
+    public _HyperboxAction get(Request req) {
+        return get(req.getCommand() + req.getName());
+    }
 
-   @Override
-   public _HyperboxAction get(String id) {
-      if (actions.containsKey(id)) {
-         _HyperboxAction ca = actions.get(id);
-         Logger.debug("Found " + ca.getClass().getSimpleName() + " for " + id);
-         return ca;
-      } else {
-         throw new HyperboxCommunicationException("No matching action for " + id);
-      }
-   }
+    @Override
+    public _HyperboxAction get(String id) {
+        if (actions.containsKey(id)) {
+            _HyperboxAction ca = actions.get(id);
+            Logger.debug("Found " + ca.getClass().getSimpleName() + " for " + id);
+            return ca;
+        } else {
+            throw new HyperboxCommunicationException("No matching action for " + id);
+        }
+    }
 
-   @Override
-   public void stop() {
+    @Override
+    public void stop() {
 
-      actions.clear();
-   }
+        actions.clear();
+    }
 
 }

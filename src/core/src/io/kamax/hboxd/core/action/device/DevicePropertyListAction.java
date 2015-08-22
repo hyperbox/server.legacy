@@ -39,27 +39,27 @@ import java.util.List;
 
 public class DevicePropertyListAction extends AbstractHyperboxMultiTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.DevicePropertyList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.DevicePropertyList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      ServerIn srvIn = request.get(ServerIn.class);
-      MachineIn mIn = request.get(MachineIn.class);
-      DeviceIn dIn = request.get(DeviceIn.class);
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        ServerIn srvIn = request.get(ServerIn.class);
+        MachineIn mIn = request.get(MachineIn.class);
+        DeviceIn dIn = request.get(DeviceIn.class);
 
-      List<_Setting> settings = hbox.getServer(srvIn.getId()).getMachine(mIn.getUuid()).getDevice(dIn.getId()).getSettings();
-      List<SettingIO> settingsIo = SettingIoFactory.getList(settings);
-      for (SettingIO settingIo : settingsIo) {
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, SettingIO.class, settingIo));
-      }
-   }
+        List<_Setting> settings = hbox.getServer(srvIn.getId()).getMachine(mIn.getUuid()).getDevice(dIn.getId()).getSettings();
+        List<SettingIO> settingsIo = SettingIoFactory.getList(settings);
+        for (SettingIO settingIo : settingsIo) {
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, SettingIO.class, settingIo));
+        }
+    }
 
 }

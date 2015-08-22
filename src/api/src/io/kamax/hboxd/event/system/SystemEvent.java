@@ -24,8 +24,8 @@ import io.kamax.hbox.event.Event;
 
 public abstract class SystemEvent extends Event {
 
-   public SystemEvent(Enum<?> eventId) {
-      super(eventId);
-   }
+    public SystemEvent(Enum<?> eventId) {
+        super(eventId);
+    }
 
 }

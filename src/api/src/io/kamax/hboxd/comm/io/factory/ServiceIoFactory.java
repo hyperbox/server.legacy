@@ -25,12 +25,12 @@ import io.kamax.hboxd.service._Service;
 
 public class ServiceIoFactory {
 
-   private ServiceIoFactory() {
-      // static only
-   }
+    private ServiceIoFactory() {
+        // static only
+    }
 
-   public static ServiceOut get(_Service svc) {
-      return new ServiceOut(svc.getId(), svc.getState());
-   }
+    public static ServiceOut get(_Service svc) {
+        return new ServiceOut(svc.getId(), svc.getState());
+    }
 
 }

@@ -27,18 +27,18 @@ import io.kamax.hboxd.server._Server;
 
 public abstract class ServerAction extends ASingleTaskAction {
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      _Server srv = null;
-      if (request.has(ServerIn.class)) {
-         srv = hbox.getServer(request.get(ServerIn.class).getId());
-      } else {
-         srv = hbox.getServer();
-      }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        _Server srv = null;
+        if (request.has(ServerIn.class)) {
+            srv = hbox.getServer(request.get(ServerIn.class).getId());
+        } else {
+            srv = hbox.getServer();
+        }
 
-      run(request, hbox, srv);
-   }
+        run(request, hbox, srv);
+    }
 
-   protected abstract void run(Request request, _Hyperbox hbox, _Server srv);
+    protected abstract void run(Request request, _Hyperbox hbox, _Server srv);
 
 }

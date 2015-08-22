@@ -23,11 +23,13 @@ package io.kamax.hboxd.exception;
 import io.kamax.hbox.comm.Request;
 import io.kamax.hbox.exception.HyperboxException;
 
-@SuppressWarnings("serial")
+
 public class RequestCanceledException extends HyperboxException {
 
-   public RequestCanceledException(Request t) {
-      super("Request #" + t.getExchangeId() + " has been canceled");
-   }
+    private static final long serialVersionUID = -7616025920179969744L;
+
+    public RequestCanceledException(Request t) {
+        super("Request #" + t.getExchangeId() + " has been canceled");
+    }
 
 }

@@ -35,22 +35,22 @@ import java.util.List;
 
 public class ModuleListAction extends ASingleTaskAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ModuleList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ModuleList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox) {
-      List<ModuleOut> listOut = ModuleIoFactory.get(hbox.getModuleManager().listModules());
-      for (ModuleOut modOut : listOut) {
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, modOut));
-      }
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox) {
+        List<ModuleOut> listOut = ModuleIoFactory.get(hbox.getModuleManager().listModules());
+        for (ModuleOut modOut : listOut) {
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, modOut));
+        }
+    }
 
 }

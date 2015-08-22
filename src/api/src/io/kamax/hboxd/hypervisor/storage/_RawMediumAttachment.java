@@ -24,20 +24,20 @@ import io.kamax.hboxd.hypervisor.vm._RawVM;
 
 public interface _RawMediumAttachment {
 
-   public _RawVM getMachine();
+    public _RawVM getMachine();
 
-   public boolean hasMedium();
+    public boolean hasMedium();
 
-   public _RawMedium getMedium();
+    public _RawMedium getMedium();
 
-   public _RawStorageController getController();
+    public _RawStorageController getController();
 
-   public long getPortId();
+    public long getPortId();
 
-   public long getDeviceId();
+    public long getDeviceId();
 
-   public String getDeviceType();
+    public String getDeviceType();
 
-   public boolean isPassThrough();
+    public boolean isPassThrough();
 
 }

@@ -31,21 +31,21 @@ import io.kamax.hboxd.core._Hyperbox;
 
 public final class SessionEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.SessionState
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.SessionState
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      switch ((HyperboxEvents) ev.getEventId()) {
-         case SessionState:
-            return new SessionStateEventOut(ev.getTime(), ServerIoFactory.get(), ev.get(SessionOut.class), ev.get(SessionStates.class));
-         default:
-            return null;
-      }
-   }
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        switch ((HyperboxEvents) ev.getEventId()) {
+            case SessionState:
+                return new SessionStateEventOut(ev.getTime(), ServerIoFactory.get(), ev.get(SessionOut.class), ev.get(SessionStates.class));
+            default:
+                return null;
+        }
+    }
 
 }

@@ -22,10 +22,10 @@ package io.kamax.hboxd.hypervisor;
 
 public interface _RawOsType {
 
-   public String getId();
+    public String getId();
 
-   public String getName();
+    public String getName();
 
-   public long getBitness();
+    public long getBitness();
 
 }

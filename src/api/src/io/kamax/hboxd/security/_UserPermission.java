@@ -22,8 +22,8 @@ package io.kamax.hboxd.security;
 
 public interface _UserPermission extends _EntityPermission {
 
-   public String getUserId();
+    public String getUserId();
 
-   public boolean isAllowed();
+    public boolean isAllowed();
 
 }

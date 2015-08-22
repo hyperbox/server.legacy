@@ -24,35 +24,35 @@ import io.kamax.hboxd.hypervisor.host._RawHost;
 
 public class Host implements _Host {
 
-   private _RawHost rawHost;
+    private _RawHost rawHost;
 
-   public Host(_RawHost rawHost) {
-      this.rawHost = rawHost;
-   }
+    public Host(_RawHost rawHost) {
+        this.rawHost = rawHost;
+    }
 
-   @Override
-   public String getHostname() {
-      return rawHost.getHostname();
-   }
+    @Override
+    public String getHostname() {
+        return rawHost.getHostname();
+    }
 
-   @Override
-   public String getOSName() {
-      return rawHost.getOSName();
-   }
+    @Override
+    public String getOSName() {
+        return rawHost.getOSName();
+    }
 
-   @Override
-   public String getOSVersion() {
-      return rawHost.getOSVersion();
-   }
+    @Override
+    public String getOSVersion() {
+        return rawHost.getOSVersion();
+    }
 
-   @Override
-   public long getMemorySize() {
-      return rawHost.getMemorySize();
-   }
+    @Override
+    public long getMemorySize() {
+        return rawHost.getMemorySize();
+    }
 
-   @Override
-   public long getMemoryAvailable() {
-      return rawHost.getMemoryAvailable();
-   }
+    @Override
+    public long getMemoryAvailable() {
+        return rawHost.getMemoryAvailable();
+    }
 
 }

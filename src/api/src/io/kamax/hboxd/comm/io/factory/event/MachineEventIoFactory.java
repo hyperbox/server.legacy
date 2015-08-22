@@ -40,42 +40,42 @@ import io.kamax.hboxd.event.machine.MachineStateEvent;
 
 public final class MachineEventIoFactory implements _EventIoFactory {
 
-   private MachineOut getObjOut(String id) {
-      try {
-         return MachineIoFactory.get(HBoxServer.get().getMachine(id));
-      } catch (HyperboxException e) {
-         return MachineIoFactory.get(id, MachineStates.Unknown.getId());
-      }
-   }
+    private MachineOut getObjOut(String id) {
+        try {
+            return MachineIoFactory.get(HBoxServer.get().getMachine(id));
+        } catch (HyperboxException e) {
+            return MachineIoFactory.get(id, MachineStates.Unknown.getId());
+        }
+    }
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.MachineState,
-            HyperboxEvents.MachineRegistration,
-            HyperboxEvents.MachineDataChange,
-            HyperboxEvents.MachineSnapshotDataChange
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.MachineState,
+                HyperboxEvents.MachineRegistration,
+                HyperboxEvents.MachineDataChange,
+                HyperboxEvents.MachineSnapshotDataChange
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      MachineEvent mEv = (MachineEvent) ev;
-      MachineOut mOut = getObjOut(mEv.getMachineId());
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        MachineEvent mEv = (MachineEvent) ev;
+        MachineOut mOut = getObjOut(mEv.getMachineId());
 
-      switch ((HyperboxEvents) ev.getEventId()) {
-         case MachineState:
-            return new MachineStateEventOut(mEv.getTime(), ServerIoFactory.get(), mOut, ((MachineStateEvent) ev).getState());
-         case MachineRegistration:
-            return new MachineRegistrationEventOut(mEv.getTime(), ServerIoFactory.get(), mOut,
-                  ((MachineRegistrationEvent) mEv).isRegistrated());
-         case MachineDataChange:
-            return new MachineDataChangeEventOut(mEv.getTime(), ServerIoFactory.get(), mOut);
-         case MachineSnapshotDataChange:
-            return new MachineSnapshotDataChangedEventOut(mEv.getTime(), ServerIoFactory.get(), mOut);
-         default:
-            return null;
-      }
-   }
+        switch ((HyperboxEvents) ev.getEventId()) {
+            case MachineState:
+                return new MachineStateEventOut(mEv.getTime(), ServerIoFactory.get(), mOut, ((MachineStateEvent) ev).getState());
+            case MachineRegistration:
+                return new MachineRegistrationEventOut(mEv.getTime(), ServerIoFactory.get(), mOut,
+                        ((MachineRegistrationEvent) mEv).isRegistrated());
+            case MachineDataChange:
+                return new MachineDataChangeEventOut(mEv.getTime(), ServerIoFactory.get(), mOut);
+            case MachineSnapshotDataChange:
+                return new MachineSnapshotDataChangedEventOut(mEv.getTime(), ServerIoFactory.get(), mOut);
+            default:
+                return null;
+        }
+    }
 
 }

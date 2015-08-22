@@ -20,11 +20,13 @@
 
 package io.kamax.hboxd.exception.security;
 
-@SuppressWarnings("serial")
+
 public class AccessDeniedException extends SecurityException {
 
-   public AccessDeniedException() {
-      super("Access denied");
-   }
+    private static final long serialVersionUID = -4976262881729642483L;
+
+    public AccessDeniedException() {
+        super("Access denied");
+    }
 
 }

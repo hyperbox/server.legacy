@@ -25,8 +25,8 @@ import io.kamax.hboxd.core.model._MachineMetric;
 
 public class MetricIoFactory {
 
-   public static MachineMetricOut get(_MachineMetric metric) {
-      return new MachineMetricOut(metric.getMachineUuid(), metric.getTime(), metric.getValue());
-   }
+    public static MachineMetricOut get(_MachineMetric metric) {
+        return new MachineMetricOut(metric.getMachineUuid(), metric.getTime(), metric.getValue());
+    }
 
 }

@@ -38,29 +38,29 @@ import java.util.List;
 
 public class NetAdaptorListAction extends ServerAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetAdaptorList.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.VBOX.getId() + HypervisorTasks.NetAdaptorList.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   protected void run(Request request, _Hyperbox hbox, _Server srv) {
-      if (request.has(NetModeIn.class)) {
-         send(request, srv.getHypervisor().listAdaptors(request.get(NetModeIn.class).getId()));
-      } else {
-         send(request, srv.getHypervisor().listAdaptors());
-      }
-   }
+    @Override
+    protected void run(Request request, _Hyperbox hbox, _Server srv) {
+        if (request.has(NetModeIn.class)) {
+            send(request, srv.getHypervisor().listAdaptors(request.get(NetModeIn.class).getId()));
+        } else {
+            send(request, srv.getHypervisor().listAdaptors());
+        }
+    }
 
-   private void send(Request request, List<_NetAdaptor> adaptors) {
-      for (_NetAdaptor adapt : adaptors) {
-         SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, NetAdaptorOut.class, NetAdaptorIoFactory.get(adapt)));
-      }
-   }
+    private void send(Request request, List<_NetAdaptor> adaptors) {
+        for (_NetAdaptor adapt : adaptors) {
+            SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, NetAdaptorOut.class, NetAdaptorIoFactory.get(adapt)));
+        }
+    }
 
 }

@@ -35,19 +35,19 @@ import java.util.List;
 
 public final class ServerGetAction extends ServerAction {
 
-   @Override
-   public List<String> getRegistrations() {
-      return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ServerGet.getId());
-   }
+    @Override
+    public List<String> getRegistrations() {
+        return Arrays.asList(Command.HBOX.getId() + HyperboxTasks.ServerGet.getId());
+    }
 
-   @Override
-   public boolean isQueueable() {
-      return false;
-   }
+    @Override
+    public boolean isQueueable() {
+        return false;
+    }
 
-   @Override
-   public void run(Request request, _Hyperbox hbox, _Server srv) {
-      SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, ServerIoFactory.get(srv)));
-   }
+    @Override
+    public void run(Request request, _Hyperbox hbox, _Server srv) {
+        SessionContext.getClient().putAnswer(new Answer(request, AnswerType.DATA, ServerIoFactory.get(srv)));
+    }
 
 }

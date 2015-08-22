@@ -26,21 +26,21 @@ import java.util.HashSet;
 
 public class HyperboxService {
 
-   private static Controller c;
+    private static Controller c;
 
-   public static void main(String[] args) throws Exception {
-      start(args);
-   }
+    public static void main(String[] args) throws Exception {
+        start(args);
+    }
 
-   public static void start(String[] args) throws Exception {
-      Hyperbox.processArgs(new HashSet<String>(Arrays.asList(args)));
+    public static void start(String[] args) throws Exception {
+        Hyperbox.processArgs(new HashSet<String>(Arrays.asList(args)));
 
-      c = new Controller();
-      c.start(args);
-   }
+        c = new Controller();
+        c.start(args);
+    }
 
-   public static void stop(String[] args) throws Exception {
-      c.stop();
-   }
+    public static void stop(String[] args) throws Exception {
+        c.stop();
+    }
 
 }

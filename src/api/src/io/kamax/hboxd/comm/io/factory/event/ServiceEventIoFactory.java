@@ -33,28 +33,28 @@ import io.kamax.hboxd.event.service.ServiceEvent;
 
 public class ServiceEventIoFactory implements _EventIoFactory {
 
-   @Override
-   public Enum<?>[] getHandles() {
-      return new Enum<?>[] {
-            HyperboxEvents.ServiceState
-      };
-   }
+    @Override
+    public Enum<?>[] getHandles() {
+        return new Enum<?>[] {
+                HyperboxEvents.ServiceState
+        };
+    }
 
-   @Override
-   public EventOut get(_Hyperbox hbox, _Event ev) {
-      if (ev instanceof ServiceEvent) {
-         ServiceEvent svcEv = (ServiceEvent) ev;
-         ServerOut srvOut = ServerIoFactory.get();
-         ServiceOut svcOut = ServiceIoFactory.get(svcEv.getService());
-         switch ((HyperboxEvents) svcEv.getEventId()) {
-            case ServiceState:
-               return new ServiceStateEventOut(ev.getTime(), ev.getEventId(), srvOut, svcOut);
-            default:
-               return null;
-         }
-      } else {
-         return null;
-      }
-   }
+    @Override
+    public EventOut get(_Hyperbox hbox, _Event ev) {
+        if (ev instanceof ServiceEvent) {
+            ServiceEvent svcEv = (ServiceEvent) ev;
+            ServerOut srvOut = ServerIoFactory.get();
+            ServiceOut svcOut = ServiceIoFactory.get(svcEv.getService());
+            switch ((HyperboxEvents) svcEv.getEventId()) {
+                case ServiceState:
+                    return new ServiceStateEventOut(ev.getTime(), ev.getEventId(), srvOut, svcOut);
+                default:
+                    return null;
+            }
+        } else {
+            return null;
+        }
+    }
 
 }

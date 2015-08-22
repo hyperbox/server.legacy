@@ -26,8 +26,8 @@ import io.kamax.hboxd.front._Front;
 
 public class ServerFrontUnloadedEvent extends ServerFrontEvent {
 
-   public ServerFrontUnloadedEvent(_Front front) {
-      super(HyperboxEvents.ServerFrontUnloaded, front);
-   }
+    public ServerFrontUnloadedEvent(_Front front) {
+        super(HyperboxEvents.ServerFrontUnloaded, front);
+    }
 
 }

@@ -25,13 +25,13 @@ import io.kamax.hbox.states.MachineStates;
 
 public class MachineStateEvent extends MachineEvent {
 
-   public MachineStateEvent(String uuid, MachineStates state) {
-      super(HyperboxEvents.MachineState, uuid);
-      set(state);
-   }
+    public MachineStateEvent(String uuid, MachineStates state) {
+        super(HyperboxEvents.MachineState, uuid);
+        set(state);
+    }
 
-   public MachineStates getState() {
-      return get(MachineStates.class);
-   }
+    public MachineStates getState() {
+        return get(MachineStates.class);
+    }
 
 }

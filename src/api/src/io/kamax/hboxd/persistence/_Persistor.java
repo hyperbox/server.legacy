@@ -25,12 +25,12 @@ import io.kamax.hboxd.exception.PersistorException;
 
 public interface _Persistor extends _SecurityPersistor, _StorePersistor, _SettingPersistor {
 
-   public void init() throws PersistorException;
+    public void init() throws PersistorException;
 
-   public void start() throws PersistorException;
+    public void start() throws PersistorException;
 
-   public void stop();
+    public void stop();
 
-   public void destroy();
+    public void destroy();
 
 }

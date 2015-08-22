@@ -32,22 +32,22 @@ import io.kamax.hboxd.task._TaskManager;
 
 public interface _HyperboxManipulator {
 
-   public _ServerManager getServerManager();
+    public _ServerManager getServerManager();
 
-   public _TaskManager getTaskManager();
+    public _TaskManager getTaskManager();
 
-   public _SessionManager getSessionManager();
+    public _SessionManager getSessionManager();
 
-   public _SecurityManager getSecurityManager();
+    public _SecurityManager getSecurityManager();
 
-   public _ActionManager getActionManager();
+    public _ActionManager getActionManager();
 
-   public _StoreManager getStoreManager();
+    public _StoreManager getStoreManager();
 
-   public _ModuleManager getModuleManager();
+    public _ModuleManager getModuleManager();
 
-   public _Persistor getPersistor();
+    public _Persistor getPersistor();
 
-   public _Hypervisor getHypervisor();
+    public _Hypervisor getHypervisor();
 
 }

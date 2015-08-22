@@ -22,10 +22,10 @@ package io.kamax.hboxd.security;
 
 public class SessionLocal {
 
-   private String sessionId;
+    private String sessionId;
 
-   public String getSessionId() {
-      return sessionId;
-   }
+    public String getSessionId() {
+        return sessionId;
+    }
 
 }

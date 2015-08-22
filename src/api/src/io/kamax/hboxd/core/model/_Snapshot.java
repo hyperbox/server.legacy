@@ -22,6 +22,6 @@ package io.kamax.hboxd.core.model;
 
 public interface _Snapshot {
 
-   public String getId();
+    public String getId();
 
 }

@@ -25,13 +25,13 @@ import io.kamax.hboxd.hypervisor.storage._RawStorageControllerSubType;
 
 public final class StorageControllerSubTypeIoFactory {
 
-   private StorageControllerSubTypeIoFactory() {
-      // static class
-   }
+    private StorageControllerSubTypeIoFactory() {
+        // static class
+    }
 
-   public static StorageControllerSubTypeOut get(_RawStorageControllerSubType subType) {
-      StorageControllerSubTypeOut scstOut = new StorageControllerSubTypeOut(subType.getId(), subType.getParentType());
-      return scstOut;
-   }
+    public static StorageControllerSubTypeOut get(_RawStorageControllerSubType subType) {
+        StorageControllerSubTypeOut scstOut = new StorageControllerSubTypeOut(subType.getId(), subType.getParentType());
+        return scstOut;
+    }
 
 }
