@@ -26,6 +26,8 @@ import io.kamax.hboxd.security.SecurityContext;
 import io.kamax.tool.logging.Logger;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import net.engio.mbassy.IPublicationErrorHandler;
+import net.engio.mbassy.PublicationError;
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.bus.config.BusConfiguration;
 
@@ -41,6 +43,14 @@ public final class DefaultEventManager implements _EventManager, Runnable {
 
         Logger.debug("Event Manager Starting");
         eventBus = new MBassador<_Event>(BusConfiguration.Default());
+        eventBus.addErrorHandler(new IPublicationErrorHandler() {
+
+            @Override
+            public void handleError(PublicationError error) {
+                Logger.error("Failed to dispatch event " + error.getPublishedObject(), error.getCause());
+            }
+
+        });
         eventsQueue = new LinkedBlockingQueue<_Event>();
         worker = new Thread(this, "EvMgrWT");
         worker.setDaemon(true);
