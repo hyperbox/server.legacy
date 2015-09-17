@@ -203,9 +203,9 @@
 		<replace file="${hbox.server.out.build.dir}/server-installer.nsi" token="@SERVER_INSTALLER_OUTPUT@" value="${hbox.server.out.dist.dir}/${hbox.server.out.dist.package}.exe" />
 		<replace file="${hbox.server.out.build.dir}/server-installer.nsi" token="@SERVER_OUT_BIN_DIR@" value="${hbox.server.out.bin.dir}" />
 		<replace file="${hbox.server.out.build.dir}/server-installer.nsi" token="@SERVER_INSTALL_DIR@" value="${hbox.server.install.dir}" />
-		<exec executable="${tools.nsis.dir}\makensis.exe" failonerror="true">
-			<arg value="/DPROJECT_NAME=Hyperbox Server" />
-			<arg value="/V2"/>
+		<exec executable="${tools.nsis.dir}\makensis" failonerror="true">
+			<arg value="-DPROJECT_NAME=Hyperbox Server" />
+			<arg value="-V2"/>
 			<arg value="${hbox.server.out.build.dir}/server-installer.nsi" />
 		</exec>
 	</target>
