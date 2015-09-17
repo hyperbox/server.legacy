@@ -45,12 +45,12 @@
 		<delete dir="${hbox.server.out.dir}"/>
 	</target>
 	
-	<target name="configure.win" if="ifWin">
+	<target name="configure.win" if="${ifWin}">
 		<property name="hbox.server.install.dir"							location="${hbox.server.install.win.dir}"/>
 		<property name="hbox.server.out.exe"								value="hyperbox.exe"/>
 	</target>
 	
-	<target name="configure.linux" if="ifLinux">
+	<target name="configure.linux" if="${ifLinux}">
 		<property name="hbox.server.install.dir"							location="${hbox.server.install.linux.dir}" />
 	</target>
 	
@@ -178,13 +178,13 @@
 	
 	<extension-point name="compile" depends="api.compile, core.compile" />
 	
-	<target name="build.win" if="ifWin" depends="configure.build">
+	<target name="build.win" if="${ifWin}" depends="configure.build">
 		<assertDirAvailable dir="${tools.launch4j.dir}" />
 		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${tools.launch4j.dir}/launch4j.jar:${tools.launch4j.dir}/lib/xstream.jar" />
 		<launch4j configFile="${hbox.server.base.dir}/scripts/launch4j/main.xml" outfile="${hbox.server.out.bin.dir}/${hbox.server.out.exe}" />
 	</target>
 	
-	<target name="build.linux" if="ifLinux" depends="configure.build">
+	<target name="build.linux" if="${ifLinux}" depends="configure.build">
 		<copy file="${hbox.server.base.dir}/scripts/hyperbox" tofile="${hbox.server.out.bin.dir}/hyperbox" />
 		<chmod file="${hbox.server.out.bin.dir}/hyperbox" perm="a+rx" />
 		<copy file="${hbox.server.base.dir}/scripts/initd/hboxd" tofile="${hbox.server.out.bin.dir}/hboxd.init" />
@@ -197,7 +197,7 @@
 	
 	<extension-point name="deploy" depends="build, api.deploy, core.deploy" />
 	
-	<target name="dist.win" if="ifWin" depends="configure.dist, deploy">
+	<target name="dist.win" if="${ifWin}" depends="configure.dist, deploy">
 		<echo message="NSIS Dir:           ${tools.nsis.dir}" />
 		<copy file="${hbox.server.base.dir}/scripts/installer/server-installer.nsi" tofile="${hbox.server.out.build.dir}/server-installer.nsi" overwrite="true" />
 		<replace file="${hbox.server.out.build.dir}/server-installer.nsi" token="@SERVER_INSTALLER_OUTPUT@" value="${hbox.server.out.dist.dir}/${hbox.server.out.dist.package}.exe" />
@@ -210,7 +210,7 @@
 		</exec>
 	</target>
 	
-	<target name="dist.linux" if="ifLinux" depends="deploy, configure.dist">
+	<target name="dist.linux" if="${ifLinux}" depends="deploy, configure.dist">
 		<copy file="${hbox.server.base.dir}/scripts/installer/server-installer.sh" tofile="${hbox.server.out.bin.dir}/server-installer.sh" overwrite="true" />
 		<chmod file="${hbox.server.out.bin.dir}/server-installer.sh" perm="a+rx" />
 		<exec executable="makeself" failonerror="true">
