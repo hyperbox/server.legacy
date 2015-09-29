@@ -90,8 +90,9 @@ public class KryonetServerFront implements _Front {
 
     @Override
     public void stop() {
-
+        Logger.debug("Kryonet: stopping");
         server.stop();
+        Logger.debug("Kryonet: stopped");
     }
 
     public void stop(EventOut ev) {
