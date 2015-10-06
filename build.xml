@@ -182,6 +182,7 @@
 		<assertDirAvailable dir="${tools.launch4j.dir}" />
 		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${tools.launch4j.dir}/launch4j.jar:${tools.launch4j.dir}/lib/xstream.jar" />
 		<launch4j configFile="${hbox.server.base.dir}/scripts/launch4j/main.xml" outfile="${hbox.server.out.bin.dir}/${hbox.server.out.exe}" />
+		<copy file="${hbox.server.base.dir}/external/common-daemons/prunsrv-amd64.exe" tofile="${hbox.server.out.bin.dir}/hboxd.exe" />
 	</target>
 	
 	<target name="build.linux" if="${ifLinux}" depends="configure.build">
