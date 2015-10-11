@@ -63,7 +63,10 @@ ExecWait '$INSTDIR\hboxd.exe install hboxd --DisplayName="Hyperbox" --StartMode=
 SectionEnd
 
 Section "Start Service"
+MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "Hyperbox requires 64 bits JRE/JDK for the service to run.$\nIf only a 32 bits JVM is available, the service will fail to start.$\n$\nPress OK now to start the service.$\n$\nPress Cancel now to skip starting the service.$\nYou will still be able to install a 64 bits JVM and start the service manually or start Hyperbox in console mode via hyperbox.exe" IDOK true IDCANCEL false
+true:
 ExecWait '$INSTDIR\hboxd.exe start hboxd'
+false:
 SectionEnd
 
 Section "Uninstall"
