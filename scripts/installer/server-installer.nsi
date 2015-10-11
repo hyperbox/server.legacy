@@ -53,8 +53,9 @@ WriteUninstaller $INSTDIR\uninstaller.exe
 SectionEnd
 
 Section "Start Menu Shortcuts"
-CreateDirectory "$SMPROGRAMS\Hyperbox\Server"
-CreateShortCut "$SMPROGRAMS\Hyperbox\Server\Uninstall.lnk" "$INSTDIR\uninstaller.exe"
+SetShellVarContext all
+CreateDirectory "$STARTMENU\Programs\Hyperbox\Server"
+CreateShortCut "$STARTMENU\Programs\Hyperbox\Server\Uninstall Hyperbox Server.lnk" "$INSTDIR\uninstaller.exe"
 SectionEnd
 
 Section "Install Service"
@@ -66,8 +67,11 @@ ExecWait '$INSTDIR\hboxd.exe start hboxd'
 SectionEnd
 
 Section "Uninstall"
+SetShellVarContext all
+
 ExecWait '$INSTDIR\hboxd.exe stop hboxd'
 ExecWait '$INSTDIR\hboxd.exe delete hboxd'
+
 RMDir /r "$INSTDIR\bin"
 RMDir /r "$INSTDIR\doc"
 RMDir /r "$INSTDIR\lib"
@@ -75,6 +79,7 @@ RMDir /r "$INSTDIR\modules"
 Delete "$INSTDIR\hboxd.exe"
 Delete "$INSTDIR\hyperbox.exe"
 Delete "$INSTDIR\uninstaller.exe"
-RMDir "$SMPROGRAMS\Hyperbox\Server"
-RMDir "$SMPROGRAMS\Hyperbox"
+
+RMDir /r "$STARTMENU\Programs\Hyperbox\Server"
+RMDir "$STARTMENU\Programs\Hyperbox"
 SectionEnd
