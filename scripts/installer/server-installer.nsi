@@ -43,7 +43,12 @@ ExecWait '$INSTDIR\bin\hboxd.exe delete hboxd'
 RMDir /r "$INSTDIR\bin"
 RMDir /r "$INSTDIR\lib"
 
-File /r "@SERVER_OUT_BIN_DIR@\*.*"
+File /r "@SERVER_OUT_BIN_DIR@\bin"
+File /r "@SERVER_OUT_BIN_DIR@\doc"
+File /r "@SERVER_OUT_BIN_DIR@\lib"
+File /r "@SERVER_OUT_BIN_DIR@\modules"
+File "@SERVER_OUT_BIN_DIR@\hboxd.exe"
+File "@SERVER_OUT_BIN_DIR@\hyperbox.exe"
 WriteUninstaller $INSTDIR\uninstaller.exe
 SectionEnd
 
@@ -63,7 +68,13 @@ SectionEnd
 Section "Uninstall"
 ExecWait '$INSTDIR\hboxd.exe stop hboxd'
 ExecWait '$INSTDIR\hboxd.exe delete hboxd'
-RMDir /r "$INSTDIR"
-RMDir /r "$SMPROGRAMS\Hyperbox\Server"
+RMDir /r "$INSTDIR\bin"
+RMDir /r "$INSTDIR\doc"
+RMDir /r "$INSTDIR\lib"
+RMDir /r "$INSTDIR\modules"
+Delete "$INSTDIR\hboxd.exe"
+Delete "$INSTDIR\hyperbox.exe"
+Delete "$INSTDIR\uninstaller.exe"
+RMDir "$SMPROGRAMS\Hyperbox\Server"
 RMDir "$SMPROGRAMS\Hyperbox"
 SectionEnd
