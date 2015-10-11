@@ -27,6 +27,7 @@ RUNAS="hyperbox"
 IS_DEBIAN_BASED=false
 IS_REDHAT_BASED=false
 RUNAS_DECIDED=false
+umask 022
 
 function displayLogo {
 	echo ""
