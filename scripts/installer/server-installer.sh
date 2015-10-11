@@ -257,7 +257,7 @@ function checkRequirements {
 
 function copyFiles {
 	if ! [ -x $INSTALL_DIR ]; then
-	        mkdir $INSTALL_DIR >> $LOG_FILE 2>&1
+	        mkdir -p $INSTALL_DIR >> $LOG_FILE 2>&1
 	        if [ $? -ne 0 ]; then
 	        	abort "Failed to create install dir"
 		fi
@@ -349,7 +349,7 @@ function installDaemon {
 function parseParameters {
 	if [ $# -gt 0 ]; then
 		log "Parameters given: $@"
-		INSTALL_DIR="$@"
+		INSTALL_DIR="$1"
 	else
 		log "No parameters were given to the script"
 	fi
