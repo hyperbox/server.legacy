@@ -38,7 +38,7 @@
 	<property name="hbox.server.out.build.jar.dir"							location="${hbox.server.out.build.dir}/${jar.dirname}" />
 	<property name="hbox.server.out.dist.dir"								location="${hbox.server.out.dir}/${dist.dirname}" />
 
-	<property name="hbox.server.install.win.dir"							value="C:/Program Files/Hyperbox/Server" />
+	<property name="hbox.server.install.win.dir"							value="C:\Program Files\Hyperbox\Server" />
 	<property name="hbox.server.install.linux.dir"							value="/opt/hboxd" />
 	
 	<target name="clean">
@@ -46,7 +46,7 @@
 	</target>
 	
 	<target name="configure.win" if="${ifWin}">
-		<property name="hbox.server.install.dir"							location="${hbox.server.install.win.dir}"/>
+		<property name="hbox.server.install.dir"							value="${hbox.server.install.win.dir}"/>
 		<property name="hbox.server.out.exe"								value="hyperbox.exe"/>
 	</target>
 	
