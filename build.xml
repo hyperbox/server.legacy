@@ -131,6 +131,7 @@
 		</copy>
 		
 		<copy todir="${hbox.server.out.bin.dir}/${lib.dirname}" flatten="true">
+			<fileset dir="${hbox.api.tools.lib.dir}" includes="**/*.jar"/>
 			<fileset dir="${hbox.api.core.lib.dir}" includes="**/*.jar"/>
 			<fileset dir="${hbox.server.api.lib.dir}" includes="**/*.jar" />
 		</copy>
