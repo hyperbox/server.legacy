@@ -347,13 +347,12 @@ public class SingleHostServer implements _Hyperbox, _Server {
         Set<Class<? extends _Hypervisor>> subTypes = ClassManager.getAnnotatedSubTypes(_Hypervisor.class, Hypervisor.class);
 
         for (Class<? extends _Hypervisor> hypLoader : subTypes) {
-            for (String scheme : hypLoader.getAnnotation(Hypervisor.class).schemes()) {
-                try {
-                    hyps.put(scheme, hypLoader);
-                    Logger.verbose("Loaded " + hypLoader.getSimpleName() + " for " + scheme + " scheme");
-                } catch (Exception e) {
-                    throw new HyperboxException("Failed to load Hypervior Class : " + e.getLocalizedMessage(), e);
-                }
+            try {
+                String id = hypLoader.getAnnotation(Hypervisor.class).id();
+                hyps.put(id, hypLoader);
+                Logger.verbose("Loaded " + hypLoader.getSimpleName() + " for Hypervisor ID " + id);
+            } catch (Exception e) {
+                throw new HyperboxException("Failed to load Hypervior Class : " + e.getLocalizedMessage(), e);
             }
         }
 

@@ -37,7 +37,8 @@ public @interface Hypervisor {
 
     String vendor();
 
+    String version();
+
     String product();
 
-    String[] schemes();
 }

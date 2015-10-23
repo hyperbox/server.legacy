@@ -57,9 +57,7 @@ public class HypervisorIoFactory {
         List<HypervisorLoaderOut> listOut = new ArrayList<HypervisorLoaderOut>();
         Hypervisor metadata = loader.getAnnotation(Hypervisor.class);
         if (metadata != null) {
-            for (String id : metadata.schemes()) {
-                listOut.add(new HypervisorLoaderOut(metadata.vendor(), metadata.product(), metadata.typeId(), id));
-            }
+            listOut.add(new HypervisorLoaderOut(metadata.vendor(), metadata.product(), metadata.version(), metadata.typeId(), metadata.id()));
         }
         return listOut;
     }
