@@ -198,11 +198,11 @@ function checkRequirements {
 		askUserConf
 	fi
 
-	checkJavaVersion 1.6
+	checkJavaVersion 1.7
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]
 	then
-		logandout "Found suitable java version (>= 1.6), continuing..."
+		logandout "Found suitable java version (>= 1.7), continuing..."
 	elif [ $RETVAL -eq 1 ]
 	then
 		abort "hboxd requires Java 1.6 or later."
