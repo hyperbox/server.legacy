@@ -24,6 +24,7 @@
 INSTALL_DIR="/opt/hboxd"
 LOG_FILE="/var/log/hboxd-install.log"
 RUNAS="hyperbox"
+RUNAS_GRP="hyperbox"
 IS_DEBIAN_BASED=false
 IS_REDHAT_BASED=false
 RUNAS_DECIDED=false
@@ -252,8 +253,11 @@ function checkRequirements {
 			log "User $RUNAS already exists"
 		fi
 	fi
+
+	RUNAS_GRP=$(grep $RUNAS /etc/passwd | cut -d":" -f3)
 	
 	log "Hyperbox will run under dedicated user: $RUNAS"
+	log "Hyperbox will run under dedicated group: $RUNAS_GRP"
 }
 
 function copyFiles {
@@ -275,7 +279,7 @@ function copyFiles {
 	        abort "Failed to copy hboxd files"
 	fi
 	
-	chown -R $RUNAS:$RUNAS $INSTALL_DIR
+	chown -R $RUNAS:$RUNAS_GRP $INSTALL_DIR
 	if [ $? -ne 0 ]; then
 		abort "Failed to set permissions on install dir"
 	fi
