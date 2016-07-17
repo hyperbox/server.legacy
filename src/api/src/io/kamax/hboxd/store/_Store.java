@@ -49,4 +49,6 @@ public interface _Store {
 
     public _StoreItem getItem(String path);
 
+    public boolean isValid();
+
 }

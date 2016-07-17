@@ -23,6 +23,7 @@ package io.kamax.hboxd.store.local;
 import io.kamax.hbox.exception.HyperboxException;
 import io.kamax.hboxd.store._Store;
 import io.kamax.hboxd.store._StoreItem;
+import io.kamax.tool.logging.Logger;
 import java.io.File;
 
 public final class FolderStore implements _Store {
@@ -30,21 +31,36 @@ public final class FolderStore implements _Store {
     private String id;
     private String name;
     private File location;
+    private boolean isValid;
 
     public FolderStore(String id, String name, File path) {
-        if (!path.exists()) {
-            throw new HyperboxException(location.getAbsolutePath() + " does not exist");
-        }
-        if (!path.isDirectory()) {
-            throw new HyperboxException(location.getAbsolutePath() + " is not a folder");
-        }
-        if (!path.isAbsolute()) {
-            throw new HyperboxException(location.getAbsolutePath() + " must be a full path");
-        }
-
         this.id = id;
         this.name = name;
-        location = new File(path.getAbsolutePath());
+        location = path.getAbsoluteFile();
+
+        // TODO ugly... find a better way
+        if (!path.exists()) {
+            isValid = false;
+            Logger.warning(path + " does not exist");
+        }
+        else if (!path.isDirectory()) {
+            isValid = false;
+            Logger.warning(path + " is not a folder");
+        }
+        else if (!path.isAbsolute()) {
+            isValid = false;
+            Logger.warning(path + " must be a full path");
+        }
+        else {
+            isValid = true;
+        }
+    }
+
+    // TODO Maybe we should use a multi-object state design pattern
+    protected void ensureValid() {
+        if (!isValid) {
+            throw new HyperboxException("Store ID " + id + " at location " + getLocation() + " is not valid");
+        }
     }
 
     @Override
@@ -64,6 +80,8 @@ public final class FolderStore implements _Store {
 
     @Override
     public _StoreItem getContainer() {
+        ensureValid();
+
         return new FolderStoreItem(this, location);
     }
 
@@ -74,6 +92,8 @@ public final class FolderStore implements _Store {
 
     @Override
     public _StoreItem getItem(String path) {
+        ensureValid();
+
         File newItemPath = path.startsWith(getLocation()) ? new File(path) : new File(getLocation() + path);
         if (!newItemPath.exists()) {
             throw new HyperboxException(newItemPath.getAbsolutePath() + " is not a valid location");
@@ -86,6 +106,11 @@ public final class FolderStore implements _Store {
         } else {
             return new FileStoreItem(this, newItemPath);
         }
+    }
+
+    @Override
+    public boolean isValid() {
+        return isValid;
     }
 
 }
