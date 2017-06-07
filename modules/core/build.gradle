@@ -1,0 +1,16 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':hbox-server-api')
+
+    compile 'commons-daemon:commons-daemon:1.0.15'
+    compile 'com.h2database:h2:1.3.174'
+
+    testCompile 'junit:junit:4.12'
+}
