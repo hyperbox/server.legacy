@@ -14,6 +14,7 @@ task distBinJar(type: Copy) {
     dependsOn subprojects.jar
 
     from project('hbox-server-core').jar
+    from project.file('scripts/hboxd')
     into binCommonPath.resolve(binDir)
 }
 
@@ -35,7 +36,7 @@ task distBinLinux(type: Copy) {
     dependsOn distBinCommon
 
     from project.file('scripts/hyperbox')
+    from project.file('scripts/initd/hboxd.init')
     from binCommonPath.toString() // using a Path creates a Stack Overflow
     into binLinuxPath
 }
-
