@@ -2,6 +2,7 @@ apply plugin: 'base'
 
 evaluationDependsOnChildren()
 
+def apiPath = project.rootDir.toPath().resolve('..').resolve('api')
 def binPath = project.buildDir.toPath().resolve('bin')
 def binDir = 'bin'
 def docDir = 'doc'
@@ -11,6 +12,7 @@ def binCommonPath = binPath.resolve('common')
 def binLinuxPath = binPath.resolve('linux')
 
 task distBinJar(type: Copy) {
+    dependsOn ':hbox-server-api:install'
     dependsOn subprojects.jar
 
     from project('hbox-server-core').jar
@@ -24,7 +26,7 @@ task distBinLib(type: Copy) {
 }
 
 task distBinDoc(type: Copy) {
-    from project('hbox-api').file(docDir)
+    from apiPath.resolve(docDir).toFile() // using a Path creates a Stack Overflow
     into binCommonPath.resolve(docDir)
 }
 
@@ -37,6 +39,6 @@ task distBinLinux(type: Copy) {
 
     from project.file('scripts/hyperbox')
     from project.file('scripts/initd/hboxd.init')
-    from binCommonPath.toString() // using a Path creates a Stack Overflow
+    from binCommonPath.toFile() // using a Path creates a Stack Overflow
     into binLinuxPath
 }
