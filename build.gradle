@@ -16,10 +16,8 @@ subprojects {
     }
 }
 
-def apiPath = project.rootDir.toPath().resolve('..').resolve('api')
 def binPath = project.buildDir.toPath().resolve('bin')
 def binDir = 'bin'
-def docDir = 'doc'
 def libDir = 'lib'
 
 def binCommonPath = binPath.resolve('common')
@@ -39,13 +37,8 @@ task distBinLib(type: Copy) {
     into binCommonPath.resolve(libDir)
 }
 
-task distBinDoc(type: Copy) {
-    from apiPath.resolve(docDir).toFile() // using a Path creates a Stack Overflow
-    into binCommonPath.resolve(docDir)
-}
-
 task distBinCommon {
-    dependsOn distBinJar, distBinLib, distBinDoc
+    dependsOn distBinJar, distBinLib
 }
 
 task distBinLinux(type: Copy) {
