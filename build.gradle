@@ -2,6 +2,15 @@ apply plugin: 'base'
 
 evaluationDependsOnChildren()
 
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+
+    group = 'io.kamax'
+    version = 'latest'
+}
+
 def apiPath = project.rootDir.toPath().resolve('..').resolve('api')
 def binPath = project.buildDir.toPath().resolve('bin')
 def binDir = 'bin'

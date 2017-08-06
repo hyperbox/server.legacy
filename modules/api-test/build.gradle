@@ -1,12 +1,15 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
+group = 'io.kamax'
+version = 'latest'
+
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    compile 'io.kamax:hbox-api:latest'
-
+    compile project(':hbox-server-api')
+    compile 'junit:junit:4.12'
 }
