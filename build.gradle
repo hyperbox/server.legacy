@@ -9,6 +9,11 @@ allprojects {
 
     group = 'io.kamax'
     version = 'latest'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
 }
 
 def apiPath = project.rootDir.toPath().resolve('..').resolve('api')

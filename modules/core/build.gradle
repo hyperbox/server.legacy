@@ -1,12 +1,5 @@
 apply plugin: 'java'
 
-sourceCompatibility = 1.7
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
 dependencies {
     compile 'io.kamax:hbox-server-api:latest'
 
@@ -15,4 +8,3 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
 }
-
