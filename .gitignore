@@ -1,6 +1,10 @@
 # IDEs
-**/.idea/
+.idea/
 
 # Build
-**/.gradle/
-**/build/
+.gradle/
+build/
+out/
+
+# Temp/Run files
+data/

@@ -1,51 +1,151 @@
-apply plugin: 'base'
+import java.nio.file.Paths
+
+plugins {
+    id 'base'
+    id 'com.palantir.git-version' version '0.8.0'
+}
+
+version = gitVersion()
 
 evaluationDependsOnChildren()
 
-subprojects {
-    apply plugin: 'java'
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+def binDir = 'bin'
+def distDir = 'dist'
+def libDir = 'lib'
+def buildPath = Paths.get(System.getProperty('buildPath', project.buildDir.toPath().resolve(binDir).toString()))
+def distPath = Paths.get(System.getProperty('distPath', project.buildDir.toPath().resolve(distDir).toString()))
 
-    group = 'io.kamax'
-    version = 'latest'
+def buildCommonPath = buildPath.resolve('common')
+def buildLinuxPath = buildPath.resolve('linux')
+def buildWinPath = buildPath.resolve('win')
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
+def launch4jDir = 'launch4j'
+def launch4jSrcPath = project.rootDir.toPath().resolve('scripts').resolve(launch4jDir)
+def launch4jBuildPath = project.buildDir.toPath().resolve('launch4j')
+def launch4jBuildXml = launch4jBuildPath.resolve('hyperbox.xml')
+def winExecPath = launch4jBuildPath.resolve('hyperbox.exe')
+
+String getPackageName(String os) {
+    return "hbox-server-${project.version}-${os}_amd64"
 }
 
-def binPath = project.buildDir.toPath().resolve('bin')
-def binDir = 'bin'
-def libDir = 'lib'
 
-def binCommonPath = binPath.resolve('common')
-def binLinuxPath = binPath.resolve('linux')
-
-task distBinJar(type: Copy) {
-    dependsOn ':hbox-server-api:install'
+task buildBinJar(type: Copy) {
     dependsOn subprojects.jar
 
     from project('hbox-server-core').jar
-    from project.file('scripts/hboxd')
-    into binCommonPath.resolve(binDir)
+    into buildCommonPath.resolve(binDir)
 }
 
-task distBinLib(type: Copy) {
+task buildBinLib(type: Copy) {
     from subprojects.configurations.compile
-    into binCommonPath.resolve(libDir)
+    into buildCommonPath.resolve(libDir)
 }
 
-task distBinCommon {
-    dependsOn distBinJar, distBinLib
+task buildBinCommon {
+    dependsOn buildBinJar, buildBinLib
 }
 
-task distBinLinux(type: Copy) {
-    dependsOn distBinCommon
+task buildLinux(type: Copy) {
+    dependsOn buildBinCommon
 
     from project.file('scripts/hyperbox')
     from project.file('scripts/initd/hboxd.init')
-    from binCommonPath.toFile() // using a Path creates a Stack Overflow
-    into binLinuxPath
+    from project.file('scripts/installer/server-installer.sh')
+    from buildCommonPath.toFile() // using a Path creates a Stack Overflow
+    into buildLinuxPath
+
+    from(project.file('scripts/hboxd')) {
+        into(binDir)
+    }
+}
+
+task buildWinExec(type: Exec) {
+    dependsOn buildBinCommon
+
+    doFirst {
+        copy {
+            from launch4jSrcPath.resolve('hyperbox.xml').toFile()
+            into launch4jBuildPath.toFile()
+        }
+
+        ant.replace(
+                file: launch4jBuildXml,
+                token: '@LAUNCH4J_OUT_FILE@',
+                value: winExecPath
+        )
+
+        ant.replace(
+                file: launch4jBuildXml,
+                token: '@LAUNCH4J_JAR@',
+                value: "${binDir}/${project('hbox-server-core').jar.archiveName}"
+        )
+    }
+
+    commandLine '/opt/launch4j/launch4j', launch4jBuildXml
+}
+
+task buildWin(type: Copy) {
+    dependsOn buildWinExec
+
+    from buildCommonPath.toFile() // using a Path creates a Stack Overflow
+    from winExecPath.toFile() // using a Path creates a Stack Overflow
+    into buildWinPath.toFile() // using a Path creates a Stack Overflow
+}
+
+task buildLinuxDefault {
+    onlyIf {
+        org.gradle.internal.os.OperatingSystem.current().isLinux()
+    }
+
+    buildLinux
+}
+
+task buildWinDefault {
+    onlyIf {
+        org.gradle.internal.os.OperatingSystem.current().isWindows()
+    }
+
+    buildWin
+}
+
+build {
+    dependsOn buildLinuxDefault, buildWinDefault
+}
+
+task buildAll {
+    dependsOn buildLinux, buildWin
+}
+
+task distLinuxZip(type: Zip) {
+    dependsOn buildLinux
+
+    archiveName = "${getPackageName('linux')}.zip"
+    destinationDir = distPath.toFile()
+
+    from buildLinuxPath.toFile()
+}
+
+task distLinuxInstall(type: Exec) {
+    dependsOn buildLinux
+
+    doFirst {
+        mkdir distPath
+    }
+
+    commandLine(
+            'makeself',
+            buildLinuxPath,
+            "${distPath}/${getPackageName('linux')}.run",
+            'Hyperbox Server',
+            './server-installer.sh'
+    )
+}
+
+task distLinux {
+    dependsOn distLinuxZip, distLinuxInstall
+}
+
+task dist {
+    dependsOn distLinux
 }
