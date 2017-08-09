@@ -12,8 +12,8 @@ evaluationDependsOnChildren()
 def binDir = 'bin'
 def distDir = 'dist'
 def libDir = 'lib'
-def buildPath = Paths.get(System.getProperty('buildPath', project.buildDir.toPath().resolve(binDir).toString()))
-def distPath = Paths.get(System.getProperty('distPath', project.buildDir.toPath().resolve(distDir).toString()))
+def buildPath = Paths.get(System.getProperty('buildBinPath', project.buildDir.toPath().resolve(binDir).toString()))
+def distPath = Paths.get(System.getProperty('buildDistPath', project.buildDir.toPath().resolve(distDir).toString()))
 
 def buildCommonPath = buildPath.resolve('common')
 def buildLinuxPath = buildPath.resolve('linux')
@@ -26,7 +26,7 @@ def launch4jBuildXml = launch4jBuildPath.resolve('hyperbox.xml')
 def winExecPath = launch4jBuildPath.resolve('hyperbox.exe')
 
 String getPackageName(String os) {
-    return "hbox-server-${project.version}-${os}_amd64"
+    return "hbox-server-${project.version}-${os}_x64"
 }
 
 
@@ -44,6 +44,11 @@ task buildBinLib(type: Copy) {
 
 task buildBinCommon {
     dependsOn buildBinJar, buildBinLib
+
+    doLast {
+        mkdir "${buildCommonPath}/doc"
+        mkdir "${buildCommonPath}/modules"
+    }
 }
 
 task buildLinux(type: Copy) {
@@ -90,7 +95,12 @@ task buildWin(type: Copy) {
 
     from buildCommonPath.toFile() // using a Path creates a Stack Overflow
     from winExecPath.toFile() // using a Path creates a Stack Overflow
+    from project.file('resources/common-daemons/prunsrv-amd64.exe')
     into buildWinPath.toFile() // using a Path creates a Stack Overflow
+
+    doLast {
+        ant.move(file: "${buildWinPath}/prunsrv-amd64.exe", tofile:"${buildWinPath}/hboxd.exe")
+    }
 }
 
 task buildLinuxDefault {
@@ -146,6 +156,52 @@ task distLinux {
     dependsOn distLinuxZip, distLinuxInstall
 }
 
+task distWinZip(type: Zip) {
+    dependsOn buildWin
+
+    archiveName = "${getPackageName('win')}.zip"
+    destinationDir = distPath.toFile()
+
+    from buildWinPath.toFile()
+}
+
+task distWinInstall(type: Exec) {
+    dependsOn buildWin
+
+    doFirst {
+        mkdir distPath
+
+        copy {
+            from project.file('scripts/installer/server-installer.nsi')
+            into "${project.buildDir}"
+        }
+
+        ant.replace(
+                file: "${project.buildDir}/server-installer.nsi",
+                token: '@SERVER_INSTALLER_OUTPUT@',
+                value: "${distPath}/${getPackageName('win')}.exe"
+        )
+
+        ant.replace(
+                file: "${project.buildDir}/server-installer.nsi",
+                token: '@SERVER_OUT_BIN_DIR@',
+                value: "${buildWinPath}"
+        )
+
+        ant.replace(
+                file: "${project.buildDir}/server-installer.nsi",
+                token: '@SERVER_INSTALL_DIR@',
+                value: "C:\\Program Files\\Hyperbox\\Server"
+        )
+    }
+
+    commandLine 'makensis', '-DPROJECT_NAME=Hyperbox Server', '-V2', "${project.buildDir}/server-installer.nsi"
+}
+
+task distWin {
+    dependsOn distWinZip, distWinInstall
+}
+
 task dist {
-    dependsOn distLinux
+    dependsOn distLinux, distWin
 }
