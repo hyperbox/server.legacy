@@ -1,0 +1,39 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.palantir.git-version'
+
+group = 'io.kamax'
+version = gitVersion()
+
+sourceCompatibility = 1.7
+
+String versionInfoFile = "${projectDir}/build/tmp/versionInfo/server.build.properties"
+
+repositories {
+    maven { url "https://kamax.io/maven/releases" }
+    maven { url "https://kamax.io/maven/snapshots" }
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':hbox-server-api')
+
+    compile 'commons-daemon:commons-daemon:1.0.15'
+    compile 'com.h2database:h2:1.3.174'
+
+    testCompile 'junit:junit:4.12'
+}
+
+task versionInfo {
+    doLast {
+        File versionFile = new File(versionInfoFile)
+        versionFile.getParentFile().mkdir()
+        versionFile.text = 'version=' + project.version
+    }
+}
+
+jar {
+    dependsOn versionInfo
+    from versionInfoFile
+}

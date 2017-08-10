@@ -44,9 +44,9 @@ RMDir /r "$INSTDIR\bin"
 RMDir /r "$INSTDIR\lib"
 
 File /r "@SERVER_OUT_BIN_DIR@\bin"
-File /r "@SERVER_OUT_BIN_DIR@\doc"
+File /nonfatal /r "@SERVER_OUT_BIN_DIR@\doc"
 File /r "@SERVER_OUT_BIN_DIR@\lib"
-File /r "@SERVER_OUT_BIN_DIR@\modules"
+File /nonfatal /r "@SERVER_OUT_BIN_DIR@\modules"
 File "@SERVER_OUT_BIN_DIR@\hboxd.exe"
 File "@SERVER_OUT_BIN_DIR@\hyperbox.exe"
 WriteUninstaller $INSTDIR\uninstaller.exe

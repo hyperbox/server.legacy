@@ -1,5 +1,10 @@
-/out/
+# IDEs
+.idea/
 
-src/api/.settings/
-src/core/.settings/
+# Build
+.gradle/
+build/
+out/
 
+# Temp/Run files
+data/
