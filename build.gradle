@@ -103,24 +103,10 @@ task buildWin(type: Copy) {
     }
 }
 
-task buildLinuxDefault {
-    onlyIf {
-        org.gradle.internal.os.OperatingSystem.current().isLinux()
-    }
-
-    buildLinux
-}
-
-task buildWinDefault {
-    onlyIf {
-        org.gradle.internal.os.OperatingSystem.current().isWindows()
-    }
-
-    buildWin
-}
-
 build {
-    dependsOn buildLinuxDefault, buildWinDefault
+    doLast {
+        println "Please choose your build system. Use 'buildLinux' or 'buildWin'"
+    }
 }
 
 task buildAll {
@@ -202,6 +188,6 @@ task distWin {
     dependsOn distWinZip, distWinInstall
 }
 
-task dist {
+task distAll {
     dependsOn distLinux, distWin
 }
