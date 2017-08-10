@@ -29,21 +29,20 @@ String getPackageName(String os) {
     return "hbox-server-${project.version}-${os}_x64"
 }
 
-
-task buildBinJar(type: Copy) {
+task binJar(type: Copy) {
     dependsOn subprojects.jar
 
     from project('hbox-server-core').jar
     into buildCommonPath.resolve(binDir)
 }
 
-task buildBinLib(type: Copy) {
+task binLib(type: Copy) {
     from subprojects.configurations.compile
     into buildCommonPath.resolve(libDir)
 }
 
-task buildBinCommon {
-    dependsOn buildBinJar, buildBinLib
+task binCommon {
+    dependsOn binJar, binLib
 
     doLast {
         mkdir "${buildCommonPath}/doc"
@@ -51,8 +50,8 @@ task buildBinCommon {
     }
 }
 
-task buildLinux(type: Copy) {
-    dependsOn buildBinCommon
+task binLinux(type: Copy) {
+    dependsOn binCommon
 
     from project.file('scripts/hyperbox')
     from project.file('scripts/initd/hboxd.init')
@@ -65,8 +64,8 @@ task buildLinux(type: Copy) {
     }
 }
 
-task buildWinExec(type: Exec) {
-    dependsOn buildBinCommon
+task binWinExec(type: Exec) {
+    dependsOn binCommon
 
     doFirst {
         copy {
@@ -90,8 +89,8 @@ task buildWinExec(type: Exec) {
     commandLine '/opt/launch4j/launch4j', launch4jBuildXml
 }
 
-task buildWin(type: Copy) {
-    dependsOn buildWinExec
+task binWin(type: Copy) {
+    dependsOn binWinExec
 
     from buildCommonPath.toFile() // using a Path creates a Stack Overflow
     from winExecPath.toFile() // using a Path creates a Stack Overflow
@@ -103,18 +102,12 @@ task buildWin(type: Copy) {
     }
 }
 
-build {
-    doLast {
-        println "Please choose your build system. Use 'buildLinux' or 'buildWin'"
-    }
-}
-
-task buildAll {
-    dependsOn buildLinux, buildWin
+task bin {
+    dependsOn binLinux, binWin
 }
 
 task distLinuxZip(type: Zip) {
-    dependsOn buildLinux
+    dependsOn binLinux
 
     archiveName = "${getPackageName('linux')}.zip"
     destinationDir = distPath.toFile()
@@ -123,7 +116,7 @@ task distLinuxZip(type: Zip) {
 }
 
 task distLinuxInstall(type: Exec) {
-    dependsOn buildLinux
+    dependsOn binLinux
 
     doFirst {
         mkdir distPath
@@ -143,7 +136,7 @@ task distLinux {
 }
 
 task distWinZip(type: Zip) {
-    dependsOn buildWin
+    dependsOn binWin
 
     archiveName = "${getPackageName('win')}.zip"
     destinationDir = distPath.toFile()
@@ -152,7 +145,7 @@ task distWinZip(type: Zip) {
 }
 
 task distWinInstall(type: Exec) {
-    dependsOn buildWin
+    dependsOn binWin
 
     doFirst {
         mkdir distPath
