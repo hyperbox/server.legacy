@@ -1,3 +1,13 @@
+static String getSysProp(String value, String fallback) {
+    // This is required as there is a length limitation on System.properties.getProperty(a,b)
+
+    if (!System.properties.containsKey(value)) {
+        return fallback
+    }
+
+    return System.properties.get(value)
+}
+
 import java.nio.file.Paths
 
 apply plugin: 'java'
@@ -18,8 +28,8 @@ evaluationDependsOnChildren()
 def binDir = 'bin'
 def distDir = 'dist'
 def libDir = 'lib'
-def buildPath = Paths.get(System.getProperty('server.build.bin', project.buildDir.toPath().resolve(binDir).toString()))
-def distPath = Paths.get(System.getProperty('server.build.dist', project.buildDir.toPath().resolve(distDir).toString()))
+def buildPath = Paths.get(getSysProp('server.build.bin', project.buildDir.toPath().resolve(binDir).toString()))
+def distPath = Paths.get(getSysProp('server.build.dist', project.buildDir.toPath().resolve(distDir).toString()))
 
 def buildCommonPath = buildPath.resolve('common')
 def buildLinuxPath = buildPath.resolve('linux')
