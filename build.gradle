@@ -18,8 +18,8 @@ evaluationDependsOnChildren()
 def binDir = 'bin'
 def distDir = 'dist'
 def libDir = 'lib'
-def buildPath = Paths.get(System.getProperty('buildBinPath', project.buildDir.toPath().resolve(binDir).toString()))
-def distPath = Paths.get(System.getProperty('buildDistPath', project.buildDir.toPath().resolve(distDir).toString()))
+def buildPath = Paths.get(System.getProperty('server.build.bin', project.buildDir.toPath().resolve(binDir).toString()))
+def distPath = Paths.get(System.getProperty('server.build.dist', project.buildDir.toPath().resolve(distDir).toString()))
 
 def buildCommonPath = buildPath.resolve('common')
 def buildLinuxPath = buildPath.resolve('linux')
