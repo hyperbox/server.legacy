@@ -149,12 +149,6 @@ public final class Controller implements _Controller {
             }
             Logger.verbose("--------------------------------------");
 
-            Logger.verbose("-------- Classpath entries -----------");
-            for (URL classPathEntry : ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs()) {
-                Logger.verbose(classPathEntry);
-            }
-            Logger.verbose("--------------------------------------");
-
             startBack();
             startFront();
             Long endTime = System.currentTimeMillis();
