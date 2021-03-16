@@ -85,12 +85,11 @@ function checkRoot {
 	fi
 }
 
-# Return 0 if Java is at least the given version passed as parameter
-# Return 1 if Java is not at least the version
-# Return 2 if Java is not found
+# Return 0 if Java is found
+# Return 1 if Java is not found
 # Credit : Glenn Jackman @ http://stackoverflow.com/questions/7334754
-function checkJavaVersion {
-	log "Checking Java version"
+function checkForJava {
+	log "Checking if Java is present"
 	java -version >> $LOG_FILE 2>&1
 	RETVAL=$?
 	echo "" >> $LOG_FILE
@@ -101,16 +100,11 @@ function checkJavaVersion {
 	then
 		_java="$JAVA_HOME/bin/java"
 	else
-		return 2
+		return 1
 	fi
 
 	if [[ "$_java" ]]; then
-		version=$("$_java" -version 2>&1 | awk -F '"' '/version/ {print $2}')
-		if [[ "$version" > "$1" ]]; then
-			return 0
-		else
-			return 1
-		fi
+		return 0
 	fi
 }
 
@@ -119,7 +113,7 @@ function askUserConf {
 	if [ $# -gt 0 ]; then
 		USER_CONF_MSG="$@"
 	fi
-	
+
 	USER_INPUT="no"
 	read -p "$USER_CONF_MSG [Y/n] " USER_INPUT
 	if [[ $USER_INPUT =~ ^[Yy]$ ]]; then
@@ -134,7 +128,7 @@ function askUserConfOrContinue {
 	if [ $# -gt 0 ]; then
 		USER_CONF_MSG="$@"
 	fi
-	
+
 	USER_INPUT="no"
 	read -p "$USER_CONF_MSG [Y/n] " USER_INPUT
 	if [[ $USER_INPUT =~ ^[Yy]$ ]]; then
@@ -152,7 +146,7 @@ function getDedicatedUserInput {
 		log "User didn't enter any username, using default"
 	else
 		log "Got user input for user: $RUNAS_INPUT"
-		RUNAS=$RUNAS_INPUT	
+		RUNAS=$RUNAS_INPUT
 	fi
 }
 
@@ -171,14 +165,14 @@ function checkRequirements {
 	else
 		abort "Unsupported system. You can manually install by using the ZIP package and following the Manual Install steps in the User Manual"
 	fi
-	
+
 	if [ -x /etc/init.d/hboxd ]; then
 		/etc/init.d/hboxd status >> $LOG_FILE 2>&1
 		if [ $? -eq 0 ]; then
 			logandout "hboxd must be stopped before continuing. The script will handle the shutdown."
 			askUserConf
 			logandout "Shutting down hboxd..."
-			
+
 			COULD_STOP_HBOXD=1
 			if $IS_REDHAT_BASED; then
 				service hboxd stop >> $LOG_FILE 2>&1
@@ -187,7 +181,7 @@ function checkRequirements {
 				/etc/init.d/hboxd stop >> $LOG_FILE 2>&1
 				COULD_STOP_HBOXD=$?
 			fi
-			
+
 			if [ $? -ne 0 ]; then
 				abort "Unable to stop hboxd, aborting...";
 			fi
@@ -199,16 +193,13 @@ function checkRequirements {
 		askUserConf
 	fi
 
-	checkJavaVersion 1.7
+	checkForJava
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]
 	then
-		logandout "Found suitable java version (>= 1.7), continuing..."
-	elif [ $RETVAL -eq 1 ]
-	then
-		abort "hboxd requires Java 1.6 or later."
+		logandout "Found Java, continuing..."
 	else
-		abort "Java is reqired by hboxd but no Java was found."
+		logandout "/!\\ Java is required by hboxd but no Java was found /!\\"
 	fi
 	
 	
