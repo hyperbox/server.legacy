@@ -1,0 +1,60 @@
+/*
+ * Hyperbox - Virtual Infrastructure Manager
+ * Copyright (C) 2014 Max Dor
+ *
+ * https://apps.kamax.io/hyperbox
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package io.kamax.hboxd.security;
+
+import io.kamax.hbox.comm.SecurityAction;
+import io.kamax.hbox.comm.SecurityItem;
+
+public class ActionPermission implements _ActionPermission {
+
+    private final String userId;
+    private final SecurityItem item;
+    private final SecurityAction action;
+    private final boolean isAllowed;
+
+    public ActionPermission(String userId, SecurityItem item, SecurityAction action, boolean isAllowed) {
+        this.userId = userId;
+        this.item = item;
+        this.action = action;
+        this.isAllowed = isAllowed;
+    }
+
+    @Override
+    public String getUserId() {
+        return userId;
+    }
+
+    @Override
+    public SecurityItem getItemType() {
+        return item;
+    }
+
+    @Override
+    public SecurityAction getAction() {
+        return action;
+    }
+
+    @Override
+    public boolean isAllowed() {
+        return isAllowed;
+    }
+
+}

@@ -5,6 +5,7 @@
 .gradle/
 build/
 out/
+lib/
 
 # Temp/Run files
-data/
+/data/

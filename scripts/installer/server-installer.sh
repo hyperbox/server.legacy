@@ -2,9 +2,9 @@
 ###########################################################################
 #
 # Hyperbox - Virtual Infrastructure Manager
-# Copyright (C) 2013-2015 Maxime Dor
+# Copyright (C) 2013 Max Dor
 # 
-# http://kamax.io/hbox/
+# https://apps.kamax.io/hyperbox
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,25 +22,21 @@
 ###########################################################################
 
 INSTALL_DIR="/opt/hboxd"
+EXEC_BIN="$INSTALL_DIR/bin/hboxd"
 LOG_FILE="/var/log/hboxd-install.log"
-RUNAS="hyperbox"
-RUNAS_GRP="hyperbox"
+INITD_FILE="/etc/init.d/hboxd"
+SYSTEMD_FILE="/etc/systemd/system/hboxd.service"
+RUNAS="hypervisor"
+RUNAS_GRP="hypervisor"
 IS_DEBIAN_BASED=false
 IS_REDHAT_BASED=false
 RUNAS_DECIDED=false
 umask 022
 
 function displayLogo {
+	echo "Hyperbox: VirtualBox Infrastructure Manager - Install"
 	echo ""
-	echo "#       # #       # ######### ######### #########  ########   ######  #       #"
-	echo "#       #  #     #  #       # #         #        # #       # #      #  #     #"
-	echo "#       #   #   #   #       # #         #        # #       # #      #   #   #"
-	echo "#########    # #    ######### ######### #########  ########  #      #    # #"
-	echo "#       #     #     #         #         #     #    #       # #      #   #   #"
-	echo "#       #     #     #         #         #      #   #       # #      #  #     #"
-	echo "#       #     #     #         ######### #       #  ########   ######  #       #"
-	echo ""
-	echo "http://kamax.io/hbox/"
+	echo "https://apps.kamax.io/hyperbox"
 	echo ""
 }
 
@@ -48,7 +44,7 @@ function log {
 	echo "$@" >> $LOG_FILE
 }
 
-function logandout {
+function logAndOut {
 	log "$@"
 	echo "$@"
 }
@@ -62,7 +58,7 @@ function run {
 }
 
 function abort {
-	logandout "$@"
+	logAndOut "$@"
 	log "Aborting install"
 	echo "An error occurred and the installation will now be cancelled. Check log file for more details: $LOG_FILE"
 	cleanUp
@@ -139,8 +135,8 @@ function askUserConfOrContinue {
 }
 
 function getDedicatedUserInput {
-	logandout "A dedicated user is required to run Hyperbox."
-	logandout "If the user does not already exist, it will be created automatically"
+	logAndOut "A dedicated user is required to run Hyperbox."
+	logAndOut "If the user does not already exist, it will be created automatically"
 	read -e -p "Please enter a dedicated username to run Hyperbox [$RUNAS]: " RUNAS_INPUT
 	if [[ $RUNAS_INPUT = "" ]]; then
 		log "User didn't enter any username, using default"
@@ -151,36 +147,28 @@ function getDedicatedUserInput {
 }
 
 function checkRequirements {
+  checkRoot
+
 	if [ -f /etc/debian-release ]; then
-		logandout "Debian-based system detected"
+		logAndOut "Debian-based system detected"
 		log $(cat /etc/debian-release)
 		IS_DEBIAN_BASED=true
 	elif [ -f /usr/bin/apt-get ]; then
-		logandout "Debian-based system detected"
+		logAndOut "Debian-based system detected"
 		IS_DEBIAN_BASED=true
-	elif [ -f /etc/redhat-release ]; then
-		logandout "Redhat-based system detected"
-		log $(cat /etc/redhat-release)
-		IS_REDHAT_BASED=true
 	else
 		abort "Unsupported system. You can manually install by using the ZIP package and following the Manual Install steps in the User Manual"
 	fi
 
-	if [ -x /etc/init.d/hboxd ]; then
-		/etc/init.d/hboxd status >> $LOG_FILE 2>&1
+	if [ -x "$SYSTEMD_FILE" ]; then
+		systemctl is-active hboxd >> $LOG_FILE 2>&1
 		if [ $? -eq 0 ]; then
-			logandout "hboxd must be stopped before continuing. The script will handle the shutdown."
+			logAndOut "hboxd must be stopped before continuing. The script will handle the shutdown."
 			askUserConf
-			logandout "Shutting down hboxd..."
+			logAndOut "Shutting down hboxd..."
 
 			COULD_STOP_HBOXD=1
-			if $IS_REDHAT_BASED; then
-				service hboxd stop >> $LOG_FILE 2>&1
-				COULD_STOP_HBOXD=$?
-			else
-				/etc/init.d/hboxd stop >> $LOG_FILE 2>&1
-				COULD_STOP_HBOXD=$?
-			fi
+			systemctl stop hboxd >> $LOG_FILE 2>&1
 
 			if [ $? -ne 0 ]; then
 				abort "Unable to stop hboxd, aborting...";
@@ -189,7 +177,7 @@ function checkRequirements {
 	fi
 
 	if [ -x $INSTALL_DIR ]; then
-		logandout "$INSTALL_DIR already exists, care should be taken in using this directory"
+		logAndOut "$INSTALL_DIR already exists, care should be taken in using this directory"
 		askUserConf
 	fi
 
@@ -197,22 +185,35 @@ function checkRequirements {
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]
 	then
-		logandout "Found Java, continuing..."
+		logAndOut "Found Java, continuing..."
 	else
-		logandout "/!\\ Java is required by hboxd but no Java was found /!\\"
+		logAndOut "/!\\ Java is required by hboxd but no Java was found /!\\"
 	fi
-	
-	
-	if ! $RUNAS_DECIDED && [ -f /etc/init.d/hboxd ]; then
+
+	if ! $RUNAS_DECIDED && [ -f "$SYSTEMD_FILE" ]; then
+    log "hbox systemd service unit found, parsing for default value"
+    RUNAS_HBOX=$(grep "^User" "$SYSTEMD_FILE" | cut -d"=" -f2 | tr -d "\"")
+    log "Possible hbox user: $RUNAS_HBOX"
+    if ! [ "$RUNAS_HBOX" == "" ]; then
+      log "Dedicated user found: $RUNAS_HBOX"
+      RUNAS=$RUNAS_HBOX
+      RUNAS_DECIDED=true
+    else
+      log "No dedicated user found"
+    fi
+  fi
+
+	# Legacy check
+	if ! $RUNAS_DECIDED && [ -f "$INITD_FILE" ]; then
 		log "hbox init.d found, parsing for default value"
-		RUNAS_HBOX=$(grep "^RUNAS" /etc/init.d/hboxd | cut -d"=" -f2 | tr -d "\"")
+		RUNAS_HBOX=$(grep "^RUNAS" "$INITD_FILE" | cut -d"=" -f2 | tr -d "\"")
 		log "Possible hbox user: $RUNAS_HBOX"
 		if ! [ "$RUNAS_HBOX" == "" ]; then
-			log "Dedicated user found in hbox init.d file: $RUNAS_HBOX"
+			log "Dedicated user found: $RUNAS_HBOX"
 			RUNAS=$RUNAS_HBOX
 			RUNAS_DECIDED=true
 		else
-			log "No dedicated user was found in hbox init.d file"
+			log "No dedicated user found"
 		fi
 	fi
 	
@@ -239,6 +240,7 @@ function checkRequirements {
 		grep $RUNAS /etc/passwd > /dev/null 2>&1
 		if [ $? -ne 0 ]; then
 			log "User $RUNAS does not exist, creating the user"
+			groupadd $RUNAS_GRP
 			useradd -m $RUNAS
 		else
 			log "User $RUNAS already exists"
@@ -253,9 +255,9 @@ function checkRequirements {
 
 function copyFiles {
 	if ! [ -x $INSTALL_DIR ]; then
-	        mkdir -p $INSTALL_DIR >> $LOG_FILE 2>&1
-	        if [ $? -ne 0 ]; then
-	        	abort "Failed to create install dir"
+    mkdir -p $INSTALL_DIR >> $LOG_FILE 2>&1
+    if [ $? -ne 0 ]; then
+      abort "Failed to create install dir"
 		fi
 	else
 		log "Cleaning up old binaries"
@@ -264,7 +266,7 @@ function copyFiles {
 		rm -rf $INSTALL_DIR/modules 2>&1 >> $LOG_FILE
 	fi
 	
-	echo Will install to $INSTALL_DIR
+	echo "Will install to $INSTALL_DIR"
 	cp -r ./* $INSTALL_DIR >> $LOG_FILE 2>&1
 	if [ $? -ne 0 ]; then
 	        abort "Failed to copy hboxd files"
@@ -275,71 +277,64 @@ function copyFiles {
 		abort "Failed to set permissions on install dir"
 	fi
 
-	chmod ugo+rx $INSTALL_DIR/bin/hboxd 2>&1 >> $LOG_FILE
+	chmod ugo+rx $INSTALL_DIR/bin/* 2>&1 >> $LOG_FILE
 	if [ $? -ne 0 ]; then
 	        abort "Failed to set permission on hboxd files"
 	fi
 }
 
 function installDaemon {
-	logandout "Install Daemon..."
-	
-	INSTDIR_SED="s#.*#INSTALL_DIR=$INSTALL_DIR#"
-	INSTDIR_LN=$(grep -m 1 -n "^INSTALL_DIR=" $INSTALL_DIR/hboxd.init | awk -F ":" '{print $1}')
-	sed -i $INSTDIR_LN$INSTDIR_SED  $INSTALL_DIR/hboxd.init >> $LOG_FILE 2>&1
-	if [ $? -ne 0 ]; then
-		abort "Failed to configure service init.d script"
-    fi
-	
-	RUNAS_SED="s/.*/RUNAS=$RUNAS/"
-	RUNAS_LN=$(grep -m 1 -n "^RUNAS=" $INSTALL_DIR/hboxd.init | awk -F ":" '{print $1}')
-	sed -i $RUNAS_LN$RUNAS_SED $INSTALL_DIR/hboxd.init >> $LOG_FILE 2>&1
-    if [ $? -ne 0 ]; then
-		abort "Failed to configure service init.d script"
-    fi
+	logAndOut "Install Daemon..."
 
-	mv $INSTALL_DIR/hboxd.init /etc/init.d/hboxd >> $LOG_FILE 2>&1
-	if [ $? -ne 0 ]; then
-	        abort "Failed to relocated init.d script to /etc/init.d"
-	fi
+	log "Removing old init.d"
+	/etc/init.d/hboxd stop
+	systemctl stop hboxd
 
-	log "Chmod ugo+rx /etc/init.d/hboxd"
-	chmod ugo+rx /etc/init.d/hboxd >> $LOG_FILE 2>&1
+  update-rc.d hboxd remove
+  rm /etc/init.d/hboxd
+
+  systemctl daemon-reload
+	
+	INSTDIR_SED="s#.*#WorkingDirectory=$INSTALL_DIR#"
+	INSTDIR_LN=$(grep -m 1 -n "^WorkingDirectory=" $INSTALL_DIR/hboxd.service | awk -F ":" '{print $1}')
+	sed -i $INSTDIR_LN$INSTDIR_SED $INSTALL_DIR/hboxd.service >> $LOG_FILE 2>&1
 	if [ $? -ne 0 ]; then
-	        abort "Failed to set execute permission on init.d script"
+		abort "Failed to configure systemd service unit"
+  fi
+	
+	RUNAS_SED="s/.*/User=$RUNAS/"
+	RUNAS_LN=$(grep -m 1 -n "^User=" $INSTALL_DIR/hboxd.service | awk -F ":" '{print $1}')
+	sed -i $RUNAS_LN$RUNAS_SED $INSTALL_DIR/hboxd.service >> $LOG_FILE 2>&1
+  if [ $? -ne 0 ]; then
+    abort "Failed to configure service init.d script"
+  fi
+
+	mv $INSTALL_DIR/hboxd.service /etc/systemd/system/ >> $LOG_FILE 2>&1
+	if [ $? -ne 0 ]; then
+	        abort "Failed to relocated systemd script"
 	fi
 	
-	log "chown root:root /etc/init.d/hboxd: $?"
-	chown root:root /etc/init.d/hboxd >> $LOG_FILE 2>&1
+	log "chown root:root $SYSTEMD_FILE: $?"
+	chown root:root "$SYSTEMD_FILE" >> $LOG_FILE 2>&1
 	if [ $? -ne 0 ]; then
-	        abort "Failed to change owner to root on init.d script"
+	        abort "Failed to change owner to root on systemd script"
 	fi
 
 	if $IS_DEBIAN_BASED; then
 		log "Registering init.d using update-rc.d"
-		update-rc.d hboxd defaults 90 16 >> $LOG_FILE 2>&1
-		INITD_REG=$?
-	elif $IS_REDHAT_BASED; then
-		log "Registering init.d using ckconfig"
-		chkconfig --add hboxd
+		systemctl enable hboxd.service >> $LOG_FILE 2>&1
 		INITD_REG=$?
 	else
-		logandout "Unsupported system, cannot register init.d script"
+		logAndOut "Unsupported system, cannot register init.d script"
 		INITD_REG=1
 	fi
 	if [ $INITD_REG -ne 0 ]; then
-	        abort "Failed to register init.d script with the system"
+	  abort "Failed to register systemd service unit with the system"
 	fi
 	
 	log "Starting hboxd daemon"
-	if $IS_REDHAT_BASED; then
-		service hboxd start
-		log "Return code of init.d start: $?"
-	else
-		/etc/init.d/hboxd start
-		log "Return code of init.d start: $?"
-	fi
-	
+	systemctl start hboxd >> $LOG_FILE 2>&1
+  log "Return code of init.d start: $?"
 }
 
 function parseParameters {
@@ -354,7 +349,6 @@ function parseParameters {
 echo "Installation start at "$(date "+%d-%I-%Y @ %H:%m") > $LOG_FILE
 parseParameters $@
 displayLogo
-checkRoot
 checkRequirements
 copyFiles
 installDaemon
@@ -362,5 +356,5 @@ cleanUp
 echo "Installation finish at "$(date "+%d-%I-%Y @ %H:%m") >> $LOG_FILE
 
 echo "The Hyperbox Server is now installed and running."
-echo "To get started, please read the User Manual located in the doc directory, or visit http://kamax.io/hbox/"
+echo "To get started, please read the User Manual located in the doc directory, or visit https://apps.kamax.io/hyperbox"
 echo

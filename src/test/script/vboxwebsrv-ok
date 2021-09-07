@@ -1,0 +1,20 @@
+#!/bin/bash
+cat <<EOL
+Oracle VM VirtualBox web service Version 0.0.0
+(C) 2007-2021 Oracle Corporation
+All rights reserved.
+00:00:00.000103 main     VirtualBox web service 0.0.0 r0 linux.amd64 (Jan  1 1970 00:00:00) release log
+00:00:00.000106 main     Log opened 2021-08-30T00:00:0.000000000Z
+00:00:00.000110 main     Build Type: release
+00:00:00.000114 main     OS Product: Linux
+00:00:00.000115 main     OS Release: 4.9.0-12-amd64
+00:00:00.000116 main     OS Version: #1 SMP Debian 4.9.210-1+deb9u1 (2020-06-07)
+00:00:00.000160 main     DMI Product Name:
+00:00:00.000168 main     DMI Product Version:
+00:00:00.000236 main     Executable: /usr/lib/virtualbox/vboxwebsrv
+00:00:00.000236 main     Process ID: 22937
+00:00:00.000237 main     Package type: LINUX_64BITS_DEBIAN_9_0
+00:00:00.008766 SQPmp    Socket connection successful: host = default (localhost), port = 18084, master socket = 8
+EOL
+sleep 10000
+exit 0

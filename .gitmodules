@@ -1,0 +1,6 @@
+[submodule "modules/vbox-6.0"]
+	path = modules/vbox-6.0
+	url = ../vbox-6.0.git
+[submodule "modules/vbox-6.1"]
+	path = modules/vbox-6.1
+	url = ../vbox-6.1.git

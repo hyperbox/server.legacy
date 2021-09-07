@@ -1,6 +1,1 @@
-rootProject.name = 'hbox-server'
-
-include 'modules/api', 'modules/api-test', 'modules/core'
-project(':modules/api').name = 'hbox-server-api'
-project(':modules/api-test').name = 'hbox-server-api-test'
-project(':modules/core').name = 'hbox-server-core'
+rootProject.name = 'hboxd'

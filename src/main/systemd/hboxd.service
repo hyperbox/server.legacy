@@ -1,0 +1,11 @@
+[Unit]
+Description=hboxd
+After=syslog.target
+
+[Service]
+User=hypervisor
+WorkingDirectory=/opt/hboxd
+ExecStart=/opt/hboxd/bin/hboxd
+
+[Install]
+WantedBy=multi-user.target
