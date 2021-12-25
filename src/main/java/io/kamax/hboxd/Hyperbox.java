@@ -54,7 +54,7 @@ public class Hyperbox {
         Set<Class<? extends T>> subTypes = reflections.getSubTypesOf(c);
         subTypes.forEach(subType -> {
             Optional<T> subTypeInstance = Hyperbox.loadClass(subType);
-            if (subTypeInstance.isEmpty()) return;
+            if (!subTypeInstance.isPresent()) return;
             subTypeInstances.add(subTypeInstance.get());
         });
         return subTypeInstances;
@@ -64,7 +64,7 @@ public class Hyperbox {
         try {
             String className = Configuration.getSetting(cfgKey, fallback.getName());
             Optional<T> opt = loadClass(Class.forName(className));
-            if (opt.isEmpty()) {
+            if (!opt.isPresent()) {
                 throw new ClassNotFoundException();
             }
             return opt.get();

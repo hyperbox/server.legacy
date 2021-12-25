@@ -1,0 +1,8 @@
+#!/bin/bash
+cat <<EOL
+Oracle VM VirtualBox web service Version 1.2.3
+(C) 2007-2021 Oracle Corporation
+All rights reserved.
+1.2.3r4
+EOL
+exit 0

@@ -30,6 +30,7 @@ import io.kamax.tools.net.NetUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.zeroturnaround.exec.ProcessExecutor;
+import org.zeroturnaround.exec.ProcessResult;
 import org.zeroturnaround.exec.StartedProcess;
 import org.zeroturnaround.exec.listener.ProcessListener;
 import org.zeroturnaround.exec.stream.LogOutputStream;
@@ -44,8 +45,28 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class VBoxWebSrv implements _VBoxWebSrv {
+
+    public static final String CFG_EXEC_PATH = "vbox.exec.web.path";
+
+    private static class OutputReader extends LogOutputStream {
+
+        private final Consumer<String> consumer;
+
+        public OutputReader(Consumer<String> consumer) {
+            this.consumer = consumer;
+        }
+
+        @Override
+        protected void processLine(String line) {
+            consumer.accept(line);
+        }
+
+    }
 
     private static final Logger log = KxLog.make(MethodHandles.lookup().lookupClass());
 
@@ -62,7 +83,7 @@ public class VBoxWebSrv implements _VBoxWebSrv {
     private String error;
 
     public VBoxWebSrv() {
-        String execPath = Configuration.getSetting("vbox.exec.web.path");
+        String execPath = Configuration.getSetting(CFG_EXEC_PATH);
         if (StringUtils.isNotBlank(execPath)) {
             defaultExecPaths.add(execPath);
         } else {
@@ -96,7 +117,7 @@ public class VBoxWebSrv implements _VBoxWebSrv {
         }
     }
 
-    private String locateExecutable() {
+    public String locateExecutable() {
         for (String path : defaultExecPaths) {
             try {
                 validateExecutable(path);
@@ -108,6 +129,40 @@ public class VBoxWebSrv implements _VBoxWebSrv {
         }
 
         throw new HypervisorException("Could not locate a valid VirtualBox WebService executable");
+    }
+
+    public String getVersion() {
+        Pattern p = Pattern.compile("(\\d+.\\d+.\\d+)(r(\\d+))?");
+        List<String> output = new ArrayList<>();
+
+        try {
+            List<String> args = new ArrayList<>();
+            args.add(locateExecutable());
+            args.add("--version");
+            ProcessExecutor exec = new ProcessExecutor().command(args).destroyOnExit()
+                    .redirectOutput(new OutputReader(output::add));
+            StartedProcess sp = exec.start();
+            ProcessResult result = sp.getFuture().get(15, TimeUnit.SECONDS);
+            if (result.getExitValue() != 0) {
+                log.warn("vboxwebsrv output:\n{}", output);
+                throw new HypervisorException("Unexpected return code: " + result.getExitValue());
+            }
+
+            String versionLine = output.get(output.size() - 1);
+            log.debug("VboxWebSrv version: {}", versionLine);
+            Matcher m = p.matcher(versionLine);
+            if (!m.matches()) {
+                return "";
+            }
+            String version = m.group(1);
+            if (StringUtils.isBlank(version)) {
+                throw new HypervisorException("Invalid version: " + versionLine);
+            }
+            return version;
+        } catch (IOException | TimeoutException | InterruptedException | ExecutionException e) {
+            log.warn("vboxwebsrv output:\n{}", output);
+            throw new HypervisorException("Unable to get vboxwebsrv version", e);
+        }
     }
 
     @Override
@@ -141,21 +196,18 @@ public class VBoxWebSrv implements _VBoxWebSrv {
 
             StringBuffer execOutput = new StringBuffer();
             processExec = new ProcessExecutor().command(args).destroyOnExit()
-                    .redirectOutput(new LogOutputStream() {
-                        @Override
-                        protected void processLine(String line) {
-                            execOutput.append(line).append(System.lineSeparator());
-                            if (StringUtils.contains(line, "Socket connection successful: ")) {
-                                log.debug("VBox Web Srv: listening for new connections, marking as started");
-                                runState = State.Started;
-                            }
-
-                            if (StringUtils.contains(line, "#### SOAP FAULT: Address already in use [detected]")) {
-                                error = "WebService port " + port + " is already in use";
-                                stop();
-                            }
+                    .redirectOutput(new OutputReader(line -> {
+                        execOutput.append(line).append(System.lineSeparator());
+                        if (StringUtils.contains(line, "Socket connection successful: ")) {
+                            log.debug("VBox Web Srv: listening for new connections, marking as started");
+                            runState = State.Started;
                         }
-                    })
+
+                        if (StringUtils.contains(line, "#### SOAP FAULT: Address already in use [detected]")) {
+                            error = "WebService port " + port + " is already in use";
+                            stop();
+                        }
+                    }))
                     .addListener(new ProcessListener() {
                         @Override
                         public void afterStop(Process process) {

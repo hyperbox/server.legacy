@@ -26,13 +26,14 @@ import io.kamax.hbox.hypervisor.vbox._VBoxWebSrv;
 import io.kamax.hboxd.hypervisor.vbox.VBoxWebSrv;
 import org.junit.Test;
 
+import static io.kamax.hboxd.hypervisor.vbox.VBoxWebSrv.CFG_EXEC_PATH;
 import static org.junit.Assert.*;
 
 public class VBoxWebSrvTest {
 
     @Test
     public void ok() {
-        Configuration.setSetting("vbox.exec.web.path", "src/test/script/vboxwebsrv-ok");
+        Configuration.setSetting(CFG_EXEC_PATH, "src/test/script/vboxwebsrv-ok");
         VBoxWebSrv srv = new VBoxWebSrv();
         srv.start();
         assertEquals(_VBoxWebSrv.State.Started, srv.getState());
@@ -43,18 +44,25 @@ public class VBoxWebSrvTest {
 
     @Test(expected = HypervisorException.class)
     public void failedExec() {
-        Configuration.setSetting("vbox.exec.web.path", "src/test/script/vboxwebsrv-failedExec");
+        Configuration.setSetting(CFG_EXEC_PATH, "src/test/script/vboxwebsrv-failedExec");
         VBoxWebSrv srv = new VBoxWebSrv();
         srv.start();
         fail();
     }
 
     @Test(expected = HypervisorException.class)
-    public void portInUse() throws InterruptedException {
-        Configuration.setSetting("vbox.exec.web.path", "src/test/script/vboxwebsrv-portAlreadyInUse");
+    public void portInUse() {
+        Configuration.setSetting(CFG_EXEC_PATH, "src/test/script/vboxwebsrv-portAlreadyInUse");
         VBoxWebSrv srv = new VBoxWebSrv();
         srv.start();
         fail();
+    }
+
+    public void version() {
+        Configuration.setSetting(CFG_EXEC_PATH, "src/test/script/vboxwebsrv-version-ok");
+        VBoxWebSrv srv = new VBoxWebSrv();
+        String version = srv.getVersion();
+        assertEquals("1.2.3r4", version);
     }
 
 }

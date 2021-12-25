@@ -27,6 +27,8 @@ import io.kamax.hbox.comm.out.event.EventOut;
 import io.kamax.hbox.constant.ServerAttribute;
 import io.kamax.hbox.constant.ServerType;
 import io.kamax.hbox.exception.HyperboxException;
+import io.kamax.hbox.exception.HypervisorException;
+import io.kamax.hbox.hypervisor.vbox.VirtualBox;
 import io.kamax.hbox.states.ServerConnectionState;
 import io.kamax.hbox.states.ServerState;
 import io.kamax.hboxd.HBoxServer;
@@ -50,6 +52,7 @@ import io.kamax.hboxd.host._Host;
 import io.kamax.hboxd.hypervisor.Hypervisor;
 import io.kamax.hboxd.hypervisor._Hypervisor;
 import io.kamax.hboxd.hypervisor.storage._RawMedium;
+import io.kamax.hboxd.hypervisor.vbox.VBoxWebSrv;
 import io.kamax.hboxd.hypervisor.vm._RawVM;
 import io.kamax.hboxd.persistence._Persistor;
 import io.kamax.hboxd.persistence.sql.h2.H2SqlPersistor;
@@ -69,6 +72,7 @@ import io.kamax.tools.AxBooleans;
 import io.kamax.tools.AxSystems;
 import io.kamax.tools.logging.KxLog;
 import net.engio.mbassy.listener.Handler;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -201,6 +205,24 @@ public class SingleHostServer implements _Hyperbox, _Server {
             }
         } else {
             log.info("No Hypervisor configuration found, skipping");
+            VBoxWebSrv vBoxWebSrv = new VBoxWebSrv();
+            try {
+                String version = vBoxWebSrv.getVersion();
+                log.info("Auto-detected VirtualBox version: {}", version);
+                String hypVersion = "";
+                if (version.startsWith("6.0")) hypVersion = VirtualBox.ID.WS_6_0;
+                if (version.startsWith("6.1")) hypVersion = VirtualBox.ID.WS_6_1;
+
+                if (StringUtils.isNotBlank(hypVersion)) {
+                    log.info("Auto-connecting to detected VirtualBox installation");
+                    HypervisorIn in = new HypervisorIn(hypVersion);
+                    in.setAutoConnect(true);
+                    taskMgr.process(new Request(Command.HBOX, HyperboxTasks.HypervisorConnect, in));
+                }
+            } catch (HypervisorException e) {
+                log.info("No Virtualbox installation detected: {}", e.getMessage());
+                log.debug("Details", e);
+            }
         }
 
         setState(ServerState.Running);
