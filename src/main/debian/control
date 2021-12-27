@@ -1,0 +1,9 @@
+Package: hyperbox-server
+Maintainer: Kamax.io <foss@kamax.io>
+Homepage: https://github.com/hyperbox/hyperbox
+Description: VirtualBox Infrastructure Manager
+Architecture: all
+Section: net
+Priority: optional
+Depends: default-jdk (>= 1.8) | default-jdk-headless (>= 1.8)
+Version: 0

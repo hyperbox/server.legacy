@@ -65,6 +65,8 @@ mainClassName = "io.kamax.hboxd.HyperboxInteractive"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+String versionInfoFile = "${projectDir}/build/tmp/versionInfo/server.build.properties"
+
 repositories {
     mavenLocal()
     mavenCentral()
@@ -87,40 +89,31 @@ dependencies {
     testImplementation "junit:junit:4.13.2"
 }
 
-String getPackageName(String os) {
-    return "hbox-server-${project.version}-${os}"
+tasks.register("versionInfo") {
+    doLast {
+        File versionFile = new File(versionInfoFile)
+        versionFile.getParentFile().mkdir()
+        versionFile.text = 'version=' + project.version
+    }
+}
+
+jar {
+    dependsOn versionInfo
+    from versionInfoFile
 }
 
 tasks.register("cleanDist", Delete) {
     delete "build/dist"
 }
 
-tasks.register("buildDist", Exec) {
-    dependsOn build
-
-    String prefix = "${project.name}-${project.version}"
-
-    doFirst {
-        copy {
-            from tarTree("build/distributions/${prefix}.tar")
-            into "build/tmp/dist"
-        }
-        copy {
-            from "src/main/systemd/hboxd.service"
-            from "scripts/installer/server-installer.sh"
-            into "build/tmp/dist/${prefix}"
-        }
-    }
+tasks.register("buildDebian", Exec) {
+    dependsOn assemble
 
     commandLine(
-            "makeself",
-            "build/tmp/dist/${prefix}",
-            "build/distributions/${getPackageName('linux')}.run",
-            "Hyperbox Server",
-            "./server-installer.sh"
+            'scripts/debian/createPackage'
     )
+}
 
-    doLast {
-        //delete("build/tmp/dist")
-    }
+tasks.register("buildDist") {
+    dependsOn builddebian
 }

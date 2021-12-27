@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Stop running instance if needed
+systemctl stop hboxd.service
+
+# Unregister service
+systemctl disable hboxd.service

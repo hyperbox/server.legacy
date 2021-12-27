@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+BASE_PATH="build/tmp/debian"
+DEB_CTRL_PATH="$BASE_PATH/DEBIAN"
+INSTALL_DIR="/opt/hboxd"
+VERSION=$(git describe --tags --always --dirty | cut -c 2-9999999)
+
+echo "Creating directory structure"
+mkdir -p "$DEB_CTRL_PATH"
+mkdir -p "$BASE_PATH$INSTALL_DIR"
+mkdir -p "$BASE_PATH/etc/systemd/system"
+
+echo "Copying built files and scripts"
+tar xf "build/distributions/hboxd-$VERSION.tar" --strip 1 -C "$BASE_PATH$INSTALL_DIR/"
+rsync -r --delete "src/main/debian/" "$DEB_CTRL_PATH/"
+cp "src/main/systemd/hboxd.service" "$BASE_PATH/etc/systemd/system/"
+
+echo "Adapting files for target install directories"
+sed -i "s/Version: 0/Version: $VERSION/" "$DEB_CTRL_PATH/control"
+sed -i "s#%DEB_INSTALL_DIR%#$INSTALL_DIR#" "$DEB_CTRL_PATH/postinst"
+
+fakeroot dpkg-deb -b "$BASE_PATH" "build/distributions"

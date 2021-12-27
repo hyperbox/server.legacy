@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Add service account
+useradd -r hypervisor || true
+
+# Set permissions for data directory
+chown -R hypervisor "%DEB_INSTALL_DIR%"
+
+# Enable systemd service
+systemctl enable hboxd.service
+systemctl restart hboxd.service
