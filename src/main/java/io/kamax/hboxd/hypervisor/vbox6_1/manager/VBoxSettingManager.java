@@ -157,7 +157,6 @@ public class VBoxSettingManager {
     }
 
     public static void apply(IMachine vm, MachineData vmData) {
-
         List<_Setting> settings = SettingIoFactory.getListIo(vmData.listSettings());
         for (_Setting setting : settings) {
             vmActions.get(setting.getName()).set(vm, setting);
@@ -175,7 +174,10 @@ public class VBoxSettingManager {
                     log.warn("Tracing exception", e);
                 }
             }
-            vm.getStorageControllerByName(controllerType).setControllerType(StorageControllerType.valueOf(controllerSubType));
+            IStorageController strCtrl = vm.getStorageControllerByName(controllerType);
+            strCtrl.setControllerType(StorageControllerType.valueOf(controllerSubType));
+            strCtrl.setPortCount(strCtrl.getMaxPortCount());
+
             vm.attachDeviceWithoutMedium(controllerType, 0, 0, DeviceType.DVD);
         }
 
@@ -191,7 +193,9 @@ public class VBoxSettingManager {
                     log.warn("Tracing error", e);
                 }
             }
-            vm.getStorageControllerByName(controllerType).setControllerType(StorageControllerType.valueOf(controllerSubType));
+            IStorageController strCtrl = vm.getStorageControllerByName(controllerType);
+            strCtrl.setControllerType(StorageControllerType.valueOf(controllerSubType));
+            strCtrl.setPortCount(strCtrl.getMaxPortCount());
         }
 
         for (Device dev : vmData.listDevices(EntityType.Network.getId())) {
